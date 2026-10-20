@@ -1,0 +1,223 @@
+{
+  "version": "1.0",
+  "asset_type": "2D raster animation assets",
+  "engine_tested": false,
+  "frame_size": [
+    384,
+    320
+  ],
+  "pivot_pixels": [
+    192,
+    300
+  ],
+  "facing": "right",
+  "animations": {},
+  "characters": {
+    "Rocky": {
+      "atlas": "Characters/Rocky/Rocky_Atlas_4x8.png",
+      "columns": 4,
+      "rows": 8,
+      "animations": {
+        "Idle": {
+          "frames": [
+            "Characters/Rocky/Idle/Rocky_Idle_00.png",
+            "Characters/Rocky/Idle/Rocky_Idle_01.png",
+            "Characters/Rocky/Idle/Rocky_Idle_02.png",
+            "Characters/Rocky/Idle/Rocky_Idle_03.png"
+          ],
+          "loop": true,
+          "suggested_fps": 8,
+          "note": "Starting playback values only. Set combat timing in gameplay data."
+        },
+        "Walk": {
+          "frames": [
+            "Characters/Rocky/Walk/Rocky_Walk_00.png",
+            "Characters/Rocky/Walk/Rocky_Walk_01.png",
+            "Characters/Rocky/Walk/Rocky_Walk_02.png",
+            "Characters/Rocky/Walk/Rocky_Walk_03.png"
+          ],
+          "loop": true,
+          "suggested_fps": 8,
+          "note": "Starting playback values only. Set combat timing in gameplay data."
+        },
+        "Jab": {
+          "frames": [
+            "Characters/Rocky/Jab/Rocky_Jab_00.png",
+            "Characters/Rocky/Jab/Rocky_Jab_01.png",
+            "Characters/Rocky/Jab/Rocky_Jab_02.png",
+            "Characters/Rocky/Jab/Rocky_Jab_03.png"
+          ],
+          "loop": false,
+          "suggested_fps": 12,
+          "note": "Starting playback values only. Set combat timing in gameplay data."
+        },
+        "HeavyPunch": {
+          "frames": [
+            "Characters/Rocky/HeavyPunch/Rocky_HeavyPunch_00.png",
+            "Characters/Rocky/HeavyPunch/Rocky_HeavyPunch_01.png",
+            "Characters/Rocky/HeavyPunch/Rocky_HeavyPunch_02.png",
+            "Characters/Rocky/HeavyPunch/Rocky_HeavyPunch_03.png"
+          ],
+          "loop": false,
+          "suggested_fps": 12,
+          "note": "Starting playback values only. Set combat timing in gameplay data."
+        },
+        "Block": {
+          "frames": [
+            "Characters/Rocky/Block/Rocky_Block_00.png",
+            "Characters/Rocky/Block/Rocky_Block_01.png",
+            "Characters/Rocky/Block/Rocky_Block_02.png",
+            "Characters/Rocky/Block/Rocky_Block_03.png"
+          ],
+          "loop": false,
+          "suggested_fps": 12,
+          "note": "Starting playback values only. Set combat timing in gameplay data."
+        },
+        "Dodge": {
+          "frames": [
+            "Characters/Rocky/Dodge/Rocky_Dodge_00.png",
+            "Characters/Rocky/Dodge/Rocky_Dodge_01.png",
+            "Characters/Rocky/Dodge/Rocky_Dodge_02.png",
+            "Characters/Rocky/Dodge/Rocky_Dodge_03.png"
+          ],
+          "loop": false,
+          "suggested_fps": 12,
+          "note": "Starting playback values only. Set combat timing in gameplay data."
+        },
+        "Knockdown": {
+          "frames": [
+            "Characters/Rocky/Knockdown/Rocky_Knockdown_00.png",
+            "Characters/Rocky/Knockdown/Rocky_Knockdown_01.png",
+            "Characters/Rocky/Knockdown/Rocky_Knockdown_02.png",
+            "Characters/Rocky/Knockdown/Rocky_Knockdown_03.png"
+          ],
+          "loop": false,
+          "suggested_fps": 12,
+          "note": "Starting playback values only. Set combat timing in gameplay data."
+        },
+        "Victory": {
+          "frames": [
+            "Characters/Rocky/Victory/Rocky_Victory_00.png",
+            "Characters/Rocky/Victory/Rocky_Victory_01.png",
+            "Characters/Rocky/Victory/Rocky_Victory_02.png",
+            "Characters/Rocky/Victory/Rocky_Victory_03.png"
+          ],
+          "loop": false,
+          "suggested_fps": 12,
+          "note": "Starting playback values only. Set combat timing in gameplay data."
+        }
+      }
+    },
+    "Shadow": {
+      "atlas": "Characters/Shadow/Shadow_Atlas_4x8.png",
+      "columns": 4,
+      "rows": 8,
+      "animations": {
+        "Idle": {
+          "frames": [
+            "Characters/Shadow/Idle/Shadow_Idle_00.png",
+            "Characters/Shadow/Idle/Shadow_Idle_01.png",
+            "Characters/Shadow/Idle/Shadow_Idle_02.png",
+            "Characters/Shadow/Idle/Shadow_Idle_03.png"
+          ],
+          "loop": true,
+          "suggested_fps": 8,
+          "note": "Starting playback values only. Set combat timing in gameplay data."
+        },
+        "Walk": {
+          "frames": [
+            "Characters/Shadow/Walk/Shadow_Walk_00.png",
+            "Characters/Shadow/Walk/Shadow_Walk_01.png",
+            "Characters/Shadow/Walk/Shadow_Walk_02.png",
+            "Characters/Shadow/Walk/Shadow_Walk_03.png"
+          ],
+          "loop": true,
+          "suggested_fps": 8,
+          "note": "Starting playback values only. Set combat timing in gameplay data."
+        },
+        "Jab": {
+          "frames": [
+            "Characters/Shadow/Jab/Shadow_Jab_00.png",
+            "Characters/Shadow/Jab/Shadow_Jab_01.png",
+            "Characters/Shadow/Jab/Shadow_Jab_02.png",
+            "Characters/Shadow/Jab/Shadow_Jab_03.png"
+          ],
+          "loop": false,
+          "suggested_fps": 12,
+          "note": "Starting playback values only. Set combat timing in gameplay data."
+        },
+        "HeavyPunch": {
+          "frames": [
+            "Characters/Shadow/HeavyPunch/Shadow_HeavyPunch_00.png",
+            "Characters/Shadow/HeavyPunch/Shadow_HeavyPunch_01.png",
+            "Characters/Shadow/HeavyPunch/Shadow_HeavyPunch_02.png",
+            "Characters/Shadow/HeavyPunch/Shadow_HeavyPunch_03.png"
+          ],
+          "loop": false,
+          "suggested_fps": 12,
+          "note": "Starting playback values only. Set combat timing in gameplay data."
+        },
+        "Block": {
+          "frames": [
+            "Characters/Shadow/Block/Shadow_Block_00.png",
+            "Characters/Shadow/Block/Shadow_Block_01.png",
+            "Characters/Shadow/Block/Shadow_Block_02.png",
+            "Characters/Shadow/Block/Shadow_Block_03.png"
+          ],
+          "loop": false,
+          "suggested_fps": 12,
+          "note": "Starting playback values only. Set combat timing in gameplay data."
+        },
+        "Dodge": {
+          "frames": [
+            "Characters/Shadow/Dodge/Shadow_Dodge_00.png",
+            "Characters/Shadow/Dodge/Shadow_Dodge_01.png",
+            "Characters/Shadow/Dodge/Shadow_Dodge_02.png",
+            "Characters/Shadow/Dodge/Shadow_Dodge_03.png"
+          ],
+          "loop": false,
+          "suggested_fps": 12,
+          "note": "Starting playback values only. Set combat timing in gameplay data."
+        },
+        "Knockdown": {
+          "frames": [
+            "Characters/Shadow/Knockdown/Shadow_Knockdown_00.png",
+            "Characters/Shadow/Knockdown/Shadow_Knockdown_01.png",
+            "Characters/Shadow/Knockdown/Shadow_Knockdown_02.png",
+            "Characters/Shadow/Knockdown/Shadow_Knockdown_03.png"
+          ],
+          "loop": false,
+          "suggested_fps": 12,
+          "note": "Starting playback values only. Set combat timing in gameplay data."
+        },
+        "Victory": {
+          "frames": [
+            "Characters/Shadow/Victory/Shadow_Victory_00.png",
+            "Characters/Shadow/Victory/Shadow_Victory_01.png",
+            "Characters/Shadow/Victory/Shadow_Victory_02.png",
+            "Characters/Shadow/Victory/Shadow_Victory_03.png"
+          ],
+          "loop": false,
+          "suggested_fps": 12,
+          "note": "Starting playback values only. Set combat timing in gameplay data."
+        }
+      }
+    }
+  },
+  "limits": [
+    "Four key poses per action; not hand-polished animation.",
+    "No Unreal project or uasset files; no engine playback verification.",
+    "Artwork is baked lighting; character appearance and pose continuity may vary.",
+    "HitReaction and GetUp require separate animations; Knockdown is a one-shot."
+  ],
+  "arena": {
+    "file": "Arena/Midnight_Rooftop_Ring.png",
+    "size": [
+      1672,
+      941
+    ],
+    "layers": "single flattened background",
+    "characters_included": false,
+    "suggested_ground_y_fraction": 0.88
+  }
+}

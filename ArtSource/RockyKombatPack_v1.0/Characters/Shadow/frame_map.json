@@ -1,0 +1,90 @@
+{
+  "Idle": {
+    "frames": [
+      "Characters/Shadow/Idle/Shadow_Idle_00.png",
+      "Characters/Shadow/Idle/Shadow_Idle_01.png",
+      "Characters/Shadow/Idle/Shadow_Idle_02.png",
+      "Characters/Shadow/Idle/Shadow_Idle_03.png"
+    ],
+    "loop": true,
+    "suggested_fps": 8,
+    "note": "Starting playback values only. Set combat timing in gameplay data."
+  },
+  "Walk": {
+    "frames": [
+      "Characters/Shadow/Walk/Shadow_Walk_00.png",
+      "Characters/Shadow/Walk/Shadow_Walk_01.png",
+      "Characters/Shadow/Walk/Shadow_Walk_02.png",
+      "Characters/Shadow/Walk/Shadow_Walk_03.png"
+    ],
+    "loop": true,
+    "suggested_fps": 8,
+    "note": "Starting playback values only. Set combat timing in gameplay data."
+  },
+  "Jab": {
+    "frames": [
+      "Characters/Shadow/Jab/Shadow_Jab_00.png",
+      "Characters/Shadow/Jab/Shadow_Jab_01.png",
+      "Characters/Shadow/Jab/Shadow_Jab_02.png",
+      "Characters/Shadow/Jab/Shadow_Jab_03.png"
+    ],
+    "loop": false,
+    "suggested_fps": 12,
+    "note": "Starting playback values only. Set combat timing in gameplay data."
+  },
+  "HeavyPunch": {
+    "frames": [
+      "Characters/Shadow/HeavyPunch/Shadow_HeavyPunch_00.png",
+      "Characters/Shadow/HeavyPunch/Shadow_HeavyPunch_01.png",
+      "Characters/Shadow/HeavyPunch/Shadow_HeavyPunch_02.png",
+      "Characters/Shadow/HeavyPunch/Shadow_HeavyPunch_03.png"
+    ],
+    "loop": false,
+    "suggested_fps": 12,
+    "note": "Starting playback values only. Set combat timing in gameplay data."
+  },
+  "Block": {
+    "frames": [
+      "Characters/Shadow/Block/Shadow_Block_00.png",
+      "Characters/Shadow/Block/Shadow_Block_01.png",
+      "Characters/Shadow/Block/Shadow_Block_02.png",
+      "Characters/Shadow/Block/Shadow_Block_03.png"
+    ],
+    "loop": false,
+    "suggested_fps": 12,
+    "note": "Starting playback values only. Set combat timing in gameplay data."
+  },
+  "Dodge": {
+    "frames": [
+      "Characters/Shadow/Dodge/Shadow_Dodge_00.png",
+      "Characters/Shadow/Dodge/Shadow_Dodge_01.png",
+      "Characters/Shadow/Dodge/Shadow_Dodge_02.png",
+      "Characters/Shadow/Dodge/Shadow_Dodge_03.png"
+    ],
+    "loop": false,
+    "suggested_fps": 12,
+    "note": "Starting playback values only. Set combat timing in gameplay data."
+  },
+  "Knockdown": {
+    "frames": [
+      "Characters/Shadow/Knockdown/Shadow_Knockdown_00.png",
+      "Characters/Shadow/Knockdown/Shadow_Knockdown_01.png",
+      "Characters/Shadow/Knockdown/Shadow_Knockdown_02.png",
+      "Characters/Shadow/Knockdown/Shadow_Knockdown_03.png"
+    ],
+    "loop": false,
+    "suggested_fps": 12,
+    "note": "Starting playback values only. Set combat timing in gameplay data."
+  },
+  "Victory": {
+    "frames": [
+      "Characters/Shadow/Victory/Shadow_Victory_00.png",
+      "Characters/Shadow/Victory/Shadow_Victory_01.png",
+      "Characters/Shadow/Victory/Shadow_Victory_02.png",
+      "Characters/Shadow/Victory/Shadow_Victory_03.png"
+    ],
+    "loop": false,
+    "suggested_fps": 12,
+    "note": "Starting playback values only. Set combat timing in gameplay data."
+  }
+}

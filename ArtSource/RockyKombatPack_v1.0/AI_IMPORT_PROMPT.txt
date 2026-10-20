@@ -1,0 +1,106 @@
+Integrate this Rocky Kombat art pack into my Unreal project. Work on the existing
+project safely, preserving source control history and unrelated content.
+
+READ FIRST
+Read START_HERE.txt, asset_manifest.json, QA_REPORT.json and the original Rocky
+Kombat combat PDF I provide. This instruction supplements my earlier full build
+prompt. For this asset path, use Paper2D sprites and PaperFlipbooks; do not try to
+rig these PNGs as 3D models. This is a 2D rendering choice with 3D-looking artwork.
+Keep shared Rocky ID and services modular as previously specified.
+
+1. AUDIT
+Inspect project version, enabled plugins, build tools and target platform.
+Enable Paper2D if appropriate. Check Epic documentation for this engine version.
+Do not replace working project systems unnecessarily. Back up before changes.
+
+2. VALIDATE THE INPUT
+Verify PNG decoding, dimensions, alpha, frame counts and manifest paths.
+There are 64 individual 384x320 PNGs, two 1536x2560 atlases and one 1672x941 arena.
+Custom pivot is x=192, y=300 measured from top-left of every individual frame.
+Do not recompute pivot from each tight silhouette; that causes jitter.
+JSON files in this pack are descriptions, not native Unreal import schemas.
+
+3. IMPORT
+Prefer the already separated individual PNGs so no approximate slicing is needed.
+Import into /Game/RockyKombat/Art/Characters/{Rocky,Shadow}/{Action}/.
+Create PaperSprite assets, retaining full 384x320 source canvases and the custom
+pivot. Keep consistent pixels-per-Unreal-unit and in-world scale for both fighters.
+If extracting atlases instead, use explicit 384x320 grid cells, 4 columns and
+8 rows; never automatic silhouette extraction, which can split tails and hands.
+
+Preserve alpha and inspect over dark and bright backgrounds. Use an appropriate
+Paper2D material with alpha support. Compare masked vs translucent edges for this
+soft fur artwork; use the least artifact-prone approach and inspect sorting.
+Avoid forced nearest-neighbor filtering intended for pixel art; these are smooth
+rendered sprites. Check texture compression, sRGB, alpha, mipmaps and max texture
+size against actual output rather than copying generic settings blindly.
+
+4. CREATE ANIMATIONS
+Names: FB_Rocky_Idle, FB_Rocky_Walk, FB_Rocky_Jab, FB_Rocky_HeavyPunch,
+FB_Rocky_Block, FB_Rocky_Dodge, FB_Rocky_Knockdown, FB_Rocky_Victory.
+Create the equivalent eight Shadow assets. Order frames 00,01,02,03.
+Start idle/walk at 8 fps; start other sequences at 12 fps. These are tuning
+suggestions, not locked combat timing. Loop idle/walk. Make attacks, dodge and
+knockdown one-shots; knockdown holds final frame until game rules change state.
+Block enters and holds an appropriate guard pose while blocking rather than
+looping a guard-drop sequence. Victory behavior follows match state.
+Do not automatically reverse knockdown as a claimed final GetUp animation.
+
+5. SET UP FIGHTERS
+Create/reuse a fighter actor with a Flipbook component and separate gameplay
+collision. Use data-driven sprite sets so Rocky and Shadow share combat code.
+Face opponents by component mirroring or an equivalent transform; test UVs,
+sorting and collision. Mirroring reverses costume text and is a prototype tradeoff.
+Do not move attacks simply by changing each frame pivot.
+Use independent hurtboxes and attack hitboxes, not PNG silhouettes. Define startup,
+active and recovery windows in gameplay data, independent of GIF playback speeds.
+Suggested attack image order is anticipation / extension / impact / recovery,
+but manually inspect each sequence before choosing active frames.
+Prevent repeated unintended damage per attack. Fix the gameplay root to the fight
+plane and keep the arena floor aligned to the custom sprite pivot.
+
+6. ARENA
+Import Arena/Midnight_Rooftop_Ring.png as a single background. Display with a
+side-on camera, preserving aspect ratio and a clear fighting area. An initial
+floor line is around 88% down the image; tune placement against actual feet.
+This is not layered geometry. Add simple invisible gameplay floor/boundaries
+separately. Keep fighters and HUD in front, and prevent background collision.
+Set texture scale so the approximately 200-pixel-high fighters look intentional,
+not excessively enlarged and blurred. Use letterboxing/camera framing as needed.
+
+7. ANIMATION STATE RULES
+Implement Idle, Move, Attack, Block, Dodge, HitStun, Knockdown and Victory states.
+HitStun/GetUp artwork is missing: mark temporary fallback explicitly and request
+new frames if the implementation requires them. Do not pretend missing art exists.
+Review Shadow Dodge before use: its third pose resembles falling. Choose a safe
+subset for the temporary dodge and record the substitution.
+Review temporal continuity, limb changes and minor outline artifacts. Correct
+source artwork or use explicit temporary fallbacks; never hide defects in QA.
+
+8. BUILD A PLAYABLE LOCAL MATCH FIRST
+Two fighters, movement, light/heavy punch, stamina, block, dodge, damage, KO,
+round timer, result and rematch. Prove sprites render and animate in a packaged
+build. Then continue the earlier staged build plan for casual networking and
+trusted ranked services. The browser preview is only an art viewer, not gameplay.
+
+9. PRESERVE PRODUCT RULES
+Rocky Kombat has RBA, Street Fights and Rocky Universe with separate mode rules.
+Preserve boxing-only rules in RBA. Shadow's martial-arts outfit does not authorize
+kicks or special attacks in RBA. Treat this as a shared art preview roster; obtain
+a mode-approved RBA glove/costume variant if required before release.
+Offline/casual must not affect ranked records. Do not enable pay-to-win, ads,
+mandatory crypto, player stakes or client-authoritative competitive outcomes.
+
+10. VERIFY AND REPORT
+Test every action, both facing directions, floor alignment, loop boundaries,
+transitions, knockout hold, block hold, camera cropping, atlas bleed, alpha halos,
+texture sharpness, sort order, resolution scaling and touch controls.
+Record engine version, device/build used and actual findings. A successful PNG
+import alone does not establish animation quality or production readiness.
+Deliver a runnable test map, project changes, import/timing settings, screenshots
+or short playback capture and a remaining-issues list. Continue independent work
+through ordinary reversible implementation steps without repeatedly asking me.
+
+Official references (verify against installed engine version):
+https://dev.epicgames.com/documentation/en-us/unreal-engine/paper-2d-flipbooks-in-unreal-engine
+https://dev.epicgames.com/documentation/en-us/unreal-engine/import-sprites-in-unreal-engine

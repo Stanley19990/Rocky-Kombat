@@ -1,0 +1,781 @@
+{
+  "file_count": 70,
+  "format_failures": [],
+  "duplicate_files": {},
+  "loops": {
+    "Music/MUS_Title.wav": {
+      "wrap_delta": 0.0072488168405546,
+      "median_adjacent_delta": 0.004099016231179864,
+      "p95_adjacent_delta": 0.01257060539368766,
+      "p99_adjacent_delta": 0.017113835310207482,
+      "max_adjacent_delta": 0.03860950416579706,
+      "criterion": "wrap_delta <= p99(|adjacent delta|)",
+      "passes": true
+    },
+    "Music/MUS_Menu.wav": {
+      "wrap_delta": 0.00562412846685148,
+      "median_adjacent_delta": 0.003942552344661648,
+      "p95_adjacent_delta": 0.012209358634523578,
+      "p99_adjacent_delta": 0.0167378631824247,
+      "max_adjacent_delta": 0.04305584828443401,
+      "criterion": "wrap_delta <= p99(|adjacent delta|)",
+      "passes": true
+    },
+    "Music/MUS_Arena.wav": {
+      "wrap_delta": 0.0053273985179128625,
+      "median_adjacent_delta": 0.0050948639561211595,
+      "p95_adjacent_delta": 0.01582695302478591,
+      "p99_adjacent_delta": 0.021755082321750645,
+      "max_adjacent_delta": 0.04833931515863403,
+      "criterion": "wrap_delta <= p99(|adjacent delta|)",
+      "passes": true
+    },
+    "Ambience/AMB_Rooftop.wav": {
+      "wrap_delta": 0.004079491650417266,
+      "median_adjacent_delta": 0.004347866490130242,
+      "p95_adjacent_delta": 0.013273927783556181,
+      "p99_adjacent_delta": 0.017933971363390377,
+      "max_adjacent_delta": 0.03527628567181936,
+      "criterion": "wrap_delta <= p99(|adjacent delta|)",
+      "passes": true
+    }
+  },
+  "family_separation": {
+    "whiff_light_centroid_hz": 523.4,
+    "whiff_heavy_centroid_hz": 222.5,
+    "impact_light_centroid_hz": 1064.75,
+    "impact_heavy_centroid_hz": 49.4,
+    "block_centroid_hz": 111.83333333333333,
+    "whiff_light_attack_ms": 69.83999999999999,
+    "impact_light_attack_ms": 1.25,
+    "impact_heavy_low_ratio": 0.98715,
+    "impact_light_low_ratio": 0.376225,
+    "rocky_glove_centroid_hz": 76.9,
+    "shadow_strike_centroid_hz": 790.2000000000002,
+    "rocky_hurt_centroid_hz": 190.0,
+    "shadow_hurt_centroid_hz": 211.26666666666665,
+    "whiff_light_crack_centroid_hz": 685.7666666666668,
+    "whiff_heavy_crack_centroid_hz": 258.93333333333334,
+    "impact_light_crack_centroid_hz": 4858.325,
+    "impact_heavy_crack_centroid_hz": 242.275,
+    "block_crack_centroid_hz": 156.96666666666667,
+    "rocky_glove_crack_centroid_hz": 362.93333333333334,
+    "shadow_strike_crack_centroid_hz": 3740.7333333333336,
+    "impact_heavy_sub_ratio": 0.9742500000000001,
+    "impact_light_sub_ratio": 0.08247499999999999,
+    "block_sub_ratio": 0.20353333333333334
+  },
+  "separation_verdict": {
+    "block_transient_duller_than_impact_light": true,
+    "impact_heavy_has_more_sub_weight_than_light": true,
+    "impact_light_transient_brighter_than_heavy": true,
+    "whiffs_are_slow_attacks_not_impulses": true,
+    "whiff_light_brighter_than_whiff_heavy": true,
+    "shadow_strike_sharper_than_rocky_glove": true,
+    "shadow_voice_brighter_than_rocky": true
+  },
+  "per_file_measurements": {
+    "Music/MUS_Title.wav": {
+      "duration_s": 24.0,
+      "spectral_centroid_hz": 84.2,
+      "crack_centroid_hz": 539.3,
+      "attack_ms": 6290.7,
+      "low_energy_ratio_below_200hz": 0.9432,
+      "low_energy_ratio_below_100hz": 0.8489,
+      "rms_dbfs": -13.305,
+      "peak_dbfs": -1.5
+    },
+    "Music/MUS_Menu.wav": {
+      "duration_s": 19.2,
+      "spectral_centroid_hz": 69.0,
+      "crack_centroid_hz": 505.3,
+      "attack_ms": 78.82,
+      "low_energy_ratio_below_200hz": 0.9667,
+      "low_energy_ratio_below_100hz": 0.9124,
+      "rms_dbfs": -11.118,
+      "peak_dbfs": -1.5
+    },
+    "Music/MUS_Arena.wav": {
+      "duration_s": 31.875,
+      "spectral_centroid_hz": 73.2,
+      "crack_centroid_hz": 589.7,
+      "attack_ms": 1902.68,
+      "low_energy_ratio_below_200hz": 0.9496,
+      "low_energy_ratio_below_100hz": 0.8571,
+      "rms_dbfs": -11.875,
+      "peak_dbfs": -1.5
+    },
+    "Ambience/AMB_Rooftop.wav": {
+      "duration_s": 20.0,
+      "spectral_centroid_hz": 403.2,
+      "crack_centroid_hz": 881.7,
+      "attack_ms": 1902.68,
+      "low_energy_ratio_below_200hz": 0.5808,
+      "low_energy_ratio_below_100hz": 0.3934,
+      "rms_dbfs": -24.169,
+      "peak_dbfs": -10.0
+    },
+    "Stingers/STG_RoundStart.wav": {
+      "duration_s": 1.2,
+      "spectral_centroid_hz": 421.6,
+      "crack_centroid_hz": 527.2,
+      "attack_ms": 16.96,
+      "low_energy_ratio_below_200hz": 0.4001,
+      "low_energy_ratio_below_100hz": 0.3552,
+      "rms_dbfs": -17.115,
+      "peak_dbfs": -1.5
+    },
+    "Stingers/STG_RoundEnd.wav": {
+      "duration_s": 1.5,
+      "spectral_centroid_hz": 270.9,
+      "crack_centroid_hz": 347.0,
+      "attack_ms": 14.97,
+      "low_energy_ratio_below_200hz": 0.2783,
+      "low_energy_ratio_below_100hz": 0.0001,
+      "rms_dbfs": -19.635,
+      "peak_dbfs": -1.5
+    },
+    "Stingers/STG_KO.wav": {
+      "duration_s": 2.0,
+      "spectral_centroid_hz": 63.0,
+      "crack_centroid_hz": 189.5,
+      "attack_ms": 4.99,
+      "low_energy_ratio_below_200hz": 0.6754,
+      "low_energy_ratio_below_100hz": 0.6139,
+      "rms_dbfs": -19.249,
+      "peak_dbfs": -1.5
+    },
+    "Stingers/STG_Victory.wav": {
+      "duration_s": 3.0,
+      "spectral_centroid_hz": 551.8,
+      "crack_centroid_hz": 710.6,
+      "attack_ms": 542.77,
+      "low_energy_ratio_below_200hz": 0.4865,
+      "low_energy_ratio_below_100hz": 0.0003,
+      "rms_dbfs": -16.331,
+      "peak_dbfs": -1.5
+    },
+    "Stingers/STG_Defeat.wav": {
+      "duration_s": 2.5,
+      "spectral_centroid_hz": 137.8,
+      "crack_centroid_hz": 206.0,
+      "attack_ms": 54.88,
+      "low_energy_ratio_below_200hz": 0.8757,
+      "low_energy_ratio_below_100hz": 0.4432,
+      "rms_dbfs": -13.957,
+      "peak_dbfs": -1.5
+    },
+    "Stingers/STG_Bell.wav": {
+      "duration_s": 1.8,
+      "spectral_centroid_hz": 316.5,
+      "crack_centroid_hz": 368.4,
+      "attack_ms": 2.99,
+      "low_energy_ratio_below_200hz": 0.2824,
+      "low_energy_ratio_below_100hz": 0.0001,
+      "rms_dbfs": -16.199,
+      "peak_dbfs": -2.0
+    },
+    "UI/UI_Focus.wav": {
+      "duration_s": 0.08,
+      "spectral_centroid_hz": 1187.8,
+      "crack_centroid_hz": 1188.9,
+      "attack_ms": 1.0,
+      "low_energy_ratio_below_200hz": 0.0001,
+      "low_energy_ratio_below_100hz": 0.0,
+      "rms_dbfs": -22.795,
+      "peak_dbfs": -4.0
+    },
+    "UI/UI_Select.wav": {
+      "duration_s": 0.15,
+      "spectral_centroid_hz": 1174.5,
+      "crack_centroid_hz": 1174.7,
+      "attack_ms": 1.0,
+      "low_energy_ratio_below_200hz": 0.0001,
+      "low_energy_ratio_below_100hz": 0.0,
+      "rms_dbfs": -19.297,
+      "peak_dbfs": -4.0
+    },
+    "UI/UI_Back.wav": {
+      "duration_s": 0.15,
+      "spectral_centroid_hz": 588.0,
+      "crack_centroid_hz": 589.6,
+      "attack_ms": 1.0,
+      "low_energy_ratio_below_200hz": 0.0004,
+      "low_energy_ratio_below_100hz": 0.0001,
+      "rms_dbfs": -18.923,
+      "peak_dbfs": -4.0
+    },
+    "UI/UI_Disabled.wav": {
+      "duration_s": 0.12,
+      "spectral_centroid_hz": 228.3,
+      "crack_centroid_hz": 347.2,
+      "attack_ms": 1.0,
+      "low_energy_ratio_below_200hz": 0.6229,
+      "low_energy_ratio_below_100hz": 0.0133,
+      "rms_dbfs": -18.006,
+      "peak_dbfs": -4.0
+    },
+    "Combat/Whiff_Light_01.wav": {
+      "duration_s": 0.18,
+      "spectral_centroid_hz": 484.4,
+      "crack_centroid_hz": 646.5,
+      "attack_ms": 82.81,
+      "low_energy_ratio_below_200hz": 0.2734,
+      "low_energy_ratio_below_100hz": 0.021,
+      "rms_dbfs": -15.894,
+      "peak_dbfs": -3.0
+    },
+    "Combat/Whiff_Light_02.wav": {
+      "duration_s": 0.18,
+      "spectral_centroid_hz": 573.1,
+      "crack_centroid_hz": 726.4,
+      "attack_ms": 66.85,
+      "low_energy_ratio_below_200hz": 0.2288,
+      "low_energy_ratio_below_100hz": 0.0106,
+      "rms_dbfs": -13.977,
+      "peak_dbfs": -3.0
+    },
+    "Combat/Whiff_Light_03.wav": {
+      "duration_s": 0.18,
+      "spectral_centroid_hz": 512.7,
+      "crack_centroid_hz": 684.4,
+      "attack_ms": 59.86,
+      "low_energy_ratio_below_200hz": 0.2435,
+      "low_energy_ratio_below_100hz": 0.0104,
+      "rms_dbfs": -14.955,
+      "peak_dbfs": -3.0
+    },
+    "Combat/Whiff_Heavy_01.wav": {
+      "duration_s": 0.3,
+      "spectral_centroid_hz": 224.6,
+      "crack_centroid_hz": 254.9,
+      "attack_ms": 143.67,
+      "low_energy_ratio_below_200hz": 0.2709,
+      "low_energy_ratio_below_100hz": 0.0097,
+      "rms_dbfs": -15.059,
+      "peak_dbfs": -3.0
+    },
+    "Combat/Whiff_Heavy_02.wav": {
+      "duration_s": 0.3,
+      "spectral_centroid_hz": 224.3,
+      "crack_centroid_hz": 264.0,
+      "attack_ms": 131.7,
+      "low_energy_ratio_below_200hz": 0.4342,
+      "low_energy_ratio_below_100hz": 0.0118,
+      "rms_dbfs": -14.718,
+      "peak_dbfs": -3.0
+    },
+    "Combat/Whiff_Heavy_03.wav": {
+      "duration_s": 0.3,
+      "spectral_centroid_hz": 218.6,
+      "crack_centroid_hz": 257.9,
+      "attack_ms": 107.76,
+      "low_energy_ratio_below_200hz": 0.4282,
+      "low_energy_ratio_below_100hz": 0.0108,
+      "rms_dbfs": -13.925,
+      "peak_dbfs": -3.0
+    },
+    "Combat/Impact_Light_01.wav": {
+      "duration_s": 0.15,
+      "spectral_centroid_hz": 1078.6,
+      "crack_centroid_hz": 4805.7,
+      "attack_ms": 1.0,
+      "low_energy_ratio_below_200hz": 0.386,
+      "low_energy_ratio_below_100hz": 0.0843,
+      "rms_dbfs": -21.701,
+      "peak_dbfs": -1.5
+    },
+    "Combat/Impact_Light_02.wav": {
+      "duration_s": 0.15,
+      "spectral_centroid_hz": 1052.3,
+      "crack_centroid_hz": 4745.4,
+      "attack_ms": 1.0,
+      "low_energy_ratio_below_200hz": 0.3347,
+      "low_energy_ratio_below_100hz": 0.0737,
+      "rms_dbfs": -23.643,
+      "peak_dbfs": -1.5
+    },
+    "Combat/Impact_Light_03.wav": {
+      "duration_s": 0.15,
+      "spectral_centroid_hz": 1022.9,
+      "crack_centroid_hz": 4945.9,
+      "attack_ms": 1.0,
+      "low_energy_ratio_below_200hz": 0.3523,
+      "low_energy_ratio_below_100hz": 0.0764,
+      "rms_dbfs": -23.117,
+      "peak_dbfs": -1.5
+    },
+    "Combat/Impact_Light_04.wav": {
+      "duration_s": 0.15,
+      "spectral_centroid_hz": 1105.2,
+      "crack_centroid_hz": 4936.3,
+      "attack_ms": 2.0,
+      "low_energy_ratio_below_200hz": 0.4319,
+      "low_energy_ratio_below_100hz": 0.0955,
+      "rms_dbfs": -23.403,
+      "peak_dbfs": -1.5
+    },
+    "Combat/Impact_Heavy_01.wav": {
+      "duration_s": 0.28,
+      "spectral_centroid_hz": 49.4,
+      "crack_centroid_hz": 262.7,
+      "attack_ms": 3.99,
+      "low_energy_ratio_below_200hz": 0.9878,
+      "low_energy_ratio_below_100hz": 0.975,
+      "rms_dbfs": -18.031,
+      "peak_dbfs": -1.5
+    },
+    "Combat/Impact_Heavy_02.wav": {
+      "duration_s": 0.28,
+      "spectral_centroid_hz": 49.4,
+      "crack_centroid_hz": 238.2,
+      "attack_ms": 2.99,
+      "low_energy_ratio_below_200hz": 0.9875,
+      "low_energy_ratio_below_100hz": 0.9748,
+      "rms_dbfs": -17.477,
+      "peak_dbfs": -1.5
+    },
+    "Combat/Impact_Heavy_03.wav": {
+      "duration_s": 0.28,
+      "spectral_centroid_hz": 49.4,
+      "crack_centroid_hz": 238.3,
+      "attack_ms": 2.0,
+      "low_energy_ratio_below_200hz": 0.987,
+      "low_energy_ratio_below_100hz": 0.9739,
+      "rms_dbfs": -17.097,
+      "peak_dbfs": -1.5
+    },
+    "Combat/Impact_Heavy_04.wav": {
+      "duration_s": 0.28,
+      "spectral_centroid_hz": 49.4,
+      "crack_centroid_hz": 229.9,
+      "attack_ms": 3.99,
+      "low_energy_ratio_below_200hz": 0.9863,
+      "low_energy_ratio_below_100hz": 0.9733,
+      "rms_dbfs": -17.735,
+      "peak_dbfs": -1.5
+    },
+    "Combat/Block_01.wav": {
+      "duration_s": 0.18,
+      "spectral_centroid_hz": 111.8,
+      "crack_centroid_hz": 156.0,
+      "attack_ms": 2.0,
+      "low_energy_ratio_below_200hz": 0.9672,
+      "low_energy_ratio_below_100hz": 0.2017,
+      "rms_dbfs": -17.165,
+      "peak_dbfs": -1.5
+    },
+    "Combat/Block_02.wav": {
+      "duration_s": 0.18,
+      "spectral_centroid_hz": 111.7,
+      "crack_centroid_hz": 156.0,
+      "attack_ms": 2.0,
+      "low_energy_ratio_below_200hz": 0.9581,
+      "low_energy_ratio_below_100hz": 0.2068,
+      "rms_dbfs": -16.677,
+      "peak_dbfs": -1.5
+    },
+    "Combat/Block_03.wav": {
+      "duration_s": 0.18,
+      "spectral_centroid_hz": 112.0,
+      "crack_centroid_hz": 158.9,
+      "attack_ms": 1.0,
+      "low_energy_ratio_below_200hz": 0.9642,
+      "low_energy_ratio_below_100hz": 0.2021,
+      "rms_dbfs": -15.919,
+      "peak_dbfs": -1.5
+    },
+    "Combat/Dodge_01.wav": {
+      "duration_s": 0.2,
+      "spectral_centroid_hz": 141.9,
+      "crack_centroid_hz": 183.7,
+      "attack_ms": 64.85,
+      "low_energy_ratio_below_200hz": 0.9122,
+      "low_energy_ratio_below_100hz": 0.1226,
+      "rms_dbfs": -17.031,
+      "peak_dbfs": -6.0
+    },
+    "Combat/Dodge_02.wav": {
+      "duration_s": 0.2,
+      "spectral_centroid_hz": 134.9,
+      "crack_centroid_hz": 173.7,
+      "attack_ms": 77.82,
+      "low_energy_ratio_below_200hz": 0.969,
+      "low_energy_ratio_below_100hz": 0.168,
+      "rms_dbfs": -14.979,
+      "peak_dbfs": -6.0
+    },
+    "Combat/Dodge_03.wav": {
+      "duration_s": 0.2,
+      "spectral_centroid_hz": 119.3,
+      "crack_centroid_hz": 221.8,
+      "attack_ms": 93.79,
+      "low_energy_ratio_below_200hz": 0.913,
+      "low_energy_ratio_below_100hz": 0.3714,
+      "rms_dbfs": -15.784,
+      "peak_dbfs": -6.0
+    },
+    "Combat/Footstep_01.wav": {
+      "duration_s": 0.12,
+      "spectral_centroid_hz": 371.6,
+      "crack_centroid_hz": 1695.4,
+      "attack_ms": 1.0,
+      "low_energy_ratio_below_200hz": 0.5944,
+      "low_energy_ratio_below_100hz": 0.3349,
+      "rms_dbfs": -27.319,
+      "peak_dbfs": -7.0
+    },
+    "Combat/Footstep_02.wav": {
+      "duration_s": 0.12,
+      "spectral_centroid_hz": 309.8,
+      "crack_centroid_hz": 1718.6,
+      "attack_ms": 2.0,
+      "low_energy_ratio_below_200hz": 0.5411,
+      "low_energy_ratio_below_100hz": 0.3087,
+      "rms_dbfs": -29.981,
+      "peak_dbfs": -7.0
+    },
+    "Combat/Footstep_03.wav": {
+      "duration_s": 0.12,
+      "spectral_centroid_hz": 266.0,
+      "crack_centroid_hz": 1606.4,
+      "attack_ms": 1.0,
+      "low_energy_ratio_below_200hz": 0.5035,
+      "low_energy_ratio_below_100hz": 0.3317,
+      "rms_dbfs": -27.629,
+      "peak_dbfs": -7.0
+    },
+    "Combat/Footstep_04.wav": {
+      "duration_s": 0.12,
+      "spectral_centroid_hz": 279.8,
+      "crack_centroid_hz": 1653.8,
+      "attack_ms": 1.0,
+      "low_energy_ratio_below_200hz": 0.5895,
+      "low_energy_ratio_below_100hz": 0.363,
+      "rms_dbfs": -27.137,
+      "peak_dbfs": -7.0
+    },
+    "Combat/Land_01.wav": {
+      "duration_s": 0.35,
+      "spectral_centroid_hz": 65.7,
+      "crack_centroid_hz": 1692.6,
+      "attack_ms": 2.99,
+      "low_energy_ratio_below_200hz": 0.9766,
+      "low_energy_ratio_below_100hz": 0.9671,
+      "rms_dbfs": -18.064,
+      "peak_dbfs": -2.5
+    },
+    "Combat/Land_02.wav": {
+      "duration_s": 0.35,
+      "spectral_centroid_hz": 65.9,
+      "crack_centroid_hz": 1666.9,
+      "attack_ms": 2.99,
+      "low_energy_ratio_below_200hz": 0.974,
+      "low_energy_ratio_below_100hz": 0.964,
+      "rms_dbfs": -19.141,
+      "peak_dbfs": -2.5
+    },
+    "Combat/KO_01.wav": {
+      "duration_s": 0.5,
+      "spectral_centroid_hz": 146.8,
+      "crack_centroid_hz": 402.5,
+      "attack_ms": 2.0,
+      "low_energy_ratio_below_200hz": 0.8626,
+      "low_energy_ratio_below_100hz": 0.8517,
+      "rms_dbfs": -17.484,
+      "peak_dbfs": -1.5
+    },
+    "Combat/KO_02.wav": {
+      "duration_s": 0.5,
+      "spectral_centroid_hz": 146.8,
+      "crack_centroid_hz": 402.6,
+      "attack_ms": 2.0,
+      "low_energy_ratio_below_200hz": 0.8614,
+      "low_energy_ratio_below_100hz": 0.8504,
+      "rms_dbfs": -17.635,
+      "peak_dbfs": -1.5
+    },
+    "Rocky/VO_Rocky_ExertLight_01.wav": {
+      "duration_s": 0.25,
+      "spectral_centroid_hz": 201.3,
+      "crack_centroid_hz": 334.2,
+      "attack_ms": 36.92,
+      "low_energy_ratio_below_200hz": 0.696,
+      "low_energy_ratio_below_100hz": 0.0024,
+      "rms_dbfs": -11.037,
+      "peak_dbfs": -3.0
+    },
+    "Rocky/VO_Rocky_ExertLight_02.wav": {
+      "duration_s": 0.25,
+      "spectral_centroid_hz": 208.4,
+      "crack_centroid_hz": 332.3,
+      "attack_ms": 41.9,
+      "low_energy_ratio_below_200hz": 0.7152,
+      "low_energy_ratio_below_100hz": 0.0029,
+      "rms_dbfs": -10.852,
+      "peak_dbfs": -3.0
+    },
+    "Rocky/VO_Rocky_ExertLight_03.wav": {
+      "duration_s": 0.25,
+      "spectral_centroid_hz": 197.5,
+      "crack_centroid_hz": 329.6,
+      "attack_ms": 41.9,
+      "low_energy_ratio_below_200hz": 0.717,
+      "low_energy_ratio_below_100hz": 0.0031,
+      "rms_dbfs": -11.051,
+      "peak_dbfs": -3.0
+    },
+    "Rocky/VO_Rocky_ExertHeavy_01.wav": {
+      "duration_s": 0.4,
+      "spectral_centroid_hz": 187.5,
+      "crack_centroid_hz": 338.3,
+      "attack_ms": 54.88,
+      "low_energy_ratio_below_200hz": 0.6513,
+      "low_energy_ratio_below_100hz": 0.0152,
+      "rms_dbfs": -11.587,
+      "peak_dbfs": -3.0
+    },
+    "Rocky/VO_Rocky_ExertHeavy_02.wav": {
+      "duration_s": 0.4,
+      "spectral_centroid_hz": 185.4,
+      "crack_centroid_hz": 337.9,
+      "attack_ms": 54.88,
+      "low_energy_ratio_below_200hz": 0.6626,
+      "low_energy_ratio_below_100hz": 0.0105,
+      "rms_dbfs": -11.423,
+      "peak_dbfs": -3.0
+    },
+    "Rocky/VO_Rocky_ExertHeavy_03.wav": {
+      "duration_s": 0.4,
+      "spectral_centroid_hz": 180.7,
+      "crack_centroid_hz": 334.1,
+      "attack_ms": 63.85,
+      "low_energy_ratio_below_200hz": 0.663,
+      "low_energy_ratio_below_100hz": 0.0202,
+      "rms_dbfs": -11.395,
+      "peak_dbfs": -3.0
+    },
+    "Rocky/VO_Rocky_Hurt_01.wav": {
+      "duration_s": 0.3,
+      "spectral_centroid_hz": 187.5,
+      "crack_centroid_hz": 333.7,
+      "attack_ms": 57.87,
+      "low_energy_ratio_below_200hz": 0.6936,
+      "low_energy_ratio_below_100hz": 0.0002,
+      "rms_dbfs": -12.94,
+      "peak_dbfs": -3.0
+    },
+    "Rocky/VO_Rocky_Hurt_02.wav": {
+      "duration_s": 0.3,
+      "spectral_centroid_hz": 192.2,
+      "crack_centroid_hz": 330.4,
+      "attack_ms": 67.85,
+      "low_energy_ratio_below_200hz": 0.7199,
+      "low_energy_ratio_below_100hz": 0.0001,
+      "rms_dbfs": -12.773,
+      "peak_dbfs": -3.0
+    },
+    "Rocky/VO_Rocky_Hurt_03.wav": {
+      "duration_s": 0.3,
+      "spectral_centroid_hz": 190.3,
+      "crack_centroid_hz": 326.5,
+      "attack_ms": 61.86,
+      "low_energy_ratio_below_200hz": 0.7212,
+      "low_energy_ratio_below_100hz": 0.0001,
+      "rms_dbfs": -12.64,
+      "peak_dbfs": -3.0
+    },
+    "Rocky/VO_Rocky_Victory_01.wav": {
+      "duration_s": 1.2,
+      "spectral_centroid_hz": 235.6,
+      "crack_centroid_hz": 328.1,
+      "attack_ms": 274.38,
+      "low_energy_ratio_below_200hz": 0.742,
+      "low_energy_ratio_below_100hz": 0.0,
+      "rms_dbfs": -10.69,
+      "peak_dbfs": -3.0
+    },
+    "Rocky/VO_Rocky_Victory_02.wav": {
+      "duration_s": 1.2,
+      "spectral_centroid_hz": 226.9,
+      "crack_centroid_hz": 327.1,
+      "attack_ms": 289.34,
+      "low_energy_ratio_below_200hz": 0.7495,
+      "low_energy_ratio_below_100hz": 0.0,
+      "rms_dbfs": -10.649,
+      "peak_dbfs": -3.0
+    },
+    "Shadow/VO_Shadow_ExertLight_01.wav": {
+      "duration_s": 0.22,
+      "spectral_centroid_hz": 230.3,
+      "crack_centroid_hz": 299.2,
+      "attack_ms": 30.93,
+      "low_energy_ratio_below_200hz": 0.8165,
+      "low_energy_ratio_below_100hz": 0.0,
+      "rms_dbfs": -9.944,
+      "peak_dbfs": -3.0
+    },
+    "Shadow/VO_Shadow_ExertLight_02.wav": {
+      "duration_s": 0.22,
+      "spectral_centroid_hz": 237.8,
+      "crack_centroid_hz": 295.4,
+      "attack_ms": 30.93,
+      "low_energy_ratio_below_200hz": 0.3249,
+      "low_energy_ratio_below_100hz": 0.0001,
+      "rms_dbfs": -9.855,
+      "peak_dbfs": -3.0
+    },
+    "Shadow/VO_Shadow_ExertLight_03.wav": {
+      "duration_s": 0.22,
+      "spectral_centroid_hz": 224.2,
+      "crack_centroid_hz": 290.5,
+      "attack_ms": 36.92,
+      "low_energy_ratio_below_200hz": 0.822,
+      "low_energy_ratio_below_100hz": 0.0001,
+      "rms_dbfs": -9.89,
+      "peak_dbfs": -3.0
+    },
+    "Shadow/VO_Shadow_ExertHeavy_01.wav": {
+      "duration_s": 0.36,
+      "spectral_centroid_hz": 192.9,
+      "crack_centroid_hz": 311.9,
+      "attack_ms": 50.88,
+      "low_energy_ratio_below_200hz": 0.7717,
+      "low_energy_ratio_below_100hz": 0.0002,
+      "rms_dbfs": -10.391,
+      "peak_dbfs": -3.0
+    },
+    "Shadow/VO_Shadow_ExertHeavy_02.wav": {
+      "duration_s": 0.36,
+      "spectral_centroid_hz": 190.0,
+      "crack_centroid_hz": 305.6,
+      "attack_ms": 68.84,
+      "low_energy_ratio_below_200hz": 0.7741,
+      "low_energy_ratio_below_100hz": 0.0001,
+      "rms_dbfs": -10.345,
+      "peak_dbfs": -3.0
+    },
+    "Shadow/VO_Shadow_ExertHeavy_03.wav": {
+      "duration_s": 0.36,
+      "spectral_centroid_hz": 190.6,
+      "crack_centroid_hz": 299.6,
+      "attack_ms": 69.84,
+      "low_energy_ratio_below_200hz": 0.7799,
+      "low_energy_ratio_below_100hz": 0.0001,
+      "rms_dbfs": -10.498,
+      "peak_dbfs": -3.0
+    },
+    "Shadow/VO_Shadow_Hurt_01.wav": {
+      "duration_s": 0.28,
+      "spectral_centroid_hz": 215.3,
+      "crack_centroid_hz": 294.4,
+      "attack_ms": 59.86,
+      "low_energy_ratio_below_200hz": 0.6753,
+      "low_energy_ratio_below_100hz": 0.0,
+      "rms_dbfs": -11.859,
+      "peak_dbfs": -3.0
+    },
+    "Shadow/VO_Shadow_Hurt_02.wav": {
+      "duration_s": 0.28,
+      "spectral_centroid_hz": 206.5,
+      "crack_centroid_hz": 291.9,
+      "attack_ms": 62.86,
+      "low_energy_ratio_below_200hz": 0.7877,
+      "low_energy_ratio_below_100hz": 0.0,
+      "rms_dbfs": -11.862,
+      "peak_dbfs": -3.0
+    },
+    "Shadow/VO_Shadow_Hurt_03.wav": {
+      "duration_s": 0.28,
+      "spectral_centroid_hz": 212.0,
+      "crack_centroid_hz": 287.1,
+      "attack_ms": 61.86,
+      "low_energy_ratio_below_200hz": 0.7688,
+      "low_energy_ratio_below_100hz": 0.0,
+      "rms_dbfs": -11.767,
+      "peak_dbfs": -3.0
+    },
+    "Shadow/VO_Shadow_Victory_01.wav": {
+      "duration_s": 1.3,
+      "spectral_centroid_hz": 264.5,
+      "crack_centroid_hz": 302.5,
+      "attack_ms": 319.27,
+      "low_energy_ratio_below_200hz": 0.045,
+      "low_energy_ratio_below_100hz": 0.0,
+      "rms_dbfs": -9.857,
+      "peak_dbfs": -3.0
+    },
+    "Shadow/VO_Shadow_Victory_02.wav": {
+      "duration_s": 1.3,
+      "spectral_centroid_hz": 265.8,
+      "crack_centroid_hz": 299.1,
+      "attack_ms": 298.32,
+      "low_energy_ratio_below_200hz": 0.0439,
+      "low_energy_ratio_below_100hz": 0.0,
+      "rms_dbfs": -9.715,
+      "peak_dbfs": -3.0
+    },
+    "Rocky/GloveImpact_01.wav": {
+      "duration_s": 0.2,
+      "spectral_centroid_hz": 76.8,
+      "crack_centroid_hz": 354.6,
+      "attack_ms": 2.0,
+      "low_energy_ratio_below_200hz": 0.964,
+      "low_energy_ratio_below_100hz": 0.911,
+      "rms_dbfs": -16.841,
+      "peak_dbfs": -1.5
+    },
+    "Rocky/GloveImpact_02.wav": {
+      "duration_s": 0.2,
+      "spectral_centroid_hz": 77.0,
+      "crack_centroid_hz": 372.2,
+      "attack_ms": 2.0,
+      "low_energy_ratio_below_200hz": 0.9585,
+      "low_energy_ratio_below_100hz": 0.9057,
+      "rms_dbfs": -18.105,
+      "peak_dbfs": -1.5
+    },
+    "Rocky/GloveImpact_03.wav": {
+      "duration_s": 0.2,
+      "spectral_centroid_hz": 76.9,
+      "crack_centroid_hz": 362.0,
+      "attack_ms": 2.0,
+      "low_energy_ratio_below_200hz": 0.9636,
+      "low_energy_ratio_below_100hz": 0.9107,
+      "rms_dbfs": -18.222,
+      "peak_dbfs": -1.5
+    },
+    "Shadow/StrikeImpact_01.wav": {
+      "duration_s": 0.18,
+      "spectral_centroid_hz": 786.7,
+      "crack_centroid_hz": 3694.6,
+      "attack_ms": 0.0,
+      "low_energy_ratio_below_200hz": 0.2871,
+      "low_energy_ratio_below_100hz": 0.0173,
+      "rms_dbfs": -25.485,
+      "peak_dbfs": -1.5
+    },
+    "Shadow/StrikeImpact_02.wav": {
+      "duration_s": 0.18,
+      "spectral_centroid_hz": 789.2,
+      "crack_centroid_hz": 3761.5,
+      "attack_ms": 0.0,
+      "low_energy_ratio_below_200hz": 0.3152,
+      "low_energy_ratio_below_100hz": 0.0187,
+      "rms_dbfs": -26.121,
+      "peak_dbfs": -1.5
+    },
+    "Shadow/StrikeImpact_03.wav": {
+      "duration_s": 0.18,
+      "spectral_centroid_hz": 794.7,
+      "crack_centroid_hz": 3766.1,
+      "attack_ms": 2.0,
+      "low_energy_ratio_below_200hz": 0.2734,
+      "low_energy_ratio_below_100hz": 0.0164,
+      "rms_dbfs": -25.665,
+      "peak_dbfs": -1.5
+    }
+  },
+  "failures": [],
+  "result": "PASS"
+}

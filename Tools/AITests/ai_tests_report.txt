@@ -1,0 +1,59 @@
+VCENV_OK
+RKCCombatCore.cpp
+RKCAI.cpp
+RKCAITests.cpp
+COMPILE_OK
+LINK_OK
+
+==== RUN ====
+ROCKY KOMBAT - offline AI harness (pure C++, no Unreal)
+simulation timestep: 0.016667 s   max ticks per match: 36000
+
+=== 1. Profile integrity ===
+      rookie reaction seconds                           0.300
+      contender reaction seconds                        0.190
+      champion reaction seconds                         0.120
+      jab startup seconds                               0.100
+      heavy startup seconds                             0.217
+
+=== 2. Live bot-vs-bot matches: per-tick invariants ===
+      matches run                                       6.000
+      total fixed ticks simulated                    7371.000
+      total attack events                             176.000
+      total hit events                                 85.000
+      total knockdown events                            4.000
+      total get-up events                               4.000
+      draws                                             0.000
+      timeouts (must be 0)                              0.000
+
+=== 3. Agreement with the shipped RunBotMatch harness ===
+      sample outcome, seed pair 20261017 / 911042:
+result=A wins end=KO scores=10-9 rounds=1 ticks=1316 time=21.9s | A: hits=7 thrown=14 kd=1 dmg=106 hp=50 | B: hits=6 thrown=15 kd=0 dmg=70 hp=0 | blocks=4/2 dodges=0/0 decisions=126/102 orders=15/15 sep=97.2 worstViolation=0.000
+
+=== 4. No side channel: replayed inputs reproduce the match exactly ===
+      captured state fingerprint                 1464294202.000
+      replayed state fingerprint                 1464294202.000
+
+=== 5. Determinism: seeds reproduce, and matter ===
+
+=== 6. Neutrality: no difficulty and no instrumentation may widen statistics ===
+
+=== 7. Difficulty changes discipline, not outcomes by fiat ===
+      rookie defensive orders                          10.000
+      champion defensive orders                        27.000
+      rookie decisions                                184.000
+      champion decisions                              286.000
+
+=== 8. Asymmetric fighters ===
+      mirror match ticks                             1535.000
+      mixed match ticks                               612.000
+      mixed match damage A                             84.888
+      mixed match damage B                             24.350
+
+================ SUMMARY ================
+checks run : 224
+failures   : 0
+result     : PASS
+========================================
+
+==== EXIT CODE 0 ====

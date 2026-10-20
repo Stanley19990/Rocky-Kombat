@@ -1,0 +1,89 @@
+# ============================================================================
+#  Rocky Kombat - Unreal Engine .gitignore
+#  Rule of thumb: anything the engine or the build script can regenerate is
+#  excluded. Anything a human authored (Content, Config, Source, docs, the art
+#  and audio pipeline inputs) is kept.
+# ============================================================================
+
+# --- Build output, caches, derived data across all platforms -----------------
+Binaries/
+DerivedDataCache/
+Intermediate/
+Saved/
+Packaged/
+Build/Receipts/
+Build/Android/*.apk
+Build/Android/*.aab
+Build/Android/gradle/
+Build/Android/src/
+Build/Android/*.gradle
+.gradle/
+
+# The shared debug keystore is deliberately kept (see Config/DefaultEngine.ini):
+# it is a throwaway self-signed key that makes successive sideloaded builds
+# install over each other. It is NOT a release key and not a secret.
+Build/*
+!Build/Android/
+Build/Android/*
+!Build/Android/rkc.keystore
+
+# --- Local distribution artefacts (regenerable, and far too large) -----------
+Dist/
+RockyKombat-Dist-Checkpoint-*/
+dist/
+
+# --- Tooling downloaded per-machine -----------------------------------------
+/Tools/jdk/
+/Tools/Android/gradle-user-home/
+
+# --- Secrets: signing material, tokens, credentials. NEVER commit. ----------
+.secrets/
+*.keystore
+!Build/Android/rkc.keystore
+*.jks
+*.p12
+*.pem
+*.key
+keystore.pw
+signing.env
+.env
+.env.*
+
+# --- IDE / editor noise ------------------------------------------------------
+.vs/
+.idea/
+.vscode/
+*.sln
+*.suo
+*.opensdf
+*.sdf
+*.VC.db
+*.VC.opendb
+*.code-workspace
+UE4.sln
+.ignore
+
+# --- OS noise ----------------------------------------------------------------
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+*.swp
+*~
+
+# --- Logs, dumps, captures ---------------------------------------------------
+*.log
+!docs/**/*.log
+*.dmp
+CrashReportClient/
+*.mp4
+*.mkv
+Saved/Evidence/
+
+# --- Temporary / scratch -----------------------------------------------------
+*.tmp
+*.bak
+*.orig
+/tmp/
+*.zip
+!docs/assets/*.zip

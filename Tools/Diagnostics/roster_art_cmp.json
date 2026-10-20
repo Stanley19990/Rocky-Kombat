@@ -1,0 +1,648 @@
+{
+  "pack": "C:\\RockyKombat\\ArtSource\\RockyKombatPack_v1.0",
+  "pairs": [
+    {
+      "anim": "Idle",
+      "frame": 0,
+      "rocky_md5": "ac6761f6a930acb2ecea5ca27e22c440",
+      "shadow_md5": "261aaca12782c6e0edc1893c3de186d7",
+      "rocky_bytes": 57201,
+      "shadow_bytes": 61402,
+      "file_identical": false,
+      "rocky_px": "58274290b0fe8d6e99eaef9d6e7d62d2",
+      "shadow_px": "b668bbc7ddfd3645bc331939dd82ff55",
+      "rocky_size": [
+        384,
+        320
+      ],
+      "shadow_size": [
+        384,
+        320
+      ],
+      "pixel_identical": false
+    },
+    {
+      "anim": "Idle",
+      "frame": 1,
+      "rocky_md5": "749f4a5db4eed4017e9b49e574fb9c92",
+      "shadow_md5": "b60601ce140ec1c6b1c58ec07ea5cd9b",
+      "rocky_bytes": 55263,
+      "shadow_bytes": 64483,
+      "file_identical": false,
+      "rocky_px": "d98d7a97050bd5cd2ddb9077b41f955a",
+      "shadow_px": "7a66e084f4772d465637d9112ed4a36c",
+      "rocky_size": [
+        384,
+        320
+      ],
+      "shadow_size": [
+        384,
+        320
+      ],
+      "pixel_identical": false
+    },
+    {
+      "anim": "Idle",
+      "frame": 2,
+      "rocky_md5": "33db39e333c29300dc817d3431483542",
+      "shadow_md5": "9b5efca97f07e6bd34c4043fd13c1611",
+      "rocky_bytes": 55953,
+      "shadow_bytes": 62176,
+      "file_identical": false,
+      "rocky_px": "9a3b2986d074e041ab4fdfb5ffb8d0d4",
+      "shadow_px": "a9360e4fd7b0648b1cb21a7f9c4e473d",
+      "rocky_size": [
+        384,
+        320
+      ],
+      "shadow_size": [
+        384,
+        320
+      ],
+      "pixel_identical": false
+    },
+    {
+      "anim": "Idle",
+      "frame": 3,
+      "rocky_md5": "5ffdb0b991ad0eca7ac9332955c65cd1",
+      "shadow_md5": "733d0055465c87fcf29a012ba569ca8d",
+      "rocky_bytes": 56071,
+      "shadow_bytes": 64383,
+      "file_identical": false,
+      "rocky_px": "7a1d5398aa731aedc0ceee0831bb8819",
+      "shadow_px": "df8d6c3d02c2c6ecbde6e73b4af29320",
+      "rocky_size": [
+        384,
+        320
+      ],
+      "shadow_size": [
+        384,
+        320
+      ],
+      "pixel_identical": false
+    },
+    {
+      "anim": "Walk",
+      "frame": 0,
+      "rocky_md5": "15dd4af5f6bc1a2d1ccab13dd57f85cc",
+      "shadow_md5": "df1f896be37f43ebd1c465feaf526538",
+      "rocky_bytes": 49653,
+      "shadow_bytes": 64965,
+      "file_identical": false,
+      "rocky_px": "e253b4de00bb3d498f75cc50f9e7e494",
+      "shadow_px": "fe314f59ea0a6f72dd2e9e9c8e53a8e8",
+      "rocky_size": [
+        384,
+        320
+      ],
+      "shadow_size": [
+        384,
+        320
+      ],
+      "pixel_identical": false
+    },
+    {
+      "anim": "Walk",
+      "frame": 1,
+      "rocky_md5": "c9373fda51f58ca2c430d71d30bdb038",
+      "shadow_md5": "9e29eccead394a6d877d2b21ab970a25",
+      "rocky_bytes": 50824,
+      "shadow_bytes": 66119,
+      "file_identical": false,
+      "rocky_px": "94cf21e6e795d5bf36225034470f7d85",
+      "shadow_px": "fdb7ed181c68323b4b0e47581d957b1b",
+      "rocky_size": [
+        384,
+        320
+      ],
+      "shadow_size": [
+        384,
+        320
+      ],
+      "pixel_identical": false
+    },
+    {
+      "anim": "Walk",
+      "frame": 2,
+      "rocky_md5": "56862d1f42d7f089bf31bff79dabbe0a",
+      "shadow_md5": "62b0ee96022d81dbe012182a644a3061",
+      "rocky_bytes": 48515,
+      "shadow_bytes": 67023,
+      "file_identical": false,
+      "rocky_px": "4a7985b2590ae7ea0f3f2c1044a7a903",
+      "shadow_px": "97996c655451010d560fd4ddc759e7db",
+      "rocky_size": [
+        384,
+        320
+      ],
+      "shadow_size": [
+        384,
+        320
+      ],
+      "pixel_identical": false
+    },
+    {
+      "anim": "Walk",
+      "frame": 3,
+      "rocky_md5": "ba66f56544b7cdebf1c1e4e9e6c3cdb9",
+      "shadow_md5": "b8ef31f3fe6f552ce7389a3adc056008",
+      "rocky_bytes": 49239,
+      "shadow_bytes": 60135,
+      "file_identical": false,
+      "rocky_px": "8deb34d066f16548e85cd5a6b950076a",
+      "shadow_px": "154151b3775491490e6ce09f6e90cbe8",
+      "rocky_size": [
+        384,
+        320
+      ],
+      "shadow_size": [
+        384,
+        320
+      ],
+      "pixel_identical": false
+    },
+    {
+      "anim": "Jab",
+      "frame": 0,
+      "rocky_md5": "4ade2a14b31ae7e4d429fbc00cfa145a",
+      "shadow_md5": "b351de3c2fa33dfe30dabf0119bb8ba0",
+      "rocky_bytes": 59668,
+      "shadow_bytes": 68979,
+      "file_identical": false,
+      "rocky_px": "9a0a912009ea5199159cff7be8a00467",
+      "shadow_px": "3b25a556e98b0d918fa51ee3477d9407",
+      "rocky_size": [
+        384,
+        320
+      ],
+      "shadow_size": [
+        384,
+        320
+      ],
+      "pixel_identical": false
+    },
+    {
+      "anim": "Jab",
+      "frame": 1,
+      "rocky_md5": "dbc5da2dd4fc83f1030ffe6f0f811eda",
+      "shadow_md5": "42742c85091b8298819536f2715e9f13",
+      "rocky_bytes": 62892,
+      "shadow_bytes": 69340,
+      "file_identical": false,
+      "rocky_px": "ffbdc99ecfb90c30e76f7cb9d5392df1",
+      "shadow_px": "c4cbc5742c5c1a334b360d8f1f807ad4",
+      "rocky_size": [
+        384,
+        320
+      ],
+      "shadow_size": [
+        384,
+        320
+      ],
+      "pixel_identical": false
+    },
+    {
+      "anim": "Jab",
+      "frame": 2,
+      "rocky_md5": "12a0974160cd3da50622bb2450fabefa",
+      "shadow_md5": "16bda8580d81ca41e3353cb7d81f3d70",
+      "rocky_bytes": 59147,
+      "shadow_bytes": 73166,
+      "file_identical": false,
+      "rocky_px": "fb53aea5948c3f4b0e506345da2d1b85",
+      "shadow_px": "a5901927094de04533bf9c34404ae24b",
+      "rocky_size": [
+        384,
+        320
+      ],
+      "shadow_size": [
+        384,
+        320
+      ],
+      "pixel_identical": false
+    },
+    {
+      "anim": "Jab",
+      "frame": 3,
+      "rocky_md5": "937be782f09c445faa77b0128adf5fd5",
+      "shadow_md5": "7ed436df86c68c66888dd3ab39d1bbbd",
+      "rocky_bytes": 59924,
+      "shadow_bytes": 62764,
+      "file_identical": false,
+      "rocky_px": "a80d6534c11d3ee55dc502aebab71593",
+      "shadow_px": "e77e179c18ba039ad3ff9dedffa09d02",
+      "rocky_size": [
+        384,
+        320
+      ],
+      "shadow_size": [
+        384,
+        320
+      ],
+      "pixel_identical": false
+    },
+    {
+      "anim": "HeavyPunch",
+      "frame": 0,
+      "rocky_md5": "97c910279708c2270a742c2987874254",
+      "shadow_md5": "0d8e61327199d9f910b34a0614c0ac05",
+      "rocky_bytes": 64288,
+      "shadow_bytes": 74111,
+      "file_identical": false,
+      "rocky_px": "e8b46f0ffa5a0592caa479f9a2b60848",
+      "shadow_px": "123cc6f44acf63392b1582529fe482ec",
+      "rocky_size": [
+        384,
+        320
+      ],
+      "shadow_size": [
+        384,
+        320
+      ],
+      "pixel_identical": false
+    },
+    {
+      "anim": "HeavyPunch",
+      "frame": 1,
+      "rocky_md5": "4f5eecb4f7203e2ffe9ec73df8d2329a",
+      "shadow_md5": "73fec6dfa87968548cc240736a580fad",
+      "rocky_bytes": 65480,
+      "shadow_bytes": 69782,
+      "file_identical": false,
+      "rocky_px": "5f4a6fccfb4ef41142db705943ef034a",
+      "shadow_px": "bf84145d27345b6b6c89d255be174b25",
+      "rocky_size": [
+        384,
+        320
+      ],
+      "shadow_size": [
+        384,
+        320
+      ],
+      "pixel_identical": false
+    },
+    {
+      "anim": "HeavyPunch",
+      "frame": 2,
+      "rocky_md5": "77202c7eaf8f44fcdd343b286c89dbc4",
+      "shadow_md5": "e3044316168b82b92d9e6188f30cac2b",
+      "rocky_bytes": 59100,
+      "shadow_bytes": 74539,
+      "file_identical": false,
+      "rocky_px": "4791a5b89b4e96e9b189803c939916ba",
+      "shadow_px": "ce40b83da45b5ab15e97f41df20130b7",
+      "rocky_size": [
+        384,
+        320
+      ],
+      "shadow_size": [
+        384,
+        320
+      ],
+      "pixel_identical": false
+    },
+    {
+      "anim": "HeavyPunch",
+      "frame": 3,
+      "rocky_md5": "9d68f354114910ecaa03fcec1dec22e1",
+      "shadow_md5": "f8b9d99a6f44610b6aaaf5441b0aeea8",
+      "rocky_bytes": 60384,
+      "shadow_bytes": 69982,
+      "file_identical": false,
+      "rocky_px": "56b93f7cd4b2fdd5742943e358a4f62f",
+      "shadow_px": "171dff9cecf8ddd3a2d48b1abd334d57",
+      "rocky_size": [
+        384,
+        320
+      ],
+      "shadow_size": [
+        384,
+        320
+      ],
+      "pixel_identical": false
+    },
+    {
+      "anim": "Block",
+      "frame": 0,
+      "rocky_md5": "85e161256017f4b38f7142c10d8a81d6",
+      "shadow_md5": "bac534896dacf2f173c60d8ee6db3eb7",
+      "rocky_bytes": 57861,
+      "shadow_bytes": 68417,
+      "file_identical": false,
+      "rocky_px": "6a85f129c512a7fe89ec50adf8a98b3a",
+      "shadow_px": "bf01e47e961ecb34c13257bc37e83ef2",
+      "rocky_size": [
+        384,
+        320
+      ],
+      "shadow_size": [
+        384,
+        320
+      ],
+      "pixel_identical": false
+    },
+    {
+      "anim": "Block",
+      "frame": 1,
+      "rocky_md5": "4e3be9b822ab8dfe0f0c04bf1383c768",
+      "shadow_md5": "796b995a005fcf9e2d4feda5fc160d07",
+      "rocky_bytes": 58539,
+      "shadow_bytes": 67669,
+      "file_identical": false,
+      "rocky_px": "960b1a1703d18587ffaf2824fab25dd2",
+      "shadow_px": "8e6acac569fd7f85f58a1bb0f243ef76",
+      "rocky_size": [
+        384,
+        320
+      ],
+      "shadow_size": [
+        384,
+        320
+      ],
+      "pixel_identical": false
+    },
+    {
+      "anim": "Block",
+      "frame": 2,
+      "rocky_md5": "47f61d79801cd94718cee4e27c387b82",
+      "shadow_md5": "74e09dbd866e82640d42d389415a30c3",
+      "rocky_bytes": 63223,
+      "shadow_bytes": 71306,
+      "file_identical": false,
+      "rocky_px": "00a116dc1a2fa49af9d5f4728e566cc1",
+      "shadow_px": "4f440e297615d1c32034886a785e58c6",
+      "rocky_size": [
+        384,
+        320
+      ],
+      "shadow_size": [
+        384,
+        320
+      ],
+      "pixel_identical": false
+    },
+    {
+      "anim": "Block",
+      "frame": 3,
+      "rocky_md5": "795775f9ad6350191d9bb1773cfa08a3",
+      "shadow_md5": "c4dc0fff1d0b948a9622813692ccc8d0",
+      "rocky_bytes": 60979,
+      "shadow_bytes": 63032,
+      "file_identical": false,
+      "rocky_px": "f128792cd005b5bbe4972c56768b6a80",
+      "shadow_px": "b7896df138bca8c0993f30bb403287ec",
+      "rocky_size": [
+        384,
+        320
+      ],
+      "shadow_size": [
+        384,
+        320
+      ],
+      "pixel_identical": false
+    },
+    {
+      "anim": "Dodge",
+      "frame": 0,
+      "rocky_md5": "ddfb282750bba3d7dac90144eeb4a428",
+      "shadow_md5": "9b856502bbcf2a4518320e0ea28e4696",
+      "rocky_bytes": 56550,
+      "shadow_bytes": 67412,
+      "file_identical": false,
+      "rocky_px": "8e3623b3b8f81619ad26685e19e494ff",
+      "shadow_px": "621bb8cf271039a6c5e4ef9924065cd8",
+      "rocky_size": [
+        384,
+        320
+      ],
+      "shadow_size": [
+        384,
+        320
+      ],
+      "pixel_identical": false
+    },
+    {
+      "anim": "Dodge",
+      "frame": 1,
+      "rocky_md5": "327d06b361479bb27e6b095240cdccd6",
+      "shadow_md5": "a4cc3a252bd1de4f19c9c49fb800bffc",
+      "rocky_bytes": 54950,
+      "shadow_bytes": 61534,
+      "file_identical": false,
+      "rocky_px": "c1dfa2c6546b84047d9236eb670dcc59",
+      "shadow_px": "00fe50fba6688bc40cc92073010bb0e5",
+      "rocky_size": [
+        384,
+        320
+      ],
+      "shadow_size": [
+        384,
+        320
+      ],
+      "pixel_identical": false
+    },
+    {
+      "anim": "Dodge",
+      "frame": 2,
+      "rocky_md5": "c29f6c92bcf564842a6f9db55cda8f6f",
+      "shadow_md5": "cf271d0e4035bc43a0a5276a1f729425",
+      "rocky_bytes": 54034,
+      "shadow_bytes": 66714,
+      "file_identical": false,
+      "rocky_px": "b27074120ed74cb9059c8befa57b3e0d",
+      "shadow_px": "7c5bc210d49e93aba10db4ed8b650ecb",
+      "rocky_size": [
+        384,
+        320
+      ],
+      "shadow_size": [
+        384,
+        320
+      ],
+      "pixel_identical": false
+    },
+    {
+      "anim": "Dodge",
+      "frame": 3,
+      "rocky_md5": "0aaaedef014848d53aca415c8ce32682",
+      "shadow_md5": "a9a1c29b61c6e2a676bd98bbc08225c4",
+      "rocky_bytes": 56165,
+      "shadow_bytes": 60342,
+      "file_identical": false,
+      "rocky_px": "cbb896170603cb404a181db32c4d4870",
+      "shadow_px": "baca3489e3f0a4804efd455b3b94f3f7",
+      "rocky_size": [
+        384,
+        320
+      ],
+      "shadow_size": [
+        384,
+        320
+      ],
+      "pixel_identical": false
+    },
+    {
+      "anim": "Knockdown",
+      "frame": 0,
+      "rocky_md5": "aabaae77f29cb467d837b1770a746e01",
+      "shadow_md5": "1a034e0dff26eb71518e66c01f71ae3e",
+      "rocky_bytes": 62887,
+      "shadow_bytes": 70182,
+      "file_identical": false,
+      "rocky_px": "7a4b978ab9148dbb8c1345ac883e2057",
+      "shadow_px": "ebd2915fe7365d7cb27622fd8eaf02a9",
+      "rocky_size": [
+        384,
+        320
+      ],
+      "shadow_size": [
+        384,
+        320
+      ],
+      "pixel_identical": false
+    },
+    {
+      "anim": "Knockdown",
+      "frame": 1,
+      "rocky_md5": "24bbc14c4953a1cc0912e5951b3d191c",
+      "shadow_md5": "9d8c0a89b3e2adaabf5fa3ae273dff09",
+      "rocky_bytes": 64698,
+      "shadow_bytes": 65890,
+      "file_identical": false,
+      "rocky_px": "e1652d80e833a1ef365bc154dc67c371",
+      "shadow_px": "297538cebd0d363417fe92d54f8bf67f",
+      "rocky_size": [
+        384,
+        320
+      ],
+      "shadow_size": [
+        384,
+        320
+      ],
+      "pixel_identical": false
+    },
+    {
+      "anim": "Knockdown",
+      "frame": 2,
+      "rocky_md5": "d483b4b4e248ef8a869640508c830b6a",
+      "shadow_md5": "b3faf6e2e1f17a2776a2d3ecfc94d473",
+      "rocky_bytes": 67453,
+      "shadow_bytes": 58716,
+      "file_identical": false,
+      "rocky_px": "f98c7be60736de56c6de690f7ab4fa4c",
+      "shadow_px": "3b193db142f4ba7a075e1f1e6ef2b775",
+      "rocky_size": [
+        384,
+        320
+      ],
+      "shadow_size": [
+        384,
+        320
+      ],
+      "pixel_identical": false
+    },
+    {
+      "anim": "Knockdown",
+      "frame": 3,
+      "rocky_md5": "38b3664c52c30fbc51352a6374b9f5e9",
+      "shadow_md5": "d787b93925084e788665670df89bbe0f",
+      "rocky_bytes": 43420,
+      "shadow_bytes": 53857,
+      "file_identical": false,
+      "rocky_px": "c79c3b3d82be20ea5cf5b01e1ec53d56",
+      "shadow_px": "b27fbdf35b2ec6eda76fa55a19ae1afd",
+      "rocky_size": [
+        384,
+        320
+      ],
+      "shadow_size": [
+        384,
+        320
+      ],
+      "pixel_identical": false
+    },
+    {
+      "anim": "Victory",
+      "frame": 0,
+      "rocky_md5": "bb525dbd86a1ff3dc9b936083d3152d9",
+      "shadow_md5": "693677efaae33fb7f4dedec3dc1494c2",
+      "rocky_bytes": 63953,
+      "shadow_bytes": 67632,
+      "file_identical": false,
+      "rocky_px": "408ab51fe3ee8f3749cbac9dce0c3596",
+      "shadow_px": "79431469c31dc688f7dfca2a28134009",
+      "rocky_size": [
+        384,
+        320
+      ],
+      "shadow_size": [
+        384,
+        320
+      ],
+      "pixel_identical": false
+    },
+    {
+      "anim": "Victory",
+      "frame": 1,
+      "rocky_md5": "9ccd67e36ac7c4636e37e86c205e19ed",
+      "shadow_md5": "94c40d642b75dc0d62e5960af50d3585",
+      "rocky_bytes": 72750,
+      "shadow_bytes": 68681,
+      "file_identical": false,
+      "rocky_px": "6412c873d9540b88f2b22726ef7974d2",
+      "shadow_px": "e773611520655351854e93d594e8467a",
+      "rocky_size": [
+        384,
+        320
+      ],
+      "shadow_size": [
+        384,
+        320
+      ],
+      "pixel_identical": false
+    },
+    {
+      "anim": "Victory",
+      "frame": 2,
+      "rocky_md5": "5e7c461997c93135b6922a3854685312",
+      "shadow_md5": "72e53f1d34315df575d0299c5597cb89",
+      "rocky_bytes": 68397,
+      "shadow_bytes": 82131,
+      "file_identical": false,
+      "rocky_px": "6cbe70c1c365386dd168c4ffb8ae759d",
+      "shadow_px": "66fd81ebbd2f5787df9ec2fd8eafe762",
+      "rocky_size": [
+        384,
+        320
+      ],
+      "shadow_size": [
+        384,
+        320
+      ],
+      "pixel_identical": false
+    },
+    {
+      "anim": "Victory",
+      "frame": 3,
+      "rocky_md5": "c4309edf1e18868134e74581e4040a3a",
+      "shadow_md5": "e6080107cb3531eba52c161523d04b7c",
+      "rocky_bytes": 61677,
+      "shadow_bytes": 71748,
+      "file_identical": false,
+      "rocky_px": "6d7bd45dde03e402aff3e75f64fccadc",
+      "shadow_px": "cdb127d377219024951e326e913c8e89",
+      "rocky_size": [
+        384,
+        320
+      ],
+      "shadow_size": [
+        384,
+        320
+      ],
+      "pixel_identical": false
+    }
+  ],
+  "identical_files": [],
+  "identical_pixels": [],
+  "pillow_available": true
+}

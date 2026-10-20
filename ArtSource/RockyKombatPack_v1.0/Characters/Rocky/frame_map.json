@@ -1,0 +1,90 @@
+{
+  "Idle": {
+    "frames": [
+      "Characters/Rocky/Idle/Rocky_Idle_00.png",
+      "Characters/Rocky/Idle/Rocky_Idle_01.png",
+      "Characters/Rocky/Idle/Rocky_Idle_02.png",
+      "Characters/Rocky/Idle/Rocky_Idle_03.png"
+    ],
+    "loop": true,
+    "suggested_fps": 8,
+    "note": "Starting playback values only. Set combat timing in gameplay data."
+  },
+  "Walk": {
+    "frames": [
+      "Characters/Rocky/Walk/Rocky_Walk_00.png",
+      "Characters/Rocky/Walk/Rocky_Walk_01.png",
+      "Characters/Rocky/Walk/Rocky_Walk_02.png",
+      "Characters/Rocky/Walk/Rocky_Walk_03.png"
+    ],
+    "loop": true,
+    "suggested_fps": 8,
+    "note": "Starting playback values only. Set combat timing in gameplay data."
+  },
+  "Jab": {
+    "frames": [
+      "Characters/Rocky/Jab/Rocky_Jab_00.png",
+      "Characters/Rocky/Jab/Rocky_Jab_01.png",
+      "Characters/Rocky/Jab/Rocky_Jab_02.png",
+      "Characters/Rocky/Jab/Rocky_Jab_03.png"
+    ],
+    "loop": false,
+    "suggested_fps": 12,
+    "note": "Starting playback values only. Set combat timing in gameplay data."
+  },
+  "HeavyPunch": {
+    "frames": [
+      "Characters/Rocky/HeavyPunch/Rocky_HeavyPunch_00.png",
+      "Characters/Rocky/HeavyPunch/Rocky_HeavyPunch_01.png",
+      "Characters/Rocky/HeavyPunch/Rocky_HeavyPunch_02.png",
+      "Characters/Rocky/HeavyPunch/Rocky_HeavyPunch_03.png"
+    ],
+    "loop": false,
+    "suggested_fps": 12,
+    "note": "Starting playback values only. Set combat timing in gameplay data."
+  },
+  "Block": {
+    "frames": [
+      "Characters/Rocky/Block/Rocky_Block_00.png",
+      "Characters/Rocky/Block/Rocky_Block_01.png",
+      "Characters/Rocky/Block/Rocky_Block_02.png",
+      "Characters/Rocky/Block/Rocky_Block_03.png"
+    ],
+    "loop": false,
+    "suggested_fps": 12,
+    "note": "Starting playback values only. Set combat timing in gameplay data."
+  },
+  "Dodge": {
+    "frames": [
+      "Characters/Rocky/Dodge/Rocky_Dodge_00.png",
+      "Characters/Rocky/Dodge/Rocky_Dodge_01.png",
+      "Characters/Rocky/Dodge/Rocky_Dodge_02.png",
+      "Characters/Rocky/Dodge/Rocky_Dodge_03.png"
+    ],
+    "loop": false,
+    "suggested_fps": 12,
+    "note": "Starting playback values only. Set combat timing in gameplay data."
+  },
+  "Knockdown": {
+    "frames": [
+      "Characters/Rocky/Knockdown/Rocky_Knockdown_00.png",
+      "Characters/Rocky/Knockdown/Rocky_Knockdown_01.png",
+      "Characters/Rocky/Knockdown/Rocky_Knockdown_02.png",
+      "Characters/Rocky/Knockdown/Rocky_Knockdown_03.png"
+    ],
+    "loop": false,
+    "suggested_fps": 12,
+    "note": "Starting playback values only. Set combat timing in gameplay data."
+  },
+  "Victory": {
+    "frames": [
+      "Characters/Rocky/Victory/Rocky_Victory_00.png",
+      "Characters/Rocky/Victory/Rocky_Victory_01.png",
+      "Characters/Rocky/Victory/Rocky_Victory_02.png",
+      "Characters/Rocky/Victory/Rocky_Victory_03.png"
+    ],
+    "loop": false,
+    "suggested_fps": 12,
+    "note": "Starting playback values only. Set combat timing in gameplay data."
+  }
+}

@@ -1,0 +1,256 @@
+{
+  "sources": [
+    {
+      "id": "104183_ekokubza123_punch",
+      "path": "C:\\Users\\DELL\\Downloads\\104183__ekokubza123__punch.wav",
+      "exists": true,
+      "sample_rate": 44100,
+      "channels": 2,
+      "sample_width_bytes": 2,
+      "frames": 52401,
+      "duration_seconds": 1.1882,
+      "size_bytes": 209648,
+      "segment_count": 1,
+      "segments": [
+        {
+          "start_s": 0.3642,
+          "end_s": 0.7283,
+          "dur_s": 0.3642,
+          "peak_dbfs": -0.56,
+          "rms_dbfs": -11.68,
+          "centroid_hz": 3979.9
+        }
+      ],
+      "dur_min_s": 0.3642,
+      "dur_max_s": 0.3642,
+      "dur_median_s": 0.3642,
+      "silence_ratio": 0.6935
+    },
+    {
+      "id": "511023_ale-batec_male-fight-grunts",
+      "path": "C:\\Users\\DELL\\Downloads\\511023__ale-batec__male-fight-grunts.wav",
+      "exists": true,
+      "sample_rate": 44100,
+      "channels": 1,
+      "sample_width_bytes": 2,
+      "frames": 1502425,
+      "duration_seconds": 34.0686,
+      "size_bytes": 3009934,
+      "segment_count": 26,
+      "segments": [
+        {
+          "start_s": 0.5488,
+          "end_s": 0.7234,
+          "dur_s": 0.1746,
+          "peak_dbfs": -13.19,
+          "rms_dbfs": -25.78,
+          "centroid_hz": 1810.8
+        },
+        {
+          "start_s": 2.0653,
+          "end_s": 2.19,
+          "dur_s": 0.1247,
+          "peak_dbfs": -17.12,
+          "rms_dbfs": -29.15,
+          "centroid_hz": 1826.5
+        },
+        {
+          "start_s": 3.956,
+          "end_s": 4.1107,
+          "dur_s": 0.1546,
+          "peak_dbfs": -18.82,
+          "rms_dbfs": -29.37,
+          "centroid_hz": 2058.1
+        },
+        {
+          "start_s": 5.3728,
+          "end_s": 5.5424,
+          "dur_s": 0.1696,
+          "peak_dbfs": -13.24,
+          "rms_dbfs": -26.49,
+          "centroid_hz": 1798.2
+        },
+        {
+          "start_s": 7.2485,
+          "end_s": 7.3633,
+          "dur_s": 0.1147,
+          "peak_dbfs": -19.79,
+          "rms_dbfs": -29.3,
+          "centroid_hz": 1627.8
+        },
+        {
+          "start_s": 7.7175,
+          "end_s": 7.8422,
+          "dur_s": 0.1247,
+          "peak_dbfs": -24.85,
+          "rms_dbfs": -34.17,
+          "centroid_hz": 1982.3
+        },
+        {
+          "start_s": 9.0644,
+          "end_s": 9.3188,
+          "dur_s": 0.2544,
+          "peak_dbfs": -11.62,
+          "rms_dbfs": -22.77,
+          "centroid_hz": 1851.9
+        },
+        {
+          "start_s": 11.5138,
+          "end_s": 11.6834,
+          "dur_s": 0.1696,
+          "peak_dbfs": -14.29,
+          "rms_dbfs": -27.81,
+          "centroid_hz": 1754.9
+        },
+        {
+          "start_s": 13.7537,
+          "end_s": 13.9333,
+          "dur_s": 0.1796,
+          "peak_dbfs": -13.39,
+          "rms_dbfs": -24.36,
+          "centroid_hz": 1603.3
+        },
+        {
+          "start_s": 16.6721,
+          "end_s": 16.8966,
+          "dur_s": 0.2245,
+          "peak_dbfs": -14.69,
+          "rms_dbfs": -27.31,
+          "centroid_hz": 1624.5
+        },
+        {
+          "start_s": 17.156,
+          "end_s": 17.3156,
+          "dur_s": 0.1596,
+          "peak_dbfs": -18.78,
+          "rms_dbfs": -30.89,
+          "centroid_hz": 2245.5
+        },
+        {
+          "start_s": 18.2934,
+          "end_s": 18.458,
+          "dur_s": 0.1646,
+          "peak_dbfs": -12.0,
+          "rms_dbfs": -24.83,
+          "centroid_hz": 2312.2
+        },
+        {
+          "start_s": 20.4236,
+          "end_s": 20.5982,
+          "dur_s": 0.1746,
+          "peak_dbfs": -18.39,
+          "rms_dbfs": -29.14,
+          "centroid_hz": 1180.0
+        },
+        {
+          "start_s": 21.3166,
+          "end_s": 21.4363,
+          "dur_s": 0.1197,
+          "peak_dbfs": -13.53,
+          "rms_dbfs": -25.58,
+          "centroid_hz": 2018.7
+        },
+        {
+          "start_s": 22.2943,
+          "end_s": 22.449,
+          "dur_s": 0.1546,
+          "peak_dbfs": -12.98,
+          "rms_dbfs": -24.75,
+          "centroid_hz": 1752.2
+        },
+        {
+          "start_s": 23.5166,
+          "end_s": 23.6862,
+          "dur_s": 0.1696,
+          "peak_dbfs": -12.99,
+          "rms_dbfs": -23.74,
+          "centroid_hz": 1674.0
+        },
+        {
+          "start_s": 24.3297,
+          "end_s": 24.4494,
+          "dur_s": 0.1197,
+          "peak_dbfs": -18.04,
+          "rms_dbfs": -29.07,
+          "centroid_hz": 1554.2
+        },
+        {
+          "start_s": 24.6789,
+          "end_s": 24.8086,
+          "dur_s": 0.1297,
+          "peak_dbfs": -23.95,
+          "rms_dbfs": -34.18,
+          "centroid_hz": 2069.2
+        },
+        {
+          "start_s": 26.3152,
+          "end_s": 26.4848,
+          "dur_s": 0.1696,
+          "peak_dbfs": -11.47,
+          "rms_dbfs": -24.18,
+          "centroid_hz": 1357.3
+        },
+        {
+          "start_s": 26.5497,
+          "end_s": 26.7193,
+          "dur_s": 0.1696,
+          "peak_dbfs": -12.49,
+          "rms_dbfs": -25.03,
+          "centroid_hz": 1533.7
+        },
+        {
+          "start_s": 27.5075,
+          "end_s": 27.6472,
+          "dur_s": 0.1397,
+          "peak_dbfs": -19.27,
+          "rms_dbfs": -29.62,
+          "centroid_hz": 1571.1
+        },
+        {
+          "start_s": 27.9215,
+          "end_s": 28.0313,
+          "dur_s": 0.1098,
+          "peak_dbfs": -22.0,
+          "rms_dbfs": -33.48,
+          "centroid_hz": 1756.0
+        },
+        {
+          "start_s": 28.6549,
+          "end_s": 28.7497,
+          "dur_s": 0.0948,
+          "peak_dbfs": -16.73,
+          "rms_dbfs": -29.69,
+          "centroid_hz": 2603.4
+        },
+        {
+          "start_s": 31.3288,
+          "end_s": 31.3787,
+          "dur_s": 0.0499,
+          "peak_dbfs": -32.72,
+          "rms_dbfs": -39.65,
+          "centroid_hz": 2780.2
+        },
+        {
+          "start_s": 32.0122,
+          "end_s": 32.0571,
+          "dur_s": 0.0449,
+          "peak_dbfs": -31.73,
+          "rms_dbfs": -40.2,
+          "centroid_hz": 2999.9
+        },
+        {
+          "start_s": 33.7234,
+          "end_s": 33.7982,
+          "dur_s": 0.0748,
+          "peak_dbfs": -28.45,
+          "rms_dbfs": -39.07,
+          "centroid_hz": 4422.7
+        }
+      ],
+      "dur_min_s": 0.0449,
+      "dur_max_s": 0.2544,
+      "dur_median_s": 0.1546,
+      "silence_ratio": 0.8903
+    }
+  ]
+}

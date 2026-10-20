@@ -1,0 +1,90 @@
+**********************************************************************
+** Visual Studio 2022 Developer Command Prompt v17.14.42
+** Copyright (c) 2025 Microsoft Corporation
+**********************************************************************
+[vcvarsall.bat] Environment initialized for: 'x64'
+VCENV_OK
+RKCCombatCoreTests.cpp
+RKCCombatCoreTests.cpp(145): warning C4505: 'InIdle': unreferenced function with internal linkage has been removed
+RKCCombatCoreTests.cpp(683): warning C4505: 'MergeTally': unreferenced function with internal linkage has been removed
+RKCCombatCore.cpp
+Generating Code...
+COMPILE_OK
+=== RUN ===
+=================================================================
+ ROCKY KOMBAT - combat core rule harness
+ core   : Source/RockyKombat/Combat/RKCCombatCore.cpp
+ groups : 22
+=================================================================
+
+[ 1/22] T1  documented defaults, countdown, inputs inert before the bell
+        ok (0 new failures)
+
+[ 2/22] T2  jab damage and the single-hit guard
+        ok (0 new failures)
+
+[ 3/22] T3  fixed-step accumulation, edge inputs consumed once
+        ok (0 new failures)
+
+[ 4/22] T4  blocked hit: chip, block stun, guard break
+        ok (0 new failures)
+
+[ 5/22] T5  the slip avoids a punch inside its invuln window
+        ok (0 new failures)
+
+[ 6/22] T5b the slip travels exactly DodgeDistance
+        ok (0 new failures)
+
+[ 7/22] T6  stamina gating, cost accounting, exhaustion
+        ok (0 new failures)
+
+[ 8/22] T7  knockdown, get-up and get-up invulnerability
+        ok (0 new failures)
+
+[ 9/22] T8  only the heavy punch can knock an opponent down
+        ok (0 new failures)
+
+[10/22] T9  knockout by damage ends the fight
+        ok (0 new failures)
+
+[11/22] T10 guard chip cannot be dodged and can end a fight
+        ok (0 new failures)
+
+[12/22] T11 three knockdowns in a round are a TKO
+        ok (0 new failures)
+
+[13/22] T12 scorecards, between-round restore, decision
+        ok (0 new failures)
+
+[14/22] T13 a level contest is a draw decision
+        ok (0 new failures)
+
+[15/22] T14 Advance() timestep contract and frame-rate independence
+        ok (0 new failures)
+
+[16/22] T15 counter hits: 1.6x damage and counter knockdown
+        ok (0 new failures)
+
+[17/22] T16a round judging: damage dealt is the first criterion
+        ok (0 new failures)
+
+[18/22] T16b simultaneous double knockdown draws the round
+        ok (0 new failures)
+
+[19/22] T16c round judging: punches landed is the second criterion
+        ok (0 new failures)
+
+[20/22] T16d round judging: stamina remaining is the third criterion
+        ok (0 new failures)
+
+[21/22] T17 the event queue is bounded and drops the newest
+        ok (0 new failures)
+
+[22/22] T18 arena bounds and the anti-overlap separation rule
+        ok (0 new failures)
+
+=================================================================
+ 364 checks run, 0 failed
+ RESULT: PASS
+=================================================================
+=== RUNDONE ===

@@ -1,0 +1,31 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "{979429F9-4493-08D3-3E98-45BC71E0E8F1}",
+	"Category": "Game",
+	"Description": "Rocky Kombat - Rocky Boxing Arena (RBA) combat product in the RockyCat Ecosystem.",
+	"Modules": [
+		{
+			"Name": "RockyKombat",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine",
+				"CoreUObject"
+			]
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "Paper2D",
+			"Enabled": true
+		},
+		{
+			"Name": "PythonScriptPlugin",
+			"Enabled": true
+		},
+		{
+			"Name": "FunctionalTestingEditor",
+			"Enabled": true
+		}
+	]
+}

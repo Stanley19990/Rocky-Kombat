@@ -1,0 +1,44 @@
+ROCKY KOMBAT — IMPORT PACK v1.0
+Rocky • Shadow • Midnight Rooftop Ring
+
+WHAT YOU HAVE
+64 individual RGBA PNG frames (32 per fighter), two regular 4-column × 8-row
+atlases, one empty rooftop arena, 16 GIF playback previews, a browser preview,
+JSON frame maps, a quality report, and an AI integration prompt.
+
+USE
+1. Extract the ZIP. Open preview.html in a browser to inspect the artwork.
+2. Give the entire extracted folder and AI_IMPORT_PROMPT.txt to your coding agent.
+3. Also provide your original combat PDF and earlier development prompt.
+4. The new import prompt overrides the earlier 3D character/rigging direction:
+   this pack is a 2D Paper2D / PaperFlipbook approach.
+
+LAYOUT
+Each individual frame is 384 × 320 pixels, with bottom-center custom pivot
+(192, 300) in image coordinates. Each atlas is 1536 × 2560 pixels.
+Rows: Idle / Walk / Jab / HeavyPunch / Block / Dodge / Knockdown / Victory.
+Four frames per row, left to right. All artwork initially faces right.
+Frame maps and asset_manifest.json are custom descriptive JSON, NOT Unreal
+import descriptors. Import individual PNGs or use explicit grid extraction.
+
+IMPORTANT QUALITY LIMIT
+This is a technically prepared, importable artwork pack, not a fully polished
+production animation set or an Unreal project. Four key poses per action can
+look choppy, pose continuity varies, and generated outlines can contain minor
+artifacts. Idle frames have limited variation. Shadow's Dodge has a low fallen
+pose that must be reviewed before using it as an evade. There is no dedicated
+HitReaction or GetUp sequence. Knockdown's first pose can stand in as a temporary
+hit response during prototyping, but this is not a finished replacement.
+
+Frames were extracted, placed on consistent canvases, checked for transparency
+and bounds, and visually reviewed in contact sheets. Unreal playback, engine
+import, materials, device performance, hitboxes, and combat timing were NOT
+validated here. Do not describe those checks as completed.
+
+The arena is a single flattened image, not separate parallax layers or 3D geometry.
+Character lighting is baked into the images. Scaling sprites substantially above
+their approximately 200-pixel standing height will soften the artwork.
+
+No .uasset, rig, skeletal mesh, sound, gameplay code, or completed game is included.
+No third-party character art was downloaded; images originate from the user's
+references and generated derivatives. No trademark clearance is represented.

@@ -1,0 +1,126 @@
+; DefaultInput.ini - Rocky Kombat
+;
+; TWO FIGHTERS, ONE KEYBOARD. Player 1 uses the left hand of the keyboard and
+; Player 2 the right hand, so a local match can be tested on one machine with no
+; extra hardware. Each player's block key is the one directly under their hand,
+; which is why S blocks for P1 and the DOWN arrow blocks for P2.
+;
+; NO NUMPAD? Player 2's punches are ALSO bound to comma, period and slash, which
+; sit on every laptop keyboard. Both bindings are live at once; there is no
+; toggle to forget. This is the only place bindings are declared - the on-screen
+; Controls screen prints them from the same list the code asserts against
+; (RKCFrontEnd::FMachine::ControlReference plus the binding check in the
+; in-engine self-test), so the game and its documentation cannot disagree.
+;
+; EDGE-TRIGGERED ATTACKS: the simulation consumes presses, so holding a punch
+; key cannot re-fire an attack (see RKC::FInputState and the latch in
+; ARKCPlayerController).
+;
+; MENU KEYS are separate actions (RKC_Menu*) because a menu screen and a match
+; are different modes: W/S/A/D navigate menus and move a fighter, and the same
+; physical key must do whichever one the current screen is for. The controller
+; latches them separately and the front end only reads them on front-end
+; screens.
+;
+; ESCAPE IS BACK, NOT QUIT. Escape opens the pause card during a match and steps
+; back one screen in the menus, which is what the label promises. Quitting the
+; process needs the pause card, or F10 in a packaged build.
+
+[/Script/Engine.InputSettings]
+-AxisConfig=(AxisKeyName="Gamepad_LeftX",AxisProperties=(DeadZone=0.25,Exponent=1.f,Sensitivity=1.f))
+-AxisConfig=(AxisKeyName="Gamepad_LeftY",AxisProperties=(DeadZone=0.25,Exponent=1.f,Sensitivity=1.f))
+-AxisConfig=(AxisKeyName="Gamepad_RightX",AxisProperties=(DeadZone=0.25,Exponent=1.f,Sensitivity=1.f))
+-AxisConfig=(AxisKeyName="Gamepad_RightY",AxisProperties=(DeadZone=0.25,Exponent=1.f,Sensitivity=1.f))
+-AxisConfig=(AxisKeyName="MouseX",AxisProperties=(DeadZone=0.f,Exponent=1.f,Sensitivity=0.07f))
+-AxisConfig=(AxisKeyName="MouseY",AxisProperties=(DeadZone=0.f,Exponent=1.f,Sensitivity=0.07f))
+-AxisConfig=(AxisKeyName="Mouse2D",AxisProperties=(DeadZone=0.f,Exponent=1.f,Sensitivity=0.07f))
++AxisConfig=(AxisKeyName="Gamepad_LeftX",AxisProperties=(DeadZone=0.250000,Sensitivity=1.000000,Exponent=1.000000,bInvert=False))
++AxisConfig=(AxisKeyName="Gamepad_LeftY",AxisProperties=(DeadZone=0.250000,Sensitivity=1.000000,Exponent=1.000000,bInvert=False))
++AxisConfig=(AxisKeyName="Gamepad_RightX",AxisProperties=(DeadZone=0.250000,Sensitivity=1.000000,Exponent=1.000000,bInvert=False))
++AxisConfig=(AxisKeyName="Gamepad_RightY",AxisProperties=(DeadZone=0.250000,Sensitivity=1.000000,Exponent=1.000000,bInvert=False))
++AxisConfig=(AxisKeyName="MouseX",AxisProperties=(DeadZone=0.000000,Sensitivity=0.070000,Exponent=1.000000,bInvert=False))
++AxisConfig=(AxisKeyName="MouseY",AxisProperties=(DeadZone=0.000000,Sensitivity=0.070000,Exponent=1.000000,bInvert=False))
++AxisConfig=(AxisKeyName="Mouse2D",AxisProperties=(DeadZone=0.000000,Sensitivity=0.070000,Exponent=1.000000,bInvert=False))
++AxisConfig=(AxisKeyName="MouseWheelAxis",AxisProperties=(DeadZone=0.000000,Sensitivity=1.000000,Exponent=1.000000,bInvert=False))
++AxisConfig=(AxisKeyName="Gamepad_LeftTriggerAxis",AxisProperties=(DeadZone=0.000000,Sensitivity=1.000000,Exponent=1.000000,bInvert=False))
++AxisConfig=(AxisKeyName="Gamepad_RightTriggerAxis",AxisProperties=(DeadZone=0.000000,Sensitivity=1.000000,Exponent=1.000000,bInvert=False))
++AxisConfig=(AxisKeyName="Gesture_Pinch",AxisProperties=(DeadZone=0.000000,Sensitivity=1.000000,Exponent=1.000000,bInvert=False))
++AxisConfig=(AxisKeyName="Gesture_Flick",AxisProperties=(DeadZone=0.000000,Sensitivity=1.000000,Exponent=1.000000,bInvert=False))
++AxisConfig=(AxisKeyName="Gesture_Rotate",AxisProperties=(DeadZone=0.000000,Sensitivity=1.000000,Exponent=1.000000,bInvert=False))
+bAltEnterTogglesFullscreen=True
+bF11TogglesFullscreen=True
+bUseMouseForTouch=False
+bEnableMouseSmoothing=True
+bEnableFOVScaling=True
+bCaptureMouseOnLaunch=False
+bEnableLegacyInputScales=True
+bEnableMotionControls=False
+bFilterInputByPlatformUser=False
+bShouldFlushPressedKeysOnViewportFocusLost=True
+bAlwaysShowTouchInterface=False
+bShowConsoleOnFourFingerTap=False
+bEnableGestureRecognizer=False
+bUseAutocorrect=False
+bEnabledLegacyMappingDeprecationWarnings=True
+bEnablePreferredInputAPIPreferences=False
+DefaultPreferredInputAPIList=
+DefaultViewportMouseCaptureMode=NoCapture
+DefaultViewportMouseLockMode=DoNotLock
+FOVScale=0.011110
+DoubleClickTime=0.200000
+; The engine's own virtual joysticks are OFF: Rocky Kombat draws and routes its
+; own on-screen controls (RKCTouchControls), and a second, invisible touch
+; interface underneath it would steal half the screen and produce duplicate
+; movement. Set rkc.TouchForced 1 to see the pad on a desktop for diagnosis.
+DefaultTouchInterface=None
+; ---- Movement axes (one per side) ------------------------------------------
+AxisMappings=(AxisName="RKC_MoveX",Scale=-1.000000,Key=A)
+AxisMappings=(AxisName="RKC_MoveX",Scale=1.000000,Key=D)
+; Player 2 moves on the arrows only. The arrows are deliberately NOT bound to
+; RKC_MoveX: in a hot-seat match both hands are live at once, so a shared
+; binding would walk both fighters with one press.
+AxisMappings=(AxisName="RKC_MoveX2",Scale=-1.000000,Key=Left)
+AxisMappings=(AxisName="RKC_MoveX2",Scale=1.000000,Key=Right)
+; ---- Player 1 actions ------------------------------------------------------
+ActionMappings=(ActionName="RKC_P1Block",Key=S)
+ActionMappings=(ActionName="RKC_P1Jab",Key=Z)
+ActionMappings=(ActionName="RKC_P1Heavy",Key=X)
+ActionMappings=(ActionName="RKC_P1Dodge",Key=C)
+; ---- Player 2 actions (numpad and the laptop-friendly alternates) ----------
+ActionMappings=(ActionName="RKC_P2Block",Key=Down)
+ActionMappings=(ActionName="RKC_P2Jab",Key=NumPadOne)
+ActionMappings=(ActionName="RKC_P2Jab",Key=Comma)
+ActionMappings=(ActionName="RKC_P2Heavy",Key=NumPadTwo)
+ActionMappings=(ActionName="RKC_P2Heavy",Key=Period)
+ActionMappings=(ActionName="RKC_P2Dodge",Key=NumPadThree)
+ActionMappings=(ActionName="RKC_P2Dodge",Key=Slash)
+; ---- Shared match actions --------------------------------------------------
+ActionMappings=(ActionName="RKC_Rematch",Key=R)
+ActionMappings=(ActionName="RKC_ToggleFrameData",Key=F1)
+ActionMappings=(ActionName="RKC_QuitMatch",Key=F10)
+ActionMappings=(ActionName="RKC_Pause",Key=P)
+ActionMappings=(ActionName="RKC_Pause",Key=Gamepad_Special_Right)
+; ---- Menu navigation (front end only) --------------------------------------
+ActionMappings=(ActionName="RKC_MenuUp",Key=W)
+ActionMappings=(ActionName="RKC_MenuUp",Key=Up)
+ActionMappings=(ActionName="RKC_MenuUp",Key=Gamepad_DPad_Up)
+ActionMappings=(ActionName="RKC_MenuDown",Key=S)
+ActionMappings=(ActionName="RKC_MenuDown",Key=Down)
+ActionMappings=(ActionName="RKC_MenuDown",Key=Gamepad_DPad_Down)
+ActionMappings=(ActionName="RKC_MenuLeft",Key=A)
+ActionMappings=(ActionName="RKC_MenuLeft",Key=Left)
+ActionMappings=(ActionName="RKC_MenuLeft",Key=Gamepad_DPad_Left)
+ActionMappings=(ActionName="RKC_MenuRight",Key=D)
+ActionMappings=(ActionName="RKC_MenuRight",Key=Right)
+ActionMappings=(ActionName="RKC_MenuRight",Key=Gamepad_DPad_Right)
+ActionMappings=(ActionName="RKC_MenuAccept",Key=Enter)
+ActionMappings=(ActionName="RKC_MenuAccept",Key=SpaceBar)
+ActionMappings=(ActionName="RKC_MenuAccept",Key=Gamepad_FaceButton_Bottom)
+ActionMappings=(ActionName="RKC_MenuBack",Key=Escape)
+ActionMappings=(ActionName="RKC_MenuBack",Key=BackSpace)
+ActionMappings=(ActionName="RKC_MenuBack",Key=Gamepad_FaceButton_Right)
+DeprecatedActionAndAxisNames=()
+DefaultPlayerInputClass=/Script/EnhancedInput.EnhancedPlayerInput
+DefaultInputComponentClass=/Script/EnhancedInput.EnhancedInputComponent
+-ConsoleKeys=Tilde
++ConsoleKeys=Tilde

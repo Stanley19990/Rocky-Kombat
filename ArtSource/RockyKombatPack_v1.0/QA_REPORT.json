@@ -1,0 +1,1094 @@
+{
+  "checks": "PNG dimensions, nonempty alpha and bounded placement checked; no engine test",
+  "frames_checked": 64,
+  "frames": [
+    {
+      "file": "Characters/Rocky/Idle/Rocky_Idle_00.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        91,
+        98,
+        258,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Rocky/Idle/Rocky_Idle_01.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        87,
+        101,
+        259,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Rocky/Idle/Rocky_Idle_02.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        89,
+        101,
+        260,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Rocky/Idle/Rocky_Idle_03.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        87,
+        99,
+        260,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Rocky/Walk/Rocky_Walk_00.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        87,
+        117,
+        270,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Rocky/Walk/Rocky_Walk_01.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        65,
+        115,
+        263,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Rocky/Walk/Rocky_Walk_02.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        78,
+        116,
+        260,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Rocky/Walk/Rocky_Walk_03.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        84,
+        116,
+        262,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Rocky/Jab/Rocky_Jab_00.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        85,
+        107,
+        266,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Rocky/Jab/Rocky_Jab_01.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        63,
+        108,
+        311,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Rocky/Jab/Rocky_Jab_02.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        71,
+        110,
+        317,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Rocky/Jab/Rocky_Jab_03.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        86,
+        107,
+        264,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Rocky/HeavyPunch/Rocky_HeavyPunch_00.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        81,
+        105,
+        276,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Rocky/HeavyPunch/Rocky_HeavyPunch_01.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        65,
+        106,
+        313,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Rocky/HeavyPunch/Rocky_HeavyPunch_02.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        84,
+        105,
+        282,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Rocky/HeavyPunch/Rocky_HeavyPunch_03.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        85,
+        103,
+        268,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Rocky/Block/Rocky_Block_00.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        88,
+        102,
+        261,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Rocky/Block/Rocky_Block_01.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        78,
+        103,
+        258,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Rocky/Block/Rocky_Block_02.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        75,
+        97,
+        287,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Rocky/Block/Rocky_Block_03.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        81,
+        94,
+        266,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Rocky/Dodge/Rocky_Dodge_00.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        81,
+        108,
+        257,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Rocky/Dodge/Rocky_Dodge_01.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        64,
+        144,
+        272,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Rocky/Dodge/Rocky_Dodge_02.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        70,
+        107,
+        300,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Rocky/Dodge/Rocky_Dodge_03.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        84,
+        107,
+        262,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Rocky/Knockdown/Rocky_Knockdown_00.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        96,
+        116,
+        298,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Rocky/Knockdown/Rocky_Knockdown_01.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        78,
+        132,
+        331,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Rocky/Knockdown/Rocky_Knockdown_02.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        53,
+        162,
+        313,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Rocky/Knockdown/Rocky_Knockdown_03.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        54,
+        233,
+        317,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Rocky/Victory/Rocky_Victory_00.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        103,
+        53,
+        278,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Rocky/Victory/Rocky_Victory_01.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        93,
+        54,
+        271,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Rocky/Victory/Rocky_Victory_02.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        89,
+        68,
+        269,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Rocky/Victory/Rocky_Victory_03.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        94,
+        66,
+        264,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Shadow/Idle/Shadow_Idle_00.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        139,
+        100,
+        319,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Shadow/Idle/Shadow_Idle_01.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        105,
+        100,
+        298,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Shadow/Idle/Shadow_Idle_02.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        85,
+        101,
+        267,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Shadow/Idle/Shadow_Idle_03.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        61,
+        100,
+        249,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Shadow/Walk/Shadow_Walk_00.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        116,
+        107,
+        306,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Shadow/Walk/Shadow_Walk_01.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        106,
+        100,
+        294,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Shadow/Walk/Shadow_Walk_02.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        77,
+        102,
+        271,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Shadow/Walk/Shadow_Walk_03.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        70,
+        106,
+        254,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Shadow/Jab/Shadow_Jab_00.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        103,
+        120,
+        316,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Shadow/Jab/Shadow_Jab_01.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        89,
+        118,
+        342,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Shadow/Jab/Shadow_Jab_02.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        59,
+        119,
+        316,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Shadow/Jab/Shadow_Jab_03.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        70,
+        116,
+        269,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Shadow/HeavyPunch/Shadow_HeavyPunch_00.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        96,
+        109,
+        319,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Shadow/HeavyPunch/Shadow_HeavyPunch_01.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        93,
+        111,
+        335,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Shadow/HeavyPunch/Shadow_HeavyPunch_02.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        60,
+        109,
+        320,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Shadow/HeavyPunch/Shadow_HeavyPunch_03.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        64,
+        110,
+        264,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Shadow/Block/Shadow_Block_00.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        109,
+        110,
+        306,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Shadow/Block/Shadow_Block_01.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        94,
+        110,
+        305,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Shadow/Block/Shadow_Block_02.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        75,
+        110,
+        290,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Shadow/Block/Shadow_Block_03.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        70,
+        110,
+        266,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Shadow/Dodge/Shadow_Dodge_00.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        109,
+        131,
+        320,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Shadow/Dodge/Shadow_Dodge_01.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        89,
+        131,
+        307,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Shadow/Dodge/Shadow_Dodge_02.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        68,
+        135,
+        321,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Shadow/Dodge/Shadow_Dodge_03.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        81,
+        131,
+        268,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Shadow/Knockdown/Shadow_Knockdown_00.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        83,
+        142,
+        347,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Shadow/Knockdown/Shadow_Knockdown_01.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        75,
+        165,
+        332,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Shadow/Knockdown/Shadow_Knockdown_02.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        59,
+        178,
+        316,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Shadow/Knockdown/Shadow_Knockdown_03.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        46,
+        202,
+        302,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Shadow/Victory/Shadow_Victory_00.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        108,
+        90,
+        304,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Shadow/Victory/Shadow_Victory_01.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        103,
+        87,
+        292,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Shadow/Victory/Shadow_Victory_02.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        58,
+        88,
+        313,
+        300
+      ]
+    },
+    {
+      "file": "Characters/Shadow/Victory/Shadow_Victory_03.png",
+      "size": [
+        384,
+        320
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        65,
+        88,
+        266,
+        300
+      ]
+    }
+  ]
+}
