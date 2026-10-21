@@ -25,6 +25,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Online/RKCOnlineClient.h"
 #include "GameFramework/GameModeBase.h"
 #include "Combat/RKCCombatCore.h"
 #include "Combat/RKCRoster.h"
@@ -386,6 +387,12 @@ private:
 
     void LogSetup() const;
 
+    TUniquePtr<FRKCOnlineClient> Online;
+    bool bOnlineMatch = false;
+    FString OnlineTestRole;
+    int32 OnlineTestMatches = 0;
+    bool bOnlineTestInviteSent = false, bOnlineTestRematchSent = false;
+    float OnlineTestAge = 0.0f;
     RKC::FCombatSim Sim;
     FRKCMatchSetup Setup;
 

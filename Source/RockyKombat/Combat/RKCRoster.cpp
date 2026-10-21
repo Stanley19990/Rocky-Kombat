@@ -1,6 +1,7 @@
 // RKCRoster.cpp
 
 #include "Combat/RKCRoster.h"
+#include "Combat/RKCFighterTuning.h"
 
 namespace RKC
 {
@@ -42,35 +43,7 @@ FString GetRosterRecord(ERoster Who)
 
 FFighterConfig MakeFighterConfig(ERoster Who)
 {
-    // A default-constructed config is already a legal fighter: both attack slots
-    // carry their documented defaults (jab 6 dmg, heavy 15 dmg + knockdown).
-    FFighterConfig C;
-
-    if (Who == ERoster::Shadow)
-    {
-        // Lightweight: a little less to hit, a little less able to take it,
-        // but faster in every phase and recovering stamina sooner.
-        C.MaxHealth = 92.0f;
-        C.MaxStamina = 108.0f;
-        C.WalkForwardSpeed = 205.0f;
-        C.WalkBackwardSpeed = 152.0f;
-        C.StaminaRegenPerSecond = 28.0f;
-        C.DamageTakenMultiplier = 1.08f;
-        C.DodgeDistance = 142.0f;
-        C.DodgeCooldownSeconds = 0.350f;
-
-        C.Jab = FAttackDef::MakeJab();
-        C.Jab.StartupSeconds = 0.083f;   // 5 ticks, one faster than Rocky's 6
-        C.Jab.RecoverySeconds = 0.167f;  // 10 ticks
-        C.Jab.StaminaCost = 8.0f;
-
-        C.HeavyPunch = FAttackDef::MakeHeavyPunch();
-        C.HeavyPunch.StartupSeconds = 0.183f; // 11 ticks
-        C.HeavyPunch.Damage = 13.0f;
-        C.HeavyPunch.StaminaCost = 18.0f;
-    }
-
-    return C;
+    return MakePlayableFighterConfig(Who == ERoster::Shadow);
 }
 
 FMatchRules MakeDefaultRules()

@@ -1,5 +1,5 @@
 # Rocky Kombat - single source of truth for the Android build version.
 # VersionDisplayName is what the user sees; StoreVersion is the integer Android
 # requires and MUST increase for every build that is installed over an older one.
-VERSION_DISPLAY=1.0.1-alpha.1
-STORE_VERSION=2
+VERSION_DISPLAY=1.0.2-alpha.2
+STORE_VERSION=3

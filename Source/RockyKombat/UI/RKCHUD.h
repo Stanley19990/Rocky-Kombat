@@ -44,6 +44,7 @@
 
 class ARKCGameMode;
 class UFont;
+class UTexture2D;
 
 UCLASS()
 class ROCKYKOMBAT_API ARKCHUD : public AHUD
@@ -72,6 +73,8 @@ public:
     int32 GetLastRegionCount() const { return LastRegionCount; }
 
 private:
+    UPROPERTY(Transient)
+    TArray<TObjectPtr<UTexture2D>> PresentationTextures;
     /** The match director, or null while the world is still starting up. */
     ARKCGameMode* GetRKCMode() const;
 

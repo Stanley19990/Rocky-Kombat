@@ -18,6 +18,7 @@
 #include "Engine/Canvas.h"
 #include "Engine/Engine.h"
 #include "Engine/Font.h"
+#include "Engine/Texture2D.h"
 #include "GameFramework/PlayerController.h"
 #include "Match/RKCGameMode.h"
 #include "Match/RKCPlayerController.h"
@@ -315,8 +316,20 @@ void ARKCHUD::DrawHUD()
 
     DrawCentreHeader(*Mode, Scale);
     DrawBanner(*Mode, Scale);
+    for (RKC::ESide Side : {RKC::ESide::A,RKC::ESide::B}) {
+        const auto& F=Mode->GetSim().GetFighter(Side);
+        if (F.State==RKC::EFighterState::HitStun) {
+            const FVector P=Project(FVector(F.PositionX,0,155));
+            for (int32 I=0;I<6;++I) {
+                const float Angle=I*PI/3;
+                const FVector2D Dir(FMath::Cos(Angle),FMath::Sin(Angle));
+                const float Radius=15*Scale;
+                DrawLine(P.X+Dir.X*Radius,P.Y+Dir.Y*Radius,P.X+Dir.X*Radius*1.65f,P.Y+Dir.Y*Radius*1.65f,FLinearColor(1,.73f,.32f,1),2*Scale);
+            }
+        }
+    }
     DrawFrameData(*Mode, Scale);
-    DrawEventFeed(*Mode, Scale);
+    if (Mode->IsFrameDataVisible()) DrawEventFeed(*Mode, Scale);
     DrawFooter(*Mode, Scale);
 
     // The pad stays up during a match, which is the only place it is actually
@@ -458,6 +471,7 @@ void ARKCHUD::DrawFighterPanel(const ARKCGameMode& Mode, RKC::ESide Side, float 
     }
 
     // ---- Live state --------------------------------------------------------
+    if (Mode.IsFrameDataVisible())
     {
         const FString State = FString::Printf(TEXT("STATE %s    ACTION %s"),
                                               FighterStateText(Fighter.State),
@@ -469,6 +483,7 @@ void ARKCHUD::DrawFighterPanel(const ARKCGameMode& Mode, RKC::ESide Side, float 
     }
 
     // ---- Who is driving this fighter ---------------------------------------
+    if (Mode.IsFrameDataVisible())
     {
         const RKC::FBotBrain* Bot = Mode.GetBot(Side);
         if (Bot)
@@ -770,339 +785,153 @@ void ARKCHUD::DrawFrameData(const ARKCGameMode& Mode, float Scale)
 
 void ARKCHUD::DrawFooter(const ARKCGameMode& Mode, float Scale)
 {
-    UFont* Detail = DetailFont();
-    const float TextScale = 0.90f * Scale;
-    const float CanvasW = static_cast<float>(Canvas->SizeX);
-    const float CanvasH = static_cast<float>(Canvas->SizeY);
-
-        // The legend is GENERATED from the binding table the self-test verifies, not
-    // typed out again here. A legend that disagrees with the keys the engine
-    // actually loaded is worse than no legend at all, and this is the one copy
-    // that cannot drift.
-    const FString Line1 = FString::Printf(TEXT("P1   %s move    %s block (hold)    %s jab    %s heavy    %s dodge"),
-                                          *RKCKeysFor(TEXT("RKC_MoveX")), *RKCKeysFor(TEXT("RKC_P1Block")),
-                                          *RKCKeysFor(TEXT("RKC_P1Jab")), *RKCKeysFor(TEXT("RKC_P1Heavy")),
-                                          *RKCKeysFor(TEXT("RKC_P1Dodge")));
-    const FString Line2 = FString::Printf(TEXT("P2   %s move    %s block (hold)    %s jab    %s heavy    %s dodge"),
-                                          *RKCKeysFor(TEXT("RKC_MoveX2")), *RKCKeysFor(TEXT("RKC_P2Block")),
-                                          *RKCKeysFor(TEXT("RKC_P2Jab")), *RKCKeysFor(TEXT("RKC_P2Heavy")),
-                                          *RKCKeysFor(TEXT("RKC_P2Dodge")));
-    const FString Line3 = FString::Printf(
-        TEXT("%s pause    %s back    %s rematch    %s quit    %s frame data (%s)    rkc.BotSide=%d"),
-        *RKCKeysFor(TEXT("RKC_Pause")), *RKCKeysFor(TEXT("RKC_MenuBack")),
-        *RKCKeysFor(TEXT("RKC_Rematch")), *RKCKeysFor(TEXT("RKC_QuitMatch")),
-        *RKCKeysFor(TEXT("RKC_ToggleFrameData")),
-        Mode.IsFrameDataVisible() ? TEXT("ON") : TEXT("OFF"),
-        Mode.GetSetup().bBotControlsA && Mode.GetSetup().bBotControlsB
-            ? 3
-            : (Mode.GetSetup().bBotControlsA ? 2 : (Mode.GetSetup().bBotControlsB ? 1 : 0)));
-
-    const FString TouchLine =
-        TEXT("TOUCH   left thumb stick    right thumb jab / heavy / block (hold) / dodge");
-
-    const ARKCPlayerController* ReadOnlyPC = Mode.GetRKCPlayerController();
-    const bool bPadOnScreen =
-        ReadOnlyPC != nullptr && ReadOnlyPC->GetTouchController().ShouldDraw();
-
-    const float LineHeight = 17.0f * Scale;
-    const int32 LegendLines = bPadOnScreen ? 4 : 3;
-    const float BiasY = CanvasH - 20.0f * Scale - LineHeight * static_cast<float>(LegendLines);
-
-    // A backing strip keeps three lines of text from being lost in the apron of
-    // the ring.
-    DrawRect(FLinearColor(0.0f, 0.0f, 0.0f, 0.35f), 0.0f, BiasY - 8.0f * Scale, CanvasW,
-             LineHeight * static_cast<float>(LegendLines) + 16.0f * Scale);
-
-    const FString* Lines[4] = { &Line1, &Line2, &Line3, &TouchLine };
-    float CursorY = BiasY;
-    for (int32 Index = 0; Index < LegendLines; ++Index)
-    {
-        const float TextW = MeasureText(Detail, *Lines[Index], TextScale);
-        DrawShadowedText(Detail, *Lines[Index], (CanvasW - TextW) * 0.5f, CursorY, TextScale,
-                         ColorTextSecondary);
-        CursorY += LineHeight;
-    }
-
+    const ARKCPlayerController* PC=Mode.GetRKCPlayerController();
+    const bool Touch=PC && PC->GetTouchController().ShouldDraw();
+    const float W=Canvas->SizeX,H=Canvas->SizeY;
+    FString Legend=Touch ? TEXT("MOVE  /  JAB  /  HEAVY  /  HOLD BLOCK  /  DODGE") : TEXT("A / D MOVE     S HOLD BLOCK     Z JAB     X HEAVY     C DODGE     ESC MENU");
+    if (!Mode.GetSetup().bBotControlsB && !Mode.GetSetup().bBotControlsA && Mode.GetFrontEnd().GetMatchRequest().Arrangement==RKCFrontEnd::EArrangement::LocalVersus)
+        Legend=TEXT("P1: A/D  S  Z/X/C    |    P2: ARROWS  DOWN  NUM 1/2/3    |    ESC MENU");
+    const float TS=FMath::Min(.9f*Scale,(W*.92f)/FMath::Max(1.0f,MeasureText(DetailFont(),Legend,1.0f)));
+    DrawRect(FLinearColor(.01f,.015f,.025f,.75f),0,H-30*Scale,W,30*Scale);
+    DrawShadowedText(DetailFont(),Legend,(W-MeasureText(DetailFont(),Legend,TS))*.5f,H-21*Scale,TS,ColorTextSecondary);
     ++LastRegionCount;
-
-    // ---- Rematch prompt ----------------------------------------------------
-    if (Mode.IsRematchOffered())
-    {
-        const FString Prompt = TEXT("PRESS  R  FOR A REMATCH");
-        UFont* Font = HeadingFont();
-        const float PromptScale = 1.25f * Scale;
-        const float TextW = MeasureText(Font, Prompt, PromptScale);
-        const float X = (CanvasW - TextW) * 0.5f;
-        const float Y = CanvasH * 0.58f;
-
-        // Pulse so the prompt reads as an invitation rather than a result.
-        const float Pulse = 0.5f + 0.5f * FMath::Sin(Mode.GetSecondsSinceMatchEnd() * 6.0f);
-        const FLinearColor Color(1.0f, 0.85f, 0.35f, 0.65f + 0.35f * Pulse);
-
-        DrawRect(FLinearColor(0.0f, 0.0f, 0.0f, 0.45f), 0.0f, Y - 8.0f * Scale, CanvasW,
-                 34.0f * Scale);
-        DrawShadowedText(Font, Prompt, X, Y, PromptScale, Color);
-        ++LastRegionCount;
-    }
 }
 
-// ---------------------------------------------------------------------------
-// 7. Front end - the branded cards
-// ---------------------------------------------------------------------------
-// Every string below comes from the front-end machine; this file chooses only
-// where it goes. That is what keeps the menu and the rules from disagreeing about
-// which screen is up: there is one screen variable in the project and it lives in
-// the machine, not here.
-
-void ARKCHUD::DrawFrontEnd(const ARKCGameMode& Mode, float Scale)
+void ARKCHUD::DrawFrontEnd(const ARKCGameMode& Mode, float IgnoredScale)
 {
-    const RKCFrontEnd::FMachine& Machine = Mode.GetFrontEnd();
-    UFont* Heading = HeadingFont();
-    UFont* Detail = DetailFont();
-
-    const float CanvasW = static_cast<float>(Canvas->SizeX);
-    const float CanvasH = static_cast<float>(Canvas->SizeY);
-    const RKCFrontEnd::EScreen Screen = Machine.GetScreen();
-
-    // A dark wash rather than an opaque fill: the ring is still visible behind the
-    // menu, so the branding and the arena read as one product.
-    DrawRect(FLinearColor(0.015f, 0.02f, 0.04f, 0.88f), 0.0f, 0.0f, CanvasW, CanvasH);
-
-    // A red band at the top edge, and a thin white rule under the heading block.
-    DrawRect(FLinearColor(0.80f, 0.13f, 0.15f, 0.95f), 0.0f, 0.0f, CanvasW, 5.0f * Scale);
-
-    float CursorY = 54.0f * Scale;
-
-    const FString HeadingText = Machine.GetHeading();
-    if (!HeadingText.IsEmpty())
-    {
-        const float HeadingScale = 2.0f * Scale;
-        const float TextW = MeasureText(Heading, HeadingText, HeadingScale);
-        DrawShadowedText(Heading, HeadingText, FMath::Max(12.0f, (CanvasW - TextW) * 0.5f), CursorY,
-                         HeadingScale, FLinearColor::White);
-        CursorY += 46.0f * Scale;
+    const auto& M = Mode.GetFrontEnd();
+    const auto Screen = M.GetScreen();
+    using E = RKCFrontEnd::EScreen;
+    const float W = Canvas->SizeX, H = Canvas->SizeY;
+    const float S = FMath::Min(W/1280.0f,H/720.0f);
+    const FLinearColor Gold(.94f,.69f,.29f,1), Muted(.65f,.69f,.76f,1);
+    if (PresentationTextures.IsEmpty()) {
+        for (const TCHAR* Name : {TEXT("RockycatLogo"), TEXT("RBAChampionBelt"), TEXT("ArenaPoster"), TEXT("RockyPortrait"), TEXT("ShadowPortrait")}) {
+            PresentationTextures.Add(LoadObject<UTexture2D>(nullptr, *FString::Printf(TEXT("/Game/RockyKombat/Presentation/%s.%s"),Name,Name)));
+        }
+    }
+    auto Image = [&](int32 Index,float X,float Y,float BW,float BH,bool Cover=false,float Alpha=1.0f) {
+        UTexture2D* T=PresentationTextures.IsValidIndex(Index)?PresentationTextures[Index].Get():nullptr;
+        if (!T || !T->GetSizeX() || !T->GetSizeY()) return;
+        const float Ratio=float(T->GetSizeX())/T->GetSizeY();
+        float U=0,V=0,UL=1,VL=1;
+        if (Cover) {
+            if (Ratio>BW/BH) { UL=BW/(BH*Ratio); U=(1-UL)*.5f; }
+            else { VL=BH/(BW/Ratio); V=(1-VL)*.5f; }
+        } else {
+            const float IW=FMath::Min(BW,BH*Ratio), IH=IW/Ratio;
+            X+=(BW-IW)*.5f; Y+=(BH-IH)*.5f; BW=IW; BH=IH;
+        }
+        DrawTexture(T,X,Y,BW,BH,U,V,UL,VL,FLinearColor(1,1,1,Alpha),BLEND_Translucent);
+        ++LastRegionCount;
+    };
+    auto Centre = [&](const FString& Text,float Y,float Size,const FLinearColor& C) {
+        const float TS=Size*S;
+        DrawShadowedText(HeadingFont(),Text,(W-MeasureText(HeadingFont(),Text,TS))*.5f,Y,TS,C);
+        ++LastRegionCount;
+    };
+    DrawRect(FLinearColor(.012f,.018f,.03f,1),0,0,W,H);
+    DrawRect(Gold,0,0,W,3*S);
+    if (Screen==E::Boot) {
+        const float Half=M.GetBootDuration()*.5f;
+        const bool Belt=M.GetScreenAge()>=Half;
+        const float Age=Belt?M.GetScreenAge()-Half:M.GetScreenAge();
+        const float Fade=FMath::Clamp(Age/.25f,0.0f,1.0f);
+        Image(Belt?1:0,W*.2f,H*.15f,W*.6f,H*.58f,false,Fade);
+        Centre(Belt?TEXT("ROCKY BOXING ARENA"):TEXT("ROCKYCAT PRESENTS"),H*.79f,1.25f,Gold);
+        Centre(TEXT("Tap or press ENTER to continue"),H*.91f,.65f,Muted);
+        return;
+    }
+    const bool Poster=Screen==E::Title || Screen==E::Menu || Screen==E::Loading;
+    if (Poster) {
+        Image(2,0,0,W,H,true);
+        DrawRect(FLinearColor(.008f,.012f,.024f,Screen==E::Menu?.62f:.28f),0,0,W,H);
+        DrawRect(FLinearColor(.008f,.012f,.024f,.88f),0,H*.73f,W,H*.27f);
+    }
+    if (Screen==E::Title) {
+        Centre(TEXT("ROCKY KOMBAT"),H*.77f,2.5f,FLinearColor::White);
+        Centre(TEXT("THE UNDERDOGS ARENA"),H*.85f,.95f,Gold);
+        Centre(TEXT("TAP TO ENTER  /  PRESS ENTER"),H*.93f,.8f,Muted);
+        return;
+    }
+    const bool Portrait=Screen==E::CharacterSelect;
+    const bool Versus=Screen==E::Versus;
+    Centre(M.GetHeading(),H*.065f,1.65f,FLinearColor::White);
+    Centre(M.GetSubheading(),H*.135f,.8f,Gold);
+    DrawRect(FLinearColor(.94f,.69f,.29f,.25f),W*.08f,H*.19f,W*.84f,S);
+    const auto& R=M.GetMatchRequest();
+    auto FighterCard = [&](RKC::ERoster Fighter,float X,float Y,float CW,float CH,bool Right,const FString& Label) {
+        const FLinearColor Accent=Right?FLinearColor(.20f,.48f,.96f,1):FLinearColor(.91f,.20f,.20f,1);
+        DrawRect(FLinearColor(.035f,.045f,.065f,1),X,Y,CW,CH);
+        DrawRect(Accent,X,Y,4*S,CH);
+        Image(Fighter==RKC::ERoster::Rocky?3:4,X+8*S,Y+8*S,CW-16*S,CH-82*S);
+        const FString Name=RKC::GetRosterDisplayName(Fighter).ToUpper();
+        DrawRect(FLinearColor(.01f,.015f,.025f,.94f),X,Y+CH-88*S,CW,88*S);
+        DrawShadowedText(HeadingFont(),Name,X+20*S,Y+CH-75*S,1.4f*S,FLinearColor::White);
+        DrawShadowedText(DetailFont(),Label,X+20*S,Y+CH-44*S,.9f*S,Accent);
+        DrawShadowedText(DetailFont(),Fighter==RKC::ERoster::Rocky?TEXT("POWER / PRESSURE BOXER"):TEXT("SPEED / COUNTER SPECIALIST"),X+20*S,Y+CH-22*S,.75f*S,Gold);
+        ++LastRegionCount;
+    };
+    if (Portrait) {
+        RKC::ERoster Fighter=M.GetCharacterStage()==0?R.FighterA:R.FighterB;
+        if (M.GetItems().IsValidIndex(M.GetSelection())) {
+            const FString& Id=M.GetItems()[M.GetSelection()].Id;
+            if (Id==TEXT("fighter_rocky")) Fighter=RKC::ERoster::Rocky;
+            if (Id==TEXT("fighter_shadow")) Fighter=RKC::ERoster::Shadow;
+        }
+        FighterCard(Fighter,W*.07f,H*.23f,W*.35f,H*.68f,false,TEXT("RBA FIGHTER"));
+        DrawShadowedText(DetailFont(),TEXT("CHOOSE YOUR CORNER"),W*.52f,H*.25f,1.0f*S,Gold);
+    } else if (Versus) {
+        const float Slide=(1-FMath::Clamp(M.GetScreenAge()/.35f,0.0f,1.0f))*65*S;
+        FighterCard(R.FighterA,W*.06f-Slide,H*.24f,W*.36f,H*.65f,false,M.GetCornerLabel(0));
+        FighterCard(R.FighterB,W*.58f+Slide,H*.24f,W*.36f,H*.65f,true,M.GetCornerLabel(1));
+        Centre(TEXT("VS"),H*.46f,3.0f,Gold);
+        if (Screen==E::Versus) { Centre(TEXT("GET READY"),H*.93f,.95f,FLinearColor::White); return; }
+    }
+    if (Screen==E::Menu) {
+        Image(1,W*.06f,H*.32f,W*.36f,H*.30f);
+        DrawShadowedText(HeadingFont(),TEXT("ENTER THE ARENA"),W*.07f,H*.67f,1.3f*S,Gold);
+    }
+    if (Screen==E::Loading) {
+        DrawRect(FLinearColor(.01f,.015f,.025f,.92f),W*.16f,H*.77f,W*.68f,H*.13f);
+        DrawBar(W*.20f,H*.82f,W*.60f,8*S,M.GetLoadingProgress(),Gold,false);
+        Centre(FString::Printf(TEXT("PREPARING THE RING  %d%%"),FMath::RoundToInt(M.GetLoadingProgress()*100)),H*.77f,.85f,FLinearColor::White);
+        return;
+    }
+    if (Screen==E::Results) Centre(M.GetResultText(),H*.28f,1.9f,Gold);
+    const auto& Items=M.GetItems();
+    if (Items.Num()>7) {
+        DrawRect(FLinearColor(.18f,.20f,.25f,1),W*.965f,H*.33f,W*.035f,H*.30f);
+        DrawShadowedText(DetailFont(),TEXT("UP"),W*.968f,H*.35f,.65f*S,Gold);
+        DrawShadowedText(DetailFont(),TEXT("DN"),W*.968f,H*.59f,.65f*S,Gold);
+    }
+    for (int32 I=0;I<Items.Num();++I) {
+        const FBox2D Rect=M.GetItemRect(I,FVector2D(W,H));
+        if (!Rect.bIsValid) continue;
+        const bool Selected=I==M.GetSelection(); const auto& Item=Items[I];
+        DrawRect(Selected?FLinearColor(.52f,.10f,.11f,.97f):FLinearColor(.035f,.045f,.065f,.96f),Rect.Min.X,Rect.Min.Y,Rect.GetSize().X,Rect.GetSize().Y);
+        if (Selected) DrawRect(Gold,Rect.Min.X,Rect.Min.Y,4*S,Rect.GetSize().Y);
+        DrawShadowedText(DetailFont(),Item.Label,Rect.Min.X+18*S,Rect.Min.Y+12*S,.95f*S,Item.bEnabled?FLinearColor::White:Muted*.6f);
         ++LastRegionCount;
     }
-
-    const FString SubText = Machine.GetSubheading();
-    if (!SubText.IsEmpty())
-    {
-        const float SubScale = 1.05f * Scale;
-        const float TextW = MeasureText(Detail, SubText, SubScale);
-        DrawShadowedText(Detail, SubText, FMath::Max(12.0f, (CanvasW - TextW) * 0.5f), CursorY,
-                         SubScale, ColorTextSecondary);
-        CursorY += 30.0f * Scale;
-        ++LastRegionCount;
+    if (Items.IsValidIndex(M.GetSelection())) {
+        const FString Hint=Items[M.GetSelection()].Hint;
+        // Hints get their own line; long copy never collides with the row label.
+        const float HintScale=FMath::Min(.75f*S,(W*.88f)/FMath::Max(1.0f,MeasureText(DetailFont(),Hint,1.0f)));
+        DrawShadowedText(DetailFont(),Hint,W*.06f,H*.93f,HintScale,Gold);
     }
-
-    DrawRect(FLinearColor(1.0f, 1.0f, 1.0f, 0.18f), CanvasW * 0.15f, CursorY, CanvasW * 0.70f,
-             2.0f * Scale);
-    CursorY += 22.0f * Scale;
-
-    // ---- Choosing screens: the versus card ---------------------------------
-    const bool bIsVersusCard = (Screen == RKCFrontEnd::EScreen::Versus);
-    const bool bIsCharacterCard = (Screen == RKCFrontEnd::EScreen::CharacterSelect);
-
-    if (bIsVersusCard || bIsCharacterCard)
-    {
-        const FString& Left = Machine.GetLeftCaption();
-        const FString& Right = Machine.GetRightCaption();
-        const float CaptionScale = 1.1f * Scale;
-        const float Top = CanvasH * 0.42f;
-
-        if (!Left.IsEmpty())
-        {
-            const TArray<FString> Lines = { Left };
-            DrawShadowedText(Detail, Lines[0], CanvasW * 0.10f, Top, CaptionScale, ColorTextPrimary);
-        }
-        if (!Right.IsEmpty())
-        {
-            const float TextW = MeasureText(Detail, Right, CaptionScale);
-            DrawShadowedText(Detail, Right, CanvasW * 0.90f - TextW, Top, CaptionScale,
-                             ColorTextPrimary);
-        }
-
-        // "VS" between the two corners, pulsing so the card reads as an imminent
-        // fight rather than as a static screen.
-        const FString Vs = TEXT("VS");
-        const float VsScale = 2.6f * Scale;
-        const float VsW = MeasureText(Heading, Vs, VsScale);
-        const float Pulse = 0.55f + 0.45f * FMath::Sin(Machine.GetScreenAge() * 5.0f);
-        DrawShadowedText(Heading, Vs, (CanvasW - VsW) * 0.5f, Top - 26.0f * Scale, VsScale,
-                         FLinearColor(1.0f, 0.30f, 0.25f, Pulse));
-        ++LastRegionCount;
-    }
-
-    // ---- Choosing screens: the loading card --------------------------------
-    if (Screen == RKCFrontEnd::EScreen::Loading)
-    {
-        const float BarW = FMath::Min(760.0f * Scale, CanvasW - 120.0f * Scale);
-        const float BarX = (CanvasW - BarW) * 0.5f;
-        const float BarY = CanvasH * 0.60f;
-        const float Progress = FMath::Clamp(Machine.GetLoadingProgress(), 0.0f, 1.0f);
-
-        DrawBar(BarX, BarY, BarW, 26.0f * Scale, Progress, FLinearColor(0.88f, 0.22f, 0.20f, 1.0f),
-                false);
-
-        // The bar is drawn with the percentage beside it on purpose: a moving bar
-        // is not evidence that anything is finishing.
-        const FString Percent = FString::Printf(TEXT("%d%%"), FMath::RoundToInt(Progress * 100.0f));
-        const float TextW = MeasureText(Heading, Percent, 1.3f * Scale);
-        DrawShadowedText(Heading, Percent, (CanvasW - TextW) * 0.5f, BarY - 34.0f * Scale,
-                         1.3f * Scale, ColorTextPrimary);
-
-        const FString& LoadDetail = Machine.GetLoadDetail();
-        if (!LoadDetail.IsEmpty())
-        {
-            const float DetailW = MeasureText(Detail, LoadDetail, 0.9f * Scale);
-            DrawShadowedText(Detail, LoadDetail, (CanvasW - DetailW) * 0.5f, BarY + 34.0f * Scale,
-                             0.9f * Scale, ColorTextSecondary);
-        }
-        ++LastRegionCount;
-    }
-
-    // ---- Choosing screens: the result card ---------------------------------
-    if (Screen == RKCFrontEnd::EScreen::Results)
-    {
-        const FString& Result = Machine.GetResultText();
-        if (!Result.IsEmpty())
-        {
-            const float ResultScale = 2.2f * Scale;
-            const float TextW = MeasureText(Heading, Result, ResultScale);
-            const float Y = CanvasH * 0.40f;
-            DrawRect(FLinearColor(0.0f, 0.0f, 0.0f, 0.45f), 0.0f, Y - 10.0f * Scale, CanvasW,
-                     54.0f * Scale);
-            DrawShadowedText(Heading, Result, (CanvasW - TextW) * 0.5f, Y, ResultScale,
-                             ColorTextAccent);
-            ++LastRegionCount;
+    if (!Portrait && !Versus && Screen!=E::Menu && Screen!=E::Results) {
+        float Y=(Screen==E::Controls || Screen==E::LocalVersusJoin)?H*.23f:H*.82f;
+        int32 Count=0; const int32 Max=(Screen==E::Controls || Screen==E::LocalVersusJoin)?10:2;
+        for (const FString& Line:M.GetBodyLines()) {
+            if (Count++>=Max) break;
+            float TS=FMath::Min(.75f*S,(W*.88f)/FMath::Max(1.0f,MeasureText(DetailFont(),Line,1.0f)));
+            DrawShadowedText(DetailFont(),Line,W*.06f,Y,TS,Muted); Y+=23*S;
         }
     }
-
-    // ---- The row list ------------------------------------------------------
-    const TArray<RKCFrontEnd::FMenuItem>& Items = Machine.GetItems();
-    if (Items.Num() > 0)
-    {
-        const int32 Selection = FMath::Clamp(Machine.GetSelection(), 0, Items.Num() - 1);
-        const float RowHeight = 38.0f * Scale;
-        const float RowGap = 4.0f * Scale;
-
-        // A long list (the controls or options screen) scrolls in a window that
-        // always contains the selection, so the highlighted row can never be off
-        // screen.
-        const int32 MaxVisibleRows = 11;
-        int32 FirstVisible = 0;
-        if (Items.Num() > MaxVisibleRows)
-        {
-            FirstVisible = FMath::Clamp(Selection - MaxVisibleRows / 2, 0,
-                                        Items.Num() - MaxVisibleRows);
-        }
-        const int32 LastVisible = FMath::Min(Items.Num(), FirstVisible + MaxVisibleRows);
-
-        const float ListW = FMath::Min(760.0f * Scale, CanvasW - 80.0f * Scale);
-        const float ListX = (CanvasW - ListW) * 0.5f;
-        float ListY = FMath::Max(CursorY, CanvasH * 0.34f);
-
-        const float ListH = (RowHeight + RowGap) * static_cast<float>(LastVisible - FirstVisible);
-        if (ListY + ListH > CanvasH - 130.0f * Scale)
-        {
-            ListY = FMath::Max(64.0f * Scale, CanvasH - 130.0f * Scale - ListH);
-        }
-
-        for (int32 Index = FirstVisible; Index < LastVisible; ++Index)
-        {
-            const RKCFrontEnd::FMenuItem& Item = Items[Index];
-            const bool bSelected = (Index == Selection);
-            const float RowY = ListY + (RowHeight + RowGap) * static_cast<float>(Index - FirstVisible);
-
-            // Selection is a filled red plate with a marker; a disabled row is
-            // dimmer than an enabled one and never marked, so "cannot be chosen"
-            // is visible before it is attempted.
-            FLinearColor RowColour(0.05f, 0.06f, 0.09f, 0.72f);
-            if (!Item.bEnabled)
-            {
-                RowColour = FLinearColor(0.09f, 0.09f, 0.11f, 0.60f);
-            }
-            else if (bSelected)
-            {
-                RowColour = FLinearColor(0.78f, 0.14f, 0.16f, 0.92f);
-            }
-            DrawRect(RowColour, ListX, RowY, ListW, RowHeight);
-
-            const FLinearColor LabelColour = !Item.bEnabled
-                                                 ? FLinearColor(0.48f, 0.48f, 0.52f, 1.0f)
-                                                 : ColorTextPrimary;
-            const FString Marker = bSelected ? TEXT(">  ") : TEXT("   ");
-            DrawShadowedText(Detail, Marker + Item.Label, ListX + 16.0f * Scale,
-                             RowY + 10.0f * Scale, 1.05f * Scale, LabelColour);
-
-            if (bSelected && !Item.Hint.IsEmpty())
-            {
-                const float HintScale = 0.85f * Scale;
-                const float HintW = MeasureText(Detail, Item.Hint, HintScale);
-                DrawShadowedText(Detail, Item.Hint, ListX + ListW - HintW - 16.0f * Scale,
-                                 RowY + 13.0f * Scale, HintScale,
-                                 FLinearColor(0.95f, 0.95f, 0.98f, 0.92f));
-            }
-            ++LastRegionCount;
-        }
-
-        if (Items.Num() > MaxVisibleRows)
-        {
-            const FString Scroll = FString::Printf(TEXT("%d more"), Items.Num() - MaxVisibleRows);
-            DrawShadowedText(Detail, Scroll, ListX + ListW - MeasureText(Detail, Scroll, 0.8f * Scale),
-                             ListY + ListH + 6.0f * Scale, 0.8f * Scale, ColorTextSecondary);
-        }
-
-        CursorY = ListY + ListH + 30.0f * Scale;
-    }
-
-    // ---- Body and footer text ----------------------------------------------
-    float BodyY = FMath::Max(CursorY, CanvasH * 0.62f);
-
-    // A local-versus rematch needs both players; saying so is the difference
-    // between a card that looks stuck and a card that is waiting for someone.
-    if (Machine.IsAwaitingSecondReady())
-    {
-        const FString Ready = TEXT("WAITING FOR PLAYER 2 ...");
-        const float ReadyW = MeasureText(Heading, Ready, 1.2f * Scale);
-        DrawShadowedText(Heading, Ready, (CanvasW - ReadyW) * 0.5f, BodyY, 1.2f * Scale,
-                         ColorTextAccent);
-        BodyY += 30.0f * Scale;
-    }
-
-    for (const FString& Line : Machine.GetBodyLines())
-    {
-        DrawShadowedText(Detail, Line, 40.0f * Scale, BodyY, 0.9f * Scale, ColorTextSecondary);
-        BodyY += 20.0f * Scale;
-    }
-
-    DrawRect(FLinearColor(0.0f, 0.0f, 0.0f, 0.40f), 0.0f, CanvasH - 96.0f * Scale, CanvasW,
-             96.0f * Scale);
-    float FooterY = CanvasH - 88.0f * Scale;
-    for (const FString& Line : Machine.GetFooterLines())
-    {
-        DrawShadowedText(Detail, Line, 40.0f * Scale, FooterY, 0.85f * Scale, ColorTextSecondary);
-        FooterY += 18.0f * Scale;
-    }
-
-    const FString Footer = Machine.GetFooter();
-    if (!Footer.IsEmpty())
-    {
-        const float FooterW = MeasureText(Detail, Footer, 0.85f * Scale);
-        DrawShadowedText(Detail, Footer, (CanvasW - FooterW) * 0.5f, CanvasH - 26.0f * Scale,
-                         0.85f * Scale, ColorTextAccent);
-    }
+    DrawShadowedText(DetailFont(),TEXT("TAP TO SELECT     W/S / ARROWS     ENTER CONFIRM     ESC BACK"),W*.06f,H*.975f,.65f*S,Muted);
     ++LastRegionCount;
 }
-
-// ---------------------------------------------------------------------------
-// 8. Touch pad
-// ---------------------------------------------------------------------------
-// The layout lives in RKCTouch::FController (normalised, device independent) and
-// this function only paints it, so what a finger hits and what a player sees are
-// the same geometry. The controller reports whether the pad is live; a menu is
-// tapped rather than played, so the pad is hidden over the front end unless a
-// diagnostic run has explicitly forced it on for a screenshot.
 
 void ARKCHUD::DrawTouchPad(const ARKCGameMode& Mode, float Scale)
 {

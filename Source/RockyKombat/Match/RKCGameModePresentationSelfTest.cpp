@@ -815,6 +815,26 @@ void ARKCGameMode::RunSelfTestPresentationSystems()
                                    IsFrontEndEnabled() ? TEXT("enabled") : TEXT("disabled (self-test)"),
                                    *ScreenText(GetFrontEnd()));
 
+    // The visible rectangle and touch hit test must agree at phone and desktop sizes.
+    for (const FVector2D Size : {FVector2D(640,360), FVector2D(1280,720), FVector2D(2400,1080)})
+    {
+        FMachine TouchMachine;
+        TouchMachine.Init(true);
+        TickUntilScreen(TouchMachine, EScreen::Menu, 3.0f);
+        Activate(TouchMachine, ItemPlay);
+        Activate(TouchMachine, ItemExpRba);
+        Activate(TouchMachine, ItemArrCpu);
+        const FBox2D Row=TouchMachine.GetItemRect(IndexOfItem(TouchMachine,ItemFighterShadow),Size);
+        FInput Tap; Tap.ViewportSize=Size;
+        Tap.Taps.Add(FVector2D(2,Row.GetCenter().Y));
+        TickInput(TouchMachine,Tap);
+        SelfTestCheck(TouchMachine.GetCharacterStage()==0, TEXT("a tap outside the visible row does not select a fighter"));
+        Tap.Taps[0]=Row.GetCenter();
+        TickInput(TouchMachine,Tap);
+        SelfTestCheck(TouchMachine.GetMatchRequest().FighterA==RKC::ERoster::Shadow && TouchMachine.GetCharacterStage()==1,
+                      FString::Printf(TEXT("touching the rendered Shadow row selects Shadow at %.0fx%.0f"),Size.X,Size.Y));
+    }
+
     // ---- C1. a first run, all the way to a match ---------------------------
     {
         FMachine Machine;
@@ -835,7 +855,7 @@ void ARKCGameMode::RunSelfTestPresentationSystems()
         SelfTestCheck(Machine.GetScreen() == EScreen::Boot,
                       TEXT("the boot sting is not skipped before it has been seen"));
 
-        TickEmpty(Machine, 2.2f);
+        TickEmpty(Machine, FMachine::BootSecondsFirstRun + 0.2f);
         SelfTestCheck(Machine.GetScreen() == EScreen::Title,
                       FString::Printf(TEXT("the boot sting leads to the title card (on %s)"),
                                       *ScreenText(Machine)));
@@ -1001,8 +1021,8 @@ void ARKCGameMode::RunSelfTestPresentationSystems()
                       TEXT("a returning run still opens on the boot sting"));
 
         const float ToTitle = TickUntilScreen(Machine, EScreen::Title, 2.0f);
-        SelfTestCheck(ToTitle > 0.0f && ToTitle < 1.0f,
-                      FString::Printf(TEXT("a returning player leaves the shortened sting quickly (%.2f s)"),
+        SelfTestCheck(ToTitle > 0.0f && ToTitle < FMachine::BootSecondsReturning + 0.1f,
+                      FString::Printf(TEXT("a returning player sees both shorter branding cards (%.2f s)"),
                                       ToTitle));
 
         SelfTestCheck(Activate(Machine, ItemPlay), TEXT("the play row is reachable on a returning run"));

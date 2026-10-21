@@ -82,5 +82,8 @@ Saved/Evidence/
 *.bak
 *.orig
 /tmp/
+node_modules/
+/Tools/AITests/build/*.obj
+/Tools/AITests/build/*.exe
 *.zip
 !docs/assets/*.zip

@@ -17,6 +17,7 @@
 // kept: stepping back into CharacterSelect shows the fighter you already picked.
 
 #include "RKCFrontEnd.h"
+#include "Online/RKCOnlineClient.h"
 
 namespace RKCFrontEnd
 {
@@ -184,6 +185,20 @@ void FMachine::Tick(float DeltaSeconds, const FInput& Input, bool bWarmupComplet
     bool bAcceptSpent = false;
     bool bBackSpent = false;
 
+    if (Online) {
+        if (Online->ConsumeEnded() && Request.Arrangement == EArrangement::PrivateOnline) SetScreen(EScreen::OnlineLobby, TEXT("online match ended"));
+        if (Online->ConsumeMatch()) {
+            Request.Arrangement = EArrangement::PrivateOnline;
+            Request.FighterA = static_cast<RKC::ERoster>(Online->Fighters[0]);
+            Request.FighterB = static_cast<RKC::ERoster>(Online->Fighters[1]);
+            Request.bHumanA = Request.bHumanB = true;
+            Request.TrainingA = Request.TrainingB = RKC::ETrainingMode::Off;
+            Request.RulesSummary = TEXT("Unranked online - 3 rounds - 30 seconds");
+            LoadingProgress = LoadingSeconds = 0;
+            SetScreen(EScreen::Loading, TEXT("online invitation accepted"));
+        }
+        if (Screen == EScreen::OnlineLobby && OnlineRevision != Online->GetRevision()) { OnlineRevision = Online->GetRevision(); RebuildItems(); }
+    }
     switch (Screen)
     {
     case EScreen::Boot:
@@ -258,7 +273,8 @@ void FMachine::Tick(float DeltaSeconds, const FInput& Input, bool bWarmupComplet
             ++Diag.Accepts;
             if (Selection >= 0 && Selection < Items.Num())
             {
-                ActivateItem(Items[Selection]);
+                const FMenuItem Chosen = Items[Selection];
+        ActivateItem(Chosen);
             }
             else
             {
@@ -288,6 +304,10 @@ void FMachine::Tick(float DeltaSeconds, const FInput& Input, bool bWarmupComplet
                 break;
             case EScreen::Arrangement:
                 SetScreen(EScreen::Experience, TEXT("back to experience selection"));
+                break;
+            case EScreen::OnlineLobby:
+                if (Online) Online->Leave();
+                SetScreen(EScreen::Arrangement, TEXT("back from online lobby"));
                 break;
             case EScreen::LocalVersusJoin:
                 SetScreen(EScreen::Arrangement, TEXT("back to arrangement selection"));
@@ -369,7 +389,8 @@ void FMachine::TickAutoPilot(float DeltaSeconds)
 
     if (Selection >= 0 && Selection < Items.Num())
     {
-        ActivateItem(Items[Selection]);
+        const FMenuItem Chosen = Items[Selection];
+        ActivateItem(Chosen);
     }
 }
 
@@ -384,6 +405,7 @@ void FMachine::SetScreen(EScreen NewScreen, const TCHAR* Reason)
         return;
     }
 
+    if (Online && Online->IsInMatch() && (NewScreen == EScreen::Menu || NewScreen == EScreen::Arrangement || NewScreen == EScreen::CharacterSelect)) Online->Leave();
     Screen = NewScreen;
     ScreenAgeSeconds = 0.0f;
     ++Diag.ScreenChanges;
@@ -451,6 +473,8 @@ void FMachine::ApplyScreenAudio()
 
 void FMachine::OnPauseRequested()
 {
+    // A peer cannot freeze the other player's simulation. Back leaves the match.
+    if (Request.Arrangement == EArrangement::PrivateOnline && Online && Online->IsInMatch()) { Online->Leave(); SetScreen(EScreen::OnlineLobby, TEXT("left online match")); return; }
     if (Screen == EScreen::Paused)
     {
         return;
@@ -563,7 +587,7 @@ void FMachine::SetLoadingProgress(float InProgress)
 
 namespace
 {
-FMenuItem MakeItem(const TCHAR* Id, const FString& Label, const FString& Hint, double Y,
+FMenuItem MakeItem(const FString& Id, const FString& Label, const FString& Hint, double Y,
                    bool bEnabled = true, bool bAdjustable = false)
 {
     FMenuItem Item;
@@ -595,13 +619,27 @@ void FMachine::RebuildItems()
 
     switch (Screen)
     {
+    case EScreen::OnlineLobby:
+        if (Online) {
+            BodyLines.Add(Online->Status);
+            if (Online->Status.StartsWith(TEXT("Invitation sent"))) Items.Add(MakeItem(TEXT("online_decline"), TEXT("CANCEL INVITATION"), TEXT("Choose another player"), NextY()));
+            if (!Online->IncomingId.IsEmpty()) {
+                Items.Add(MakeItem(TEXT("online_accept"), TEXT("ACCEPT: ") + Online->IncomingName, TEXT("Start an unranked match"), NextY()));
+                Items.Add(MakeItem(TEXT("online_decline"), TEXT("DECLINE INVITATION"), TEXT("Stay in the lobby"), NextY()));
+            }
+            for (const auto& P : Online->Players) Items.Add(MakeItem(TEXT("peer:") + P.Id, P.Name + (P.bBusy ? TEXT("  / BUSY") : TEXT("  / AVAILABLE")), P.Fighter == 0 ? TEXT("Rocky") : TEXT("Shadow"), NextY(), !P.bBusy));
+            if (Online->IsConnected() && Online->Players.IsEmpty()) BodyLines.Add(TEXT("No other players connected. Ask your opponent to open Online Versus."));
+            if (!Online->IsConnected()) Items.Add(MakeItem(TEXT("online_connect"), TEXT("CONNECT"), TEXT("Refresh the connection"), NextY(), Online->IsConfigured()));
+        }
+        Items.Add(MakeItem(IdBack, TEXT("BACK"), TEXT("Return to play selection"), NextY()));
+        break;
     case EScreen::Menu:
         Items.Add(MakeItem(IdPlay, TEXT("PLAY"), TEXT("Choose how you want to fight"), NextY()));
         Items.Add(MakeItem(IdTraining, TEXT("TRAINING"), TEXT("Learn the controls against a stationary dummy"), NextY()));
         Items.Add(MakeItem(IdControls, TEXT("CONTROLS / HOW TO PLAY"), TEXT("Every binding, on keyboard and on touch"), NextY()));
         Items.Add(MakeItem(IdOptions, TEXT("SETTINGS"), TEXT("Volume, mute and touch controls"), NextY()));
         Items.Add(MakeItem(IdQuit, TEXT("EXIT GAME"), TEXT("Close Rocky Kombat"), NextY()));
-        FooterLines.Add(TEXT("Offline game. No account, no login, no internet connection is used."));
+        FooterLines.Add(TEXT("RBA / UNRANKED ALPHA"));
         FooterLines.Add(TEXT("Navigate W/S or Arrows - Confirm ENTER - Back ESC"));
         break;
 
@@ -617,7 +655,7 @@ void FMachine::RebuildItems()
         Items.Add(MakeItem(IdArrCpu, TEXT("PLAY AGAINST COMPUTER"), TEXT("One player, one CPU opponent"), NextY()));
         Items.Add(MakeItem(IdArrLocal, TEXT("PLAY WITH ANOTHER PLAYER"), TEXT("Local versus on this device - two humans, no AI"), NextY()));
         Items.Add(MakeItem(IdArrTraining, TEXT("TRAINING"), TEXT("Stationary dummy, no damage to you"), NextY()));
-        Items.Add(MakeItem(IdArrOnline, TEXT("PRIVATE ONLINE VERSUS"), NotAvailableOnline, NextY(), false));
+        Items.Add(MakeItem(IdArrOnline, TEXT("ONLINE VERSUS"), TEXT("Invite a connected player over the internet"), NextY()));
         Items.Add(MakeItem(IdBack, TEXT("BACK"), TEXT("Return to experience selection"), NextY()));
         break;
 
@@ -908,24 +946,33 @@ int32 FMachine::IndexOfId(const TCHAR* Id) const
     return INDEX_NONE;
 }
 
-void FMachine::HandleTap(const FVector2D& Tap, const FVector2D& ViewportSize)
+FBox2D FMachine::GetItemRect(int32 Index, const FVector2D& V) const
 {
-    if (Items.Num() == 0 || ViewportSize.Y <= 0.0f)
-    {
-        return;
-    }
-
-    const float RowHeight = static_cast<float>(ItemSpacingY) * ViewportSize.Y;
-    for (const FMenuItem& Item : Items)
-    {
-        const float RowY = static_cast<float>(Item.Y) * ViewportSize.Y;
-        if (Tap.Y >= RowY - RowHeight * 0.5f && Tap.Y <= RowY + RowHeight * 0.5f)
-        {
-            SelectById(*Item.Id);
-            ++Diag.TapSelections;
-            ActivateItem(Item);
-            return;
-        }
+    const float S = FMath::Min(V.X / 1280.0f, V.Y / 720.0f);
+    const int32 Visible = 7;
+    const int32 First = FMath::Clamp(Selection - Visible / 2, 0, FMath::Max(0, Items.Num() - Visible));
+    if (Index < First || Index >= First + Visible) return FBox2D(ForceInit);
+    const bool Portrait = Screen == EScreen::CharacterSelect;
+    const bool Poster = Screen == EScreen::Menu;
+    float X = Portrait || Poster ? V.X * .52f : V.X * .14f;
+    float W = Portrait || Poster ? V.X * .43f : V.X * .72f;
+    float Y = (Screen == EScreen::LocalVersusJoin || Screen == EScreen::Controls) ? V.Y * .76f : V.Y * .33f;
+    if (Screen == EScreen::Results) Y = V.Y * .49f;
+    Y += (Index - First) * 46.0f * S;
+    return FBox2D(FVector2D(X,Y), FVector2D(X+W,Y+40.0f*S));
+}
+FString FMachine::GetCornerLabel(int32 Side) const
+{
+    if (Request.Arrangement == EArrangement::PrivateOnline && Online) return Online->Names[Side];
+    if (Side == 0) return TEXT("PLAYER 1 / RED CORNER");
+    return Request.bHumanB ? TEXT("PLAYER 2 / BLUE CORNER") : TEXT("CPU / BLUE CORNER");
+}
+void FMachine::HandleTap(const FVector2D& Tap, const FVector2D& V)
+{
+    if (Items.Num()>7 && Tap.X>V.X*.96f) { ApplyNavigate(Tap.Y<V.Y*.5f?-1:1); return; }
+    for (int32 I = 0; I < Items.Num(); ++I) {
+        const FBox2D Rect = GetItemRect(I,V);
+        if (Rect.bIsValid && Rect.IsInside(Tap)) { const FMenuItem Item=Items[I]; SelectById(*Item.Id); ++Diag.TapSelections; ActivateItem(Item); return; }
     }
 }
 
@@ -1133,6 +1180,17 @@ void FMachine::ActivateItem(const FMenuItem& Item)
         return;
     }
 
+    if (Item.Id == IdArrOnline) {
+        Request.Arrangement = EArrangement::PrivateOnline; Request.bHumanA = Request.bHumanB = true;
+        CharStage = 0; SetScreen(EScreen::CharacterSelect, TEXT("online fighter selection")); return;
+    }
+    if (Screen == EScreen::OnlineLobby && Online) {
+        if (Item.Id == TEXT("online_connect")) { Online->Connect(); return; }
+        if (Item.Id == TEXT("online_accept")) { Online->Accept(); return; }
+        if (Item.Id == TEXT("online_decline")) { Online->Decline(); return; }
+        if (Item.Id.StartsWith(TEXT("peer:"))) { Online->Invite(Item.Id.Mid(5)); return; }
+        if (Item.Id == IdBack) { Online->Leave(); SetScreen(EScreen::Arrangement, TEXT("leave online lobby")); return; }
+    }
     // ---- arrangement -------------------------------------------------------
     if (Item.Id == IdArrCpu)
     {
@@ -1177,6 +1235,10 @@ void FMachine::ActivateItem(const FMenuItem& Item)
         if (CharStage == 0)
         {
             Request.FighterA = Chosen;
+            if (Request.Arrangement == EArrangement::PrivateOnline && Online) {
+                Online->Connect(); Online->SelectFighter(static_cast<int32>(Chosen));
+                SetScreen(EScreen::OnlineLobby, TEXT("online fighter chosen")); return;
+            }
             CharStage = 1;
             RebuildItems();
             return;
@@ -1262,6 +1324,7 @@ void FMachine::ActivateItem(const FMenuItem& Item)
     // ---- results -----------------------------------------------------------
     if (Item.Id == IdRematch)
     {
+        if (Request.Arrangement == EArrangement::PrivateOnline && Online) { Online->Rematch(); return; }
         if (Request.Arrangement == EArrangement::LocalVersus)
         {
             if (LocalReadyPresses < 1)
@@ -1422,8 +1485,10 @@ FString FMachine::GetHeading() const
         return TEXT("ROCKYCAT ECOSYSTEM");
     case EScreen::Title:
         return TEXT("ROCKY KOMBAT");
+    case EScreen::OnlineLobby:
+        return TEXT("CONNECTED PLAYERS");
     case EScreen::Menu:
-        return TEXT("MAIN MENU");
+        return TEXT("ROCKY KOMBAT");
     case EScreen::Experience:
         return TEXT("COMBAT EXPERIENCE");
     case EScreen::Arrangement:
@@ -1472,7 +1537,7 @@ FString FMachine::GetSubheading() const
     case EScreen::Versus:
         return FString::Printf(TEXT("%s  vs  %s"), *RosterName(Request.FighterA), *RosterName(Request.FighterB));
     case EScreen::Menu:
-        return TEXT("RockyCat Ecosystem - offline build");
+        return TEXT("ROCKY BOXING ARENA / THE UNDERDOGS ARENA");
     default:
         return TEXT("");
     }
@@ -1503,6 +1568,8 @@ FString FMachine::ScreenName(EScreen InScreen)
 {
     switch (InScreen)
     {
+    case EScreen::OnlineLobby:
+        return TEXT("OnlineLobby");
     case EScreen::Boot:
         return TEXT("Boot");
     case EScreen::Title:

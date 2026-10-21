@@ -110,13 +110,13 @@ FBotProfile FBotProfile::Make(EBotArchetype Archetype, EBotDifficulty Difficulty
         break;
 
     case EBotDifficulty::Champion:
-        P.ReactionSeconds = 0.120f;
-        P.ThinkIntervalSeconds = 0.080f;
-        P.Aggression = 0.54f;
+        P.ReactionSeconds = 0.110f;
+        P.ThinkIntervalSeconds = 0.050f;
+        P.Aggression = 0.76f;
         P.HeavyBias = 0.24f;
-        P.GuardChance = 0.60f;
-        P.SlipChance = 0.22f;
-        P.PreferredRangeFraction = 0.84f;
+        P.GuardChance = 0.70f;
+        P.SlipChance = 0.30f;
+        P.PreferredRangeFraction = 0.80f;
         P.RetreatStaminaFraction = 0.24f;
         P.HealthPanicMargin = 0.30f;
         P.bPunishRecovery = true;

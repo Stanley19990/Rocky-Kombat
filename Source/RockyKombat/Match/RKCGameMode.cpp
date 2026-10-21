@@ -41,6 +41,10 @@
 #include "Components/PrimitiveComponent.h"
 #include "UnrealClient.h"
 #include "RockyKombat.h"
+#if WITH_EDITOR
+#include "AssetCompilingManager.h"
+#include "ShaderCompiler.h"
+#endif
 
 namespace
 {
@@ -839,6 +843,10 @@ bool IsDefensiveEvent(RKC::ECombatEvent Type)
 
 void ARKCGameMode::InitFrontEndAndAudio()
 {
+    Online = MakeUnique<FRKCOnlineClient>();
+    FrontEnd.SetOnline(Online.Get());
+    FParse::Value(FCommandLine::Get(), TEXT("rkc.OnlineTest="), OnlineTestRole);
+    if (!OnlineTestRole.IsEmpty()) Online->Connect();
     // ---- Audio --------------------------------------------------------------
     // Built even when this run asked for silence, so the catalog is still
     // resolved and the evidence record can report what is missing instead of
@@ -1005,6 +1013,10 @@ void ARKCGameMode::RefreshLoadingProgress()
 
 bool ARKCGameMode::IsRenderWarmupComplete() const
 {
+#if WITH_EDITOR
+    if (FAssetCompilingManager::Get().GetNumRemainingAssets() > 0 ||
+        (GShaderCompilingManager && GShaderCompilingManager->IsCompiling())) return false;
+#endif
     if (bSawAnyHudDraw)
     {
         // A renderer exists: the gate is the drawn-frame count, so gameplay is
@@ -1033,6 +1045,11 @@ void ARKCGameMode::BeginMatchFromFrontEnd()
 
     // The request is copied into the setup the rest of the director already
     // understands. Nothing below this line needs to know a menu exists.
+    bOnlineMatch = Request.Arrangement == RKCFrontEnd::EArrangement::PrivateOnline;
+    if (bOnlineMatch) {
+        Setup.bUseQuickRules = !OnlineTestRole.IsEmpty();
+        ++OnlineTestMatches; bOnlineTestRematchSent = false;
+    }
     Setup.FighterA = Request.FighterA;
     Setup.FighterB = Request.FighterB;
     Setup.bBotControlsA = !Request.bHumanA;
@@ -1069,6 +1086,11 @@ void ARKCGameMode::BeginMatchFromFrontEnd()
     bFrameDataVisible = (Setup.TrainingA == RKC::ETrainingMode::DisplayFrameData) || (GK_FrameData != 0);
 
     RestartMatch();
+#if WITH_EDITOR
+    // Complete the selected fighter resources before presenting gameplay.
+    FAssetCompilingManager::Get().FinishAllCompilation();
+    if (GShaderCompilingManager) GShaderCompilingManager->FinishAllCompilation();
+#endif
     bMatchEndReported = false;
     bMatchWasRunning = true;
     bWasSimulating = true;
@@ -1080,7 +1102,11 @@ void ARKCGameMode::BeginMatchFromFrontEnd()
         // assignment. Local versus is one keyboard driving both sides; every
         // other arrangement is one human side with the offline opponent on the
         // other.
-        if (Request.bHumanA && Request.bHumanB)
+        if (bOnlineMatch && Online) {
+            PC->SetInputScheme(ERKCInputScheme::SingleSide, Online->Side == 0 ? RKC::ESide::A : RKC::ESide::B);
+            PC->SetTouchControlsEnabled(ResolveTouchControlsEnabled(AudioSystem));
+        }
+        else if (Request.bHumanA && Request.bHumanB)
         {
             PC->SetInputScheme(ERKCInputScheme::HotSeat, RKC::ESide::A);
             PC->SetTouchControlsEnabled(false);
@@ -1100,6 +1126,7 @@ void ARKCGameMode::BeginMatchFromFrontEnd()
         AudioSystem->IncrementMatchesPlayed();
     }
 
+    if (bOnlineMatch && Online) Online->Ready();
     FrontEnd.NotifyMatchStarted();
 
     UE_LOG(LogRockyKombat, Log, TEXT("Front end accepted: %s vs %s, human A %s / human B %s."),
@@ -1160,6 +1187,28 @@ void ARKCGameMode::TickFrontEnd(float DeltaSeconds)
     const bool bWarmupComplete = IsRenderWarmupComplete();
 
     // ---- One frame of the machine ------------------------------------------
+    if (!OnlineTestRole.IsEmpty() && Online) {
+        OnlineTestAge += SafeDelta;
+        if (OnlineTestAge > 120.0f || Online->ConsumeEnded()) {
+            UE_LOG(LogRockyKombat, Error, TEXT("RKC_ONLINE_TEST_FAIL: %s"), *Online->Status);
+            FPlatformMisc::RequestExit(true);
+        }
+        if (OnlineTestRole == TEXT("guest") && !Online->IncomingId.IsEmpty()) Online->Accept();
+        if (OnlineTestRole == TEXT("host") && !bOnlineTestInviteSent && Online->IsConnected()) {
+            for (const auto& Player : Online->Players) if (Player.Name == TEXT("RKC-Test-Guest") && Player.Fighter == 1 && !Player.bBusy) {
+                Online->Invite(Player.Id); bOnlineTestInviteSent = true; break;
+            }
+        }
+        if (OnlineTestRole == TEXT("guest") && Online->IsConnected() && !Online->IsInMatch()) Online->SelectFighter(1);
+        if (FrontEnd.GetScreen() == RKCFrontEnd::EScreen::Results && !bOnlineTestRematchSent) {
+            bOnlineTestRematchSent = true;
+            const bool Passed = !bBotActive[0] && !bBotActive[1] && Setup.FighterA == RKC::ERoster::Rocky && Setup.FighterB == RKC::ERoster::Shadow && Sim.GetFighter(RKC::ESide::A).AttacksThrownTotal > 0 && Sim.GetFighter(RKC::ESide::B).AttacksThrownTotal > 0;
+            UE_LOG(LogRockyKombat, Display, TEXT("RKC_ONLINE_MATCH_%s role=%s match=%d ticks=%d checksum=%08x Aattacks=%d Battacks=%d Ahits=%d Bhits=%d"),
+                Passed ? TEXT("PASS") : TEXT("FAIL"), *OnlineTestRole, OnlineTestMatches, Sim.GetMatch().TickCount, ComputeStateChecksum(Sim), Sim.GetFighter(RKC::ESide::A).AttacksThrownTotal, Sim.GetFighter(RKC::ESide::B).AttacksThrownTotal, Sim.GetFighter(RKC::ESide::A).HitsLandedTotal, Sim.GetFighter(RKC::ESide::B).HitsLandedTotal);
+            if (OnlineTestMatches >= 2 || !Passed) FPlatformMisc::RequestExit(false);
+            else Online->Rematch();
+        }
+    }
     FrontEnd.Tick(SafeDelta, CollectFrontEndInput(), bWarmupComplete);
 
     // ---- What it asked for -------------------------------------------------
@@ -1693,6 +1742,8 @@ void ARKCGameMode::HandleSlateActivationStateChanged(bool bIsActive)
 
 void ARKCGameMode::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
+    FrontEnd.SetOnline(nullptr);
+    Online.Reset();
     // A scripted-input run leaves its record here, before the world starts coming
     // apart, so an unattended run always produces its evidence file even if it was
     // asked to quit early. WriteRecord keeps everything already recorded, so the
@@ -2119,7 +2170,17 @@ void ARKCGameMode::AdvanceMatchFrame(float DeltaSeconds)
     const int32 KnockdownsBeforeA = BeforeA.KnockdownsTotal;
     const int32 KnockdownsBeforeB = BeforeB.KnockdownsTotal;
 
-    Sim.Advance(DeltaSeconds, InA, InB);
+    if (bOnlineMatch && Online) {
+        Online->TickInput(DeltaSeconds, Online->Side == 0 ? InA : InB);
+        FRKCOnlineFrame Frame;
+        int32 Stepped = 0;
+        while (Stepped < 4 && Online->PopFrame(Frame)) {
+            Sim.StepFixed(Frame.A, Frame.B); ++Stepped;
+            if ((Frame.Seq+1)%60 == 0) Online->SendHash(Frame.Seq+1, ComputeStateChecksum(Sim));
+        }
+        DeltaSeconds = Stepped * RKC::FCombatSim::FixedTickSeconds;
+    }
+    else Sim.Advance(DeltaSeconds, InA, InB);
 
     // ---- integrity monitor: the anti-overlap rule, measured every tick ------
     const RKC::FFighterState& PostA = Sim.GetFighter(RKC::ESide::A);
@@ -2220,6 +2281,18 @@ void ARKCGameMode::GatherInputs(float DeltaSeconds, RKC::FInputState& OutA, RKC:
 
     OutA = bBotActive[0] ? BotBrains[0].ComputeInput(DeltaSeconds, Sim) : HumanA;
     OutB = bBotActive[1] ? BotBrains[1].ComputeInput(DeltaSeconds, Sim) : HumanB;
+    // Explicit automation switch only: real matches always consume device input.
+    if (bOnlineMatch && Online && !OnlineTestRole.IsEmpty()) {
+        auto& In = Online->Side == 0 ? OutA : OutB;
+        const int32 Tick = Sim.GetMatch().TickCount;
+        const auto& Me = Sim.GetFighter(Online->Side == 0 ? RKC::ESide::A : RKC::ESide::B);
+        if (FMath::Abs(Sim.GetFighter(RKC::ESide::A).PositionX-Sim.GetFighter(RKC::ESide::B).PositionX)>95) {
+            In.bMoveRight=Online->Side==0; In.bMoveLeft=Online->Side==1;
+        }
+        In.bHoldBlock=Tick%140>100;
+        In.bJabPressed=Tick%17==0; In.bHeavyPressed=Tick%43==0;
+        In.bDodgePressed=Tick%181==0 && Me.Stamina>30;
+    }
 }
 
 void ARKCGameMode::DrainEvents()

@@ -1,0 +1,12 @@
+{
+  "source": "Five images supplied by the project owner on 2026-10-21",
+  "assets": [
+    { "file": "RockycatLogo.jpeg", "use": "Studio launch card" },
+    { "file": "RBAChampionBelt.jpeg", "use": "RBA launch card and menu branding; no competitive belt logic" },
+    { "file": "ArenaPoster.jpeg", "use": "Title, menu and loading poster only; contains two baked-in fighters" },
+    { "file": "RockyPortrait.jpeg", "use": "Character selection and versus introduction" },
+    { "file": "ShadowPortrait.jpeg", "use": "Character selection and versus introduction" }
+  ],
+  "gameplayArena": "Existing empty Midnight Rooftop Ring",
+  "gameplayAnimation": "Existing four-pose Paper2D animation assets; reference portraits are not animated fighter replacements"
+}

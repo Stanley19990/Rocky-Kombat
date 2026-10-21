@@ -16,9 +16,8 @@
 // as gameplay, and the progress it shows is derived from work that actually
 // happened rather than from a timer.
 //
-// OFFLINE BY CONSTRUCTION: there is no network call anywhere in this file and no
-// screen depends on connectivity. Private online versus is listed as unavailable
-// rather than faked, and the menu says so out loud.
+// Offline screens remain usable without connectivity. Online versus displays
+// real guest presence supplied by the standalone relay and requires its endpoint.
 //
 // RETURNING PLAYERS: the only difference between a first run and a later one is
 // a shorter studio sting and an auto-advancing title. A returning player is on
@@ -36,6 +35,7 @@
 #include "AI/RKCAI.h"
 
 class URKCAudioSystem;
+class FRKCOnlineClient;
 
 namespace RKCFrontEnd
 {
@@ -60,7 +60,8 @@ enum class EScreen : uint8
     Match = 14,
     Results = 15,
     Paused = 16,
-    Quit = 17
+    Quit = 17,
+    OnlineLobby = 18
 };
 
 /** Requirement 3A - the combat experience. */
@@ -162,15 +163,15 @@ class FMachine
 public:
     /** Branding durations. A first run watches the studio sting; a returning
      *  player sees a short fade and lands on the title. */
-    static constexpr float BootSecondsFirstRun = 2.0f;
-    static constexpr float BootSecondsReturning = 0.35f;
+    static constexpr float BootSecondsFirstRun = 3.6f;
+    static constexpr float BootSecondsReturning = 1.8f;
     static constexpr float BootSkippableAfter = 0.4f;
     static constexpr float TitleAutoAdvanceReturning = 0.8f;
     /** A first run waits for the player, but not forever: an unattended or
      *  kiosk run still reaches the menu. */
     static constexpr float TitleAutoAdvanceFirstRun = 6.0f;
     /** How long the versus card is held before the round begins. */
-    static constexpr float VersusSeconds = 1.8f;
+    static constexpr float VersusSeconds = 3.0f;
     /** The loading screen is held at least this long, so a fast machine cannot
      *  flash a progress bar for two frames. */
     static constexpr float MinimumLoadingSeconds = 0.45f;
@@ -180,6 +181,10 @@ public:
     FMachine();
 
     void Init(bool bReturningPlayer);
+    void SetOnline(FRKCOnlineClient* InOnline) { Online = InOnline; }
+    FBox2D GetItemRect(int32 Index, const FVector2D& Viewport) const;
+    int32 GetCharacterStage() const { return CharStage; }
+    FString GetCornerLabel(int32 Side) const;
     void SetAudio(URKCAudioSystem* InAudio) { Audio = InAudio; }
     URKCAudioSystem* GetAudio() const { return Audio; }
 
@@ -235,6 +240,7 @@ public:
     const TArray<FString>& GetFooterLines() const { return FooterLines; }
     FString GetFooter() const;
     float GetScreenAge() const { return ScreenAgeSeconds; }
+    float GetBootDuration() const { return BootSeconds; }
     const FString& GetResultText() const { return ResultText; }
     const FString& GetLoadDetail() const { return LoadDetail; }
     /** Portrait/identity block drawn on the character-select and versus cards.
@@ -273,6 +279,8 @@ private:
     /** Fills in the human/CPU flags and the rule summary from the arrangement. */
     void FinaliseRequest();
 
+    FRKCOnlineClient* Online = nullptr;
+    int32 OnlineRevision = -1;
     URKCAudioSystem* Audio = nullptr;
 
     EScreen Screen = EScreen::Boot;

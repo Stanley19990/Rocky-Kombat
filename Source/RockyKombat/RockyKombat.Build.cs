@@ -43,6 +43,8 @@ public class RockyKombat : ModuleRules
 			"UMG",
 			"Slate",
 			"SlateCore",
+			"WebSockets",
+			"Json",
 			// FDisplayMetrics::TitleSafePaddingSize is the platform's safe area
 			// (display cut-out and gesture bar on a phone) and lives in
 			// ApplicationCore. It is a public dependency of SlateCore, but the
