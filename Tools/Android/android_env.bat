@@ -14,21 +14,26 @@ set "UE_ROOT=C:\Program Files\Epic Games\UE_5.8"
 
 REM --- Java: project-local portable JDK 17 (matches what UE 5.8 expects) ------
 if not defined JAVA_HOME set "JAVA_HOME=%RKC_ROOT%\Tools\jdk\jdk-17.0.13+11"
+REM Shells such as Git Bash may export /c/... paths that cmd and Java cannot use.
+if not exist "%JAVA_HOME%\bin\javac.exe" set "JAVA_HOME=%RKC_ROOT%\Tools\jdk\jdk-17.0.13+11"
 
 REM --- Android SDK ------------------------------------------------------------
 if not defined ANDROID_HOME set "ANDROID_HOME=%LOCALAPPDATA%\Android\Sdk"
+if not exist "%ANDROID_HOME%\platform-tools\adb.exe" set "ANDROID_HOME=%LOCALAPPDATA%\Android\Sdk"
 if not defined ANDROID_SDK_ROOT set "ANDROID_SDK_ROOT=%ANDROID_HOME%"
+if not exist "%ANDROID_SDK_ROOT%\platform-tools\adb.exe" set "ANDROID_SDK_ROOT=%ANDROID_HOME%"
 
 REM --- NDK --------------------------------------------------------------------
 set "NDK_VERSION=27.2.12479018"
 if not defined NDKROOT set "NDKROOT=%ANDROID_HOME%\ndk\%NDK_VERSION%"
+if not exist "%NDKROOT%\source.properties" set "NDKROOT=%ANDROID_HOME%\ndk\%NDK_VERSION%"
 set "NDK_ROOT=%NDKROOT%"
 set "NDK_PATH=%NDKROOT%"
 
 REM --- UE's own toolchain expectations ---------------------------------------
 set "UE_ANDROID_API=android-26"
 set "UE_SDK_PLATFORM=android-36"
-set "UE_BUILD_TOOLS=36.1.0"
+set "UE_BUILD_TOOLS=36.0.0"
 
 REM --- PATH: put Java, platform-tools and build-tools in front -----------------
 set "PATH=%JAVA_HOME%\bin;%ANDROID_HOME%\platform-tools;%ANDROID_HOME%\build-tools\%UE_BUILD_TOOLS%;%PATH%"

@@ -2,7 +2,8 @@
 REM package_android.bat - build + cook + stage + package an ARM64 Android APK.
 REM
 REM Usage:  Scripts\package_android.bat [Development|Shipping]
-REM Output: Saved\Android\<Config>\RockyKombat-<arch>.apk  (and a -arm64 build log)
+REM Output: Saved\Android\ (Unreal archive layout, including the ARM64 APK).
+REM Development uses Android's local debug identity, never a committed key.
 REM
 REM The Android toolchain (JDK 17, NDK r27c, platform 36, build-tools 36.1.0) is
 REM installed under %ANDROID_HOME%; the paths are exported here so a plain cmd.exe
@@ -25,15 +26,10 @@ echo [rkc] config      : %CONFIG%
 echo [rkc] JAVA_HOME   : %JAVA_HOME%
 echo [rkc] ANDROID_HOME: %ANDROID_HOME%
 echo [rkc] NDKROOT     : %NDKROOT%
-echo [rkc] keystore    : C:\RockyKombat\Build\Android\rkc.keystore
 
 if not exist "%ANDROID_HOME%\ndk\27.2.12479018" (
   echo [rkc] ANDROID TOOLCHAIN MISSING under %ANDROID_HOME%
   exit /b 4
-)
-if not exist "C:\RockyKombat\Build\Android\rkc.keystore" (
-  echo [rkc] KEYSTORE MISSING - generate it with keytool first
-  exit /b 5
 )
 
 call "%ENGINE%\Build\BatchFiles\RunUAT.bat" BuildCookRun ^
