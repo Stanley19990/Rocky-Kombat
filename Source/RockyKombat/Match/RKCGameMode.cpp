@@ -18,7 +18,9 @@
 #include "Engine/Engine.h"
 #include "Engine/GameViewportClient.h"
 #include "Engine/LocalPlayer.h"
+#include "Engine/Texture2D.h"
 #include "Engine/World.h"
+#include "GameFramework/PlayerController.h"
 #include "EngineUtils.h"
 #include "Framework/Application/SlateApplication.h"
 #include "HAL/FileManager.h"
@@ -32,7 +34,11 @@
 #include "Misc/FileHelper.h"
 #include "Misc/Paths.h"
 #include "Materials/MaterialInterface.h"
+#include "PaperFlipbook.h"
 #include "PaperFlipbookComponent.h"
+#include "PaperSprite.h"
+#include "PaperSpriteComponent.h"
+#include "Components/PrimitiveComponent.h"
 #include "UnrealClient.h"
 #include "RockyKombat.h"
 
@@ -44,6 +50,44 @@ namespace
  *  than a tall thin one. The arena image keeps its own aspect ratio either way and
  *  is cropped to cover the frame, so no background shows around it. */
 constexpr float ArenaMinimumAspect = 4.0f / 3.0f;
+
+// ---------------------------------------------------------------------------
+// Sprite-component census (diagnostic only, inert unless asked for).
+//
+// WHY IT EXISTS: a rendered frame can show two fighter sprites where the source
+// spawns one, and a picture cannot say which actor owns the extra one, whether it
+// is a stale actor from an earlier screen, or a second component. This enumerates
+// every live UPaperFlipbookComponent in the world with its owner, transform,
+// flipbook, material and visibility, so the answer comes from the world rather
+// than from guessing at an image. Set with  -rkc.SpriteDump=1  (optionally
+// -rkc.SpriteDumpInterval=<seconds>, default 2.0).
+// ---------------------------------------------------------------------------
+int32 GK_SpriteDump = 0;
+FAutoConsoleVariableRef CVarSpriteDump(
+    TEXT("rkc.SpriteDump"), GK_SpriteDump,
+    TEXT("1 = log a census of every live PaperFlipbook component each interval. Default 0."),
+    ECVF_Default);
+
+float GK_SpriteDumpInterval = 2.0f;
+FAutoConsoleVariableRef CVarSpriteDumpInterval(
+    TEXT("rkc.SpriteDumpInterval"), GK_SpriteDumpInterval,
+    TEXT("Seconds between sprite censuses when rkc.SpriteDump=1. Default 2.0."),
+    ECVF_Default);
+
+// Diagnostic only, inert unless asked for. Hides one side's fighter sprite so a
+// shape seen on screen can be attributed to a component rather than guessed at:
+// hide A, then B, then both, and whatever still draws was never a fighter.
+int32 GK_ArtAudit = 0;
+FAutoConsoleVariableRef CVarArtAudit(
+    TEXT("rkc.ArtAudit"), GK_ArtAudit,
+    TEXT("1 = log every flipbook frame of both rosters and the texture it samples, once. Default 0."),
+    ECVF_Default);
+
+int32 GK_HideSide = 0;
+FAutoConsoleVariableRef CVarHideSide(
+    TEXT("rkc.HideSide"), GK_HideSide,
+    TEXT("0 = show both fighters, 1 = hide side A's sprite, 2 = hide side B's, 3 = hide both. "),
+    ECVF_Default);
 
 // ---------------------------------------------------------------------------
 // Console-tunable match setup. Every value declared here is set either from the
@@ -257,6 +301,18 @@ FAutoConsoleVariableRef CVarCaptureStages(
          "leaves when the set is complete. 2 = the same without leaving. Needs a real "
          "renderer, so run windowed rather than with -nullrhi. Never normal play. "
          "Default 0."),
+    ECVF_Default);
+
+int32 GK_LiveShots = 0;
+FAutoConsoleVariableRef CVarLiveShots(
+    TEXT("rkc.LiveShots"), GK_LiveShots,
+    TEXT("N = ask the renderer for N screenshots, evenly spaced one second apart, from "
+         "inside the game itself while an ordinary match is being played. This is the "
+         "control for a defect seen through an external window grab: the game's own "
+         "screenshot is taken from the final rendered frame, so a feature that appears "
+         "in both an external grab and one of these is really on screen, while a feature "
+         "that appears only in the external grab is an artefact of that grab. Needs a "
+         "real renderer. Never normal play. Default 0."),
     ECVF_Default);
 
 // ---------------------------------------------------------------------------
@@ -617,10 +673,10 @@ void ARKCGameMode::BuildCamera()
         return;
     }
 
-    // The ring is a 1-D fight line along X, so the camera sits back along -Y and
-    // looks straight down +Y at the middle of the ring.
-    const FVector Location(0.0f, -Setup.CameraDistance, Setup.CameraHeight);
-    const FRotator Rotation(Setup.CameraPitch, 90.0f, 0.0f);
+    // Looking along -Y makes screen-right agree with simulation +X. Looking from
+    // the opposite side reversed both movement controls and the HUD's side labels.
+    const FVector Location(0.0f, Setup.CameraDistance, Setup.CameraHeight);
+    const FRotator Rotation(Setup.CameraPitch, -90.0f, 0.0f);
 
     MatchCamera = World->SpawnActor<ACameraActor>(Location, Rotation);
     if (!MatchCamera)
@@ -1675,6 +1731,222 @@ void ARKCGameMode::EndPlay(const EEndPlayReason::Type EndPlayReason)
 // Per-frame director
 // ---------------------------------------------------------------------------
 
+/** Logs one census of every live PaperFlipbook component in the world.
+ *
+ *  Inert unless rkc.SpriteDump is non-zero. Each line carries the owner actor
+ *  (class and name), the component name, the world location, the flipbook asset,
+ *  the material and the two visibility flags, which together are enough to tell
+ *  a stale leftover actor apart from a second component on a live fighter, and to
+ *  tell a missing material apart from a correctly textured sprite. */
+static void DumpSpriteCensus(UWorld* World, int32 Index)
+{
+    if (World == nullptr)
+    {
+        return;
+    }
+
+    int32 Sprites = 0;
+    int32 Prims = 0;
+    for (TActorIterator<AActor> It(World); It; ++It)
+    {
+        AActor* Actor = *It;
+        if (Actor == nullptr)
+        {
+            continue;
+        }
+
+        // Every primitive component, not just flipbooks: a duplicate fighter drawn
+        // from a UPaperSpriteComponent or a mesh would be invisible to a
+        // flipbook-only census, which is exactly the hole a black twin could hide in.
+        TArray<UPrimitiveComponent*> Components;
+        Actor->GetComponents<UPrimitiveComponent>(Components);
+        for (UPrimitiveComponent* Prim : Components)
+        {
+            if (Prim == nullptr || !Prim->IsVisible())
+            {
+                continue;
+            }
+            ++Prims;
+            // Non-const: GetFlipbook() is a non-const accessor on the component.
+            UPaperFlipbookComponent* Sprite = Cast<UPaperFlipbookComponent>(Prim);
+            // Non-const: GetSprite() is a non-const accessor on the component.
+            UPaperSpriteComponent* Single = Cast<UPaperSpriteComponent>(Prim);
+            const UMaterialInterface* Mat = Prim->GetMaterial(0);
+            const FVector Where = Prim->GetComponentLocation();
+
+            // Where that component actually lands on screen. A picture cannot name a
+            // component, but a projected rectangle can be matched to a shape on it, so
+            // a stray silhouette is attributed instead of guessed at.
+            FString OnScreen;
+            if (APlayerController* ProjectingPC = World->GetFirstPlayerController())
+            {
+                const FBox Box = Prim->Bounds.GetBox();
+                const FVector Mid(
+                    (Box.Min.X + Box.Max.X) * 0.5, (Box.Min.Y + Box.Max.Y) * 0.5, 0.0);
+                FVector2D Feet;
+                FVector2D Head;
+                const bool bFeet =
+                    ProjectingPC->ProjectWorldLocationToScreen(FVector(Mid.X, Mid.Y, Box.Min.Z), Feet);
+                const bool bHead =
+                    ProjectingPC->ProjectWorldLocationToScreen(FVector(Mid.X, Mid.Y, Box.Max.Z), Head);
+                if (bFeet && bHead)
+                {
+                    OnScreen = FString::Printf(TEXT(" px=(%.0f,%.0f)-(%.0f,%.0f)"), Feet.X, Feet.Y,
+                                               Head.X, Head.Y);
+                }
+            }
+            if (Sprite != nullptr)
+            {
+                ++Sprites;
+                const UPaperFlipbook* Book = Sprite->GetFlipbook();
+                UE_LOG(LogRockyKombat, Display,
+                       TEXT("census %d.%d: actor=%s (%s) comp=%s(flipbook) at (%.1f, %.1f, %.1f) "
+                            "book=%s frame=%d mat=%s hiddenInGame=%d bounds=%s%s"),
+                       Index, Prims, *Actor->GetName(), *Actor->GetClass()->GetName(),
+                       *Prim->GetName(), Where.X, Where.Y, Where.Z,
+                       Book ? *Book->GetName() : TEXT("(none)"),
+                       Sprite->GetPlaybackPositionInFrames(),
+                       Mat ? *Mat->GetName() : TEXT("(none)"), Prim->bHiddenInGame ? 1 : 0,
+                       *Prim->Bounds.GetBox().ToString(), *OnScreen);
+            }
+            else
+            {
+                // Non-flipbook primitives only matter when they are sprite-like or
+                // mesh-like and near the ring, so the class name carries the meaning.
+                UE_LOG(LogRockyKombat, Display,
+                       TEXT("census %d.%d: actor=%s (%s) comp=%s(%s) at (%.1f, %.1f, %.1f) "
+                            "sprite=%s mat=%s hiddenInGame=%d bounds=%s%s"),
+                       Index, Prims, *Actor->GetName(), *Actor->GetClass()->GetName(),
+                       *Prim->GetName(), *Prim->GetClass()->GetName(), Where.X, Where.Y, Where.Z,
+                       Single && Single->GetSprite() ? *Single->GetSprite()->GetName() : TEXT("(none)"),
+                       Mat ? *Mat->GetName() : TEXT("(none)"), Prim->bHiddenInGame ? 1 : 0,
+                       *Prim->Bounds.GetBox().ToString(), *OnScreen);
+            }
+        }
+    }
+
+    UE_LOG(LogRockyKombat, Display,
+           TEXT("census %d: %d visible primitive(s), of which %d flipbook(s), in %d actor(s)%s"),
+           Index, Prims, Sprites, World->GetActorCount(),
+           (Sprites > 2) ? TEXT(" -- more than the two fighters, so something else draws a fighter")
+                         : TEXT(""));
+}
+
+/** Logs every imported flipbook frame and the texture it draws with, once.
+ *
+ *  WHY IT EXISTS: a sprite frame whose source texture is missing draws as a solid
+ *  black shape - the same silhouette as the sprite, in the right place, with no
+ *  light or shadow involved. That is indistinguishable on screen from a second
+ *  actor, so the question "is the black figure another actor or an untextured
+ *  frame?" is answered from the assets instead of from a picture. Inert unless
+ *  rkc.ArtAudit is non-zero. */
+static void DumpArtAudit()
+{
+    const RKC::ERoster Rosters[] = { RKC::ERoster::Rocky, RKC::ERoster::Shadow };
+    for (RKC::ERoster Roster : Rosters)
+    {
+        const RKCArt::FArtSet Set = RKCArt::LoadArtSet(Roster);
+        const TCHAR* const Names[] = { TEXT("Idle"), TEXT("Walk"), TEXT("Jab"), TEXT("HeavyPunch"),
+                                       TEXT("Block"), TEXT("Dodge"), TEXT("Knockdown"),
+                                       TEXT("Victory") };
+        UPaperFlipbook* const Books[] = { Set.Idle, Set.Walk, Set.Jab, Set.HeavyPunch,
+                                          Set.Block, Set.Dodge, Set.Knockdown, Set.Victory };
+        for (int32 Anim = 0; Anim < UE_ARRAY_COUNT(Books); ++Anim)
+        {
+            UPaperFlipbook* Book = Books[Anim];
+            if (Book == nullptr)
+            {
+                UE_LOG(LogRockyKombat, Display, TEXT("art audit: %s %s MISSING"),
+                       *RKC::GetRosterDisplayName(Roster), Names[Anim]);
+                continue;
+            }
+
+            const int32 FrameCount = Book->GetNumFrames();
+            int32 Untextured = 0;
+            for (int32 Frame = 0; Frame < FrameCount; ++Frame)
+            {
+                UPaperSprite* const FrameSprite = Book->GetSpriteAtFrame(Frame);
+                // Source texture access is editor-only; the baked texture is
+                // what Android and other cooked targets actually render.
+                UTexture2D* const Tex = FrameSprite ? FrameSprite->GetBakedTexture() : nullptr;
+                if (Tex == nullptr)
+                {
+                    ++Untextured;
+                    UE_LOG(LogRockyKombat, Warning,
+                           TEXT("art audit: %s %s frame %d/%d (%s) has NO TEXTURE - it draws black"),
+                           *RKC::GetRosterDisplayName(Roster), Names[Anim], Frame, FrameCount,
+                           FrameSprite ? *FrameSprite->GetName() : TEXT("(no sprite)"));
+                }
+            }
+            UE_LOG(LogRockyKombat, Display,
+                   TEXT("art audit: %s %s: %d frame(s), %d without a texture"),
+                   *RKC::GetRosterDisplayName(Roster), Names[Anim], FrameCount, Untextured);
+        }
+    }
+}
+
+void ARKCGameMode::TickLiveShots(float DeltaSeconds)
+{
+    if (GK_LiveShots <= 0 || LiveShotsTaken >= GK_LiveShots)
+    {
+        return;
+    }
+
+    LiveShotsElapsed += DeltaSeconds;
+
+    // One second between shots, with the first taken as soon as the switch is read
+    // so a short run still yields a picture.
+    const bool bFirst = (LiveShotsTaken == 0);
+    if (!bFirst && LiveShotsElapsed < 1.0f)
+    {
+        return;
+    }
+    LiveShotsElapsed = 0.0f;
+
+    const FString Directory = FPaths::ProjectSavedDir() / TEXT("Evidence") / TEXT("LiveShots");
+    IFileManager::Get().MakeDirectory(*Directory, true);
+
+    const FString ShotPath =
+        Directory / FString::Printf(TEXT("live_%03d.png"), LiveShotsTaken + 1);
+    FScreenshotRequest::RequestScreenshot(ShotPath, /*bInShowUI=*/true,
+                                          /*bAddFilenameSuffix=*/false);
+
+    ++LiveShotsTaken;
+
+    // Record what the world said at the instant the frame was asked for, so the
+    // picture can be tied to named components instead of read as a shape. The
+    // fighter positions are the simulation's own, which is what decides whether a
+    // second figure on screen belongs to a fighter actor at all.
+    FString Row = FString::Printf(TEXT("shot %03d at frame %d, screen %s, world time %.2f s"),
+                                  LiveShotsTaken, GFrameCounter,
+                                  *RKCFrontEnd::FMachine::ScreenName(FrontEnd.GetScreen()),
+                                  GetWorld() ? GetWorld()->GetTimeSeconds() : 0.0f);
+    if (const ARKCFighter* A = GetFighterActor(RKC::ESide::A))
+    {
+        const RKC::FFighterState& S = Sim.GetFighter(RKC::ESide::A);
+        Row += FString::Printf(TEXT("\n    A %s x=%.1f sprite=%s visible=%s"),
+                               *RKC::GetRosterDisplayName(A->GetRoster()), S.PositionX,
+                               *A->GetCurrentArtName(),
+                               (A->GetSpriteComponent() &&
+                                A->GetSpriteComponent()->IsVisible()) ? TEXT("yes") : TEXT("no"));
+    }
+    if (const ARKCFighter* B = GetFighterActor(RKC::ESide::B))
+    {
+        const RKC::FFighterState& S = Sim.GetFighter(RKC::ESide::B);
+        Row += FString::Printf(TEXT("\n    B %s x=%.1f sprite=%s visible=%s"),
+                               *RKC::GetRosterDisplayName(B->GetRoster()), S.PositionX,
+                               *B->GetCurrentArtName(),
+                               (B->GetSpriteComponent() &&
+                                B->GetSpriteComponent()->IsVisible()) ? TEXT("yes") : TEXT("no"));
+    }
+
+    LiveShotRows.Add(Row);
+    FFileHelper::SaveStringArrayToFile(LiveShotRows, *(Directory / TEXT("LiveShots.txt")));
+
+    UE_LOG(LogRockyKombat, Display, TEXT("live shot %d/%d written to %s"), LiveShotsTaken,
+           GK_LiveShots, *FPaths::ConvertRelativePathToFull(ShotPath));
+}
+
 void ARKCGameMode::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
@@ -1682,6 +1954,60 @@ void ARKCGameMode::Tick(float DeltaSeconds)
     if (!bWorldBuilt)
     {
         return;
+    }
+
+    // Evidence runs only, and inert otherwise: the game asks the renderer for its
+    // own screenshots while an ordinary match is played, so anything seen through
+    // an external window grab can be confirmed against the rendered frame itself.
+    TickLiveShots(DeltaSeconds);
+
+    // Diagnostic only, and off by default: every flipbook frame and the texture it
+    // draws with, once, so an untextured frame is named rather than reconstructed.
+    if (GK_ArtAudit != 0)
+    {
+        static bool bArtAuditDone = false;
+        if (!bArtAuditDone)
+        {
+            bArtAuditDone = true;
+            DumpArtAudit();
+        }
+    }
+
+    // Diagnostic only, and off by default: a census of the sprites that are
+    // actually alive in the world, so a frame that shows two fighters when one
+    // actor was spawned can be attributed to a named component instead of a guess.
+    if (GK_SpriteDump != 0)
+    {
+        static float SinceLastCensus = 0.0f;
+        static int32 CensusIndex = 0;
+        SinceLastCensus += DeltaSeconds;
+        if (SinceLastCensus >= FMath::Max(GK_SpriteDumpInterval, 0.05f))
+        {
+            SinceLastCensus = 0.0f;
+            DumpSpriteCensus(GetWorld(), ++CensusIndex);
+        }
+    }
+
+    // Diagnostic only, and off by default: hide one side's sprite so a shape seen on
+    // screen can be tied to a named component - or shown to be no fighter at all,
+    // because it survives hiding both. Re-applied every frame because a rebuilt match
+    // creates new components.
+    if (GK_HideSide != 0)
+    {
+        if (ARKCFighter* HiddenA = GetFighterActor(RKC::ESide::A))
+        {
+            if (UPaperFlipbookComponent* SpriteA = HiddenA->GetSpriteComponent())
+            {
+                SpriteA->SetVisibility((GK_HideSide & 1) == 0);
+            }
+        }
+        if (ARKCFighter* HiddenB = GetFighterActor(RKC::ESide::B))
+        {
+            if (UPaperFlipbookComponent* SpriteB = HiddenB->GetSpriteComponent())
+            {
+                SpriteB->SetVisibility((GK_HideSide & 2) == 0);
+            }
+        }
     }
 
     // Scripted input first, before anything reads a latch this frame: the driver
@@ -1860,7 +2186,7 @@ void ARKCGameMode::AdvanceMatchFrame(float DeltaSeconds)
     }
 
     // ---- 5. banner and feed ------------------------------------------------
-    UpdateBanner();
+    UpdateBanner(DeltaSeconds);
 
     for (FRKCEventFeedLine& Line : EventFeed)
     {
@@ -2086,7 +2412,7 @@ void ARKCGameMode::PushFeed(const FString& Line)
     }
 }
 
-void ARKCGameMode::UpdateBanner()
+void ARKCGameMode::UpdateBanner(float DeltaSeconds)
 {
     const RKC::FMatchState& M = Sim.GetMatch();
 
@@ -2129,16 +2455,9 @@ void ARKCGameMode::UpdateBanner()
             SetBanner(TEXT("FIGHT!"), true);
             BannerAgeSeconds = 0.0f;
         }
-        else if (BannerAgeSeconds > 0.8f)
+        else if (BannerText == TEXT("FIGHT!") && BannerAgeSeconds > 0.8f)
         {
             SetBanner(TEXT(""), false);
-        }
-        else
-        {
-            // Let the "FIGHT!" call fade on its own clock.
-            const float HeldAge = BannerAgeSeconds;
-            SetBanner(TEXT("FIGHT!"), true);
-            BannerAgeSeconds = HeldAge;
         }
         break;
 
@@ -2177,15 +2496,9 @@ void ARKCGameMode::UpdateBanner()
         break;
     }
 
-    // The banner's own clock. Presentation, so it follows the frame the player actually
-    // saw - the same clock the event feed ages by a few lines up - rather than the
-    // simulation step, which can be a whole tick or none of one. Without this the age
-    // stayed at zero for the whole round and the > 0.8 s clear above could never fire,
-    // leaving the "FIGHT!" call and its band on screen until the round-end text
-    // replaced it. Clamped at zero so a clock read that goes backwards, or a world that
-    // is already shutting down, cannot make the age shrink.
-    const double BannerDelta = GetWorld() ? GetWorld()->GetDeltaSeconds() : Sim.FixedTickSeconds;
-    BannerAgeSeconds += FMath::Max(0.0f, static_cast<float>(BannerDelta));
+    // Use the director's clock, which also advances in headless self-tests.
+    // A cleared banner stays cleared until another countdown or match event.
+    BannerAgeSeconds += FMath::Max(0.0f, DeltaSeconds);
 }
 
 // ---------------------------------------------------------------------------
@@ -2944,6 +3257,15 @@ void ARKCGameMode::RunSelfTestMatches()
                                   GetFighterPartCount(RKC::ESide::B)));
     SelfTestCheck(MatchCamera != nullptr, TEXT("a match camera exists"));
     SelfTestCheck(HUDClass == ARKCHUD::StaticClass(), TEXT("the match HUD class is ARKCHUD"));
+    SelfTestCheck(MatchCamera != nullptr && MatchCamera->GetActorRightVector().X > 0.99f,
+                  TEXT("screen-right agrees with simulation +X, so player A and left/right controls match the HUD"));
+    if (FighterA != nullptr && FighterB != nullptr &&
+        FighterA->GetSpriteComponent() != nullptr && FighterB->GetSpriteComponent() != nullptr)
+    {
+        SelfTestCheck(FighterA->GetSpriteComponent()->GetComponentLocation().Y >
+                          FighterB->GetSpriteComponent()->GetComponentLocation().Y + 1.0f,
+                      TEXT("overlapping fighters occupy distinct sprite depth layers"));
+    }
     SelfTestCheck(Sim.GetRules().IsValid(), TEXT("the live simulation carries a valid rule set"));
 
     // ---- Imported artwork ----------------------------------------------------
@@ -3101,11 +3423,40 @@ void ARKCGameMode::RunSelfTestMatches()
         }
 
         int32 Ticks = 0;
+        // Side order is checked on EVERY simulated frame, not only at the end.
+        // A fighter drawn on the wrong side of its opponent is a momentary thing -
+        // it happens while a fighter is crossing over or while a rematch is being
+        // set up - so an end-of-match snapshot can easily miss it. Both the rules
+        // and the pictures are sampled: the simulation's own X for each side, and
+        // the actor X the renderer actually uses.
+        int32 SideOrderBreaksSim = 0;
+        int32 SideOrderBreaksActors = 0;
+        int32 StaleFightBannerFrames = 0;
         while (!Sim.IsMatchOver() && Ticks < TickBudget)
         {
             AdvanceMatchFrame(Dt);
             ++Ticks;
+            if (Sim.IsFighting() &&
+                Sim.GetRules().RoundSeconds - Sim.GetMatch().RoundTimeRemaining > 1.2f &&
+                BannerText == TEXT("FIGHT!"))
+            {
+                ++StaleFightBannerFrames;
+            }
+
+            if (Sim.GetFighter(RKC::ESide::A).PositionX > Sim.GetFighter(RKC::ESide::B).PositionX)
+            {
+                ++SideOrderBreaksSim;
+            }
+            if (FighterA != nullptr && FighterB != nullptr &&
+                FighterA->GetActorLocation().X > FighterB->GetActorLocation().X)
+            {
+                ++SideOrderBreaksActors;
+            }
         }
+
+        SelfTestCheck(StaleFightBannerFrames == 0,
+                      FString::Printf(TEXT("match %d clears FIGHT after the introduction and does not redisplay it (%d stale frames)"),
+                                      Index + 1, StaleFightBannerFrames));
 
         // Where the fighters are, measured on both sides of the presentation
         // boundary. Each sprite reads its X straight off the simulation, so if the
@@ -3127,6 +3478,19 @@ void ARKCGameMode::RunSelfTestMatches()
                           FMath::IsNearlyEqual(SimXB, ActorXB, 1.0f),
                       FString::Printf(TEXT("match %d draws each fighter at the simulation's own X"),
                                       Index + 1));
+
+        // The side-order invariant. Side A is the left fighter and side B is the
+        // right fighter for the whole contest; a human who chooses the first
+        // character is side A, so this is the machine-readable form of "the player
+        // is never put on the wrong side". Checked on every frame above.
+        SelfTestCheck(SideOrderBreaksSim == 0,
+                      FString::Printf(TEXT("match %d keeps side A left of side B in the rules on all "
+                                           "%d frame(s) (breaks %d)"),
+                                      Index + 1, Ticks, SideOrderBreaksSim));
+        SelfTestCheck(SideOrderBreaksActors == 0,
+                      FString::Printf(TEXT("match %d draws side A left of side B on all %d frame(s) "
+                                           "(breaks %d)"),
+                                      Index + 1, Ticks, SideOrderBreaksActors));
 
         const RKC::FMatchState& M = Sim.GetMatch();
         const bool bTimedOut = !Sim.IsMatchOver();
@@ -3594,7 +3958,7 @@ void ARKCGameMode::UpdateArenaFraming(float DeltaSeconds)
     if (MatchCamera != nullptr)
     {
         const FVector CameraLocation = MatchCamera->GetActorLocation();
-        Distance = FMath::Max(-CameraLocation.Y, 1.0f);
+        Distance = FMath::Max(CameraLocation.Y, 1.0f);
         Height = CameraLocation.Z;
         Pitch = MatchCamera->GetActorRotation().Pitch;
         if (UCameraComponent* Camera = MatchCamera->GetCameraComponent())

@@ -91,6 +91,9 @@ private:
      *  UpdatePose() so the two never fight over what is visible. */
     void UpdateArt(const RKC::FFighterState& S);
 
+    /** Advances the walking pose by distance travelled, including in headless runs. */
+    void UpdateWalkPhase(const RKC::FFighterState& State);
+
     UPROPERTY(VisibleAnywhere, Category = "RKC|Fighter")
     TObjectPtr<USceneComponent> Root;
 
@@ -154,6 +157,10 @@ private:
      *  is only restarted when the state actually changes. 255 means "none yet". */
     uint8 LastArtState = 255;
     uint8 LastArtAction = 255;
+
+    float WalkPhase = 0.0f;
+    float LastWalkPositionX = 0.0f;
+    bool bHasWalkPosition = false;
 
     RKC::FCombatSim* Sim = nullptr;
     RKC::ESide Side = RKC::ESide::A;

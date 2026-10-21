@@ -301,7 +301,7 @@ private:
      *  simulation has advanced and writes no simulation state, so a sound can
      *  never change a match. */
     void DrivePresentationAudio();
-    void UpdateBanner();
+    void UpdateBanner(float DeltaSeconds);
     void PushFeed(const FString& Line);
 
     void OnMatchEnded();
@@ -340,6 +340,14 @@ private:
     /** True while the on-screen pad is actually being drawn, which is what the
      *  touch-pad stage is evidence of. */
     bool IsTouchPadOnScreen() const;
+
+    // ---- Live capture (rkc.LiveShots; evidence runs only) -------------------
+    /** One frame of a live capture run: asks the renderer for a screenshot once a
+     *  second, up to the requested count, while an ORDINARY match is played. This
+     *  is the control for anything seen through an external window grab, because
+     *  the engine's own screenshot is the rendered frame itself. Does nothing
+     *  unless rkc.LiveShots is set. */
+    void TickLiveShots(float DeltaSeconds);
 
     /** Feeds one simulation event to the audio layer. Presentation only: the
      *  simulation has already been advanced by the time this is called, so a
@@ -537,6 +545,15 @@ private:
     FString StageCaptureStartedAt;
     /** One line per stage: what was asked for and what the HUD reported. */
     TArray<FString> StageCaptureRows;
+
+    // ---- Live capture state (inert unless rkc.LiveShots is set) -------------
+    /** Shots requested so far, against the requested total. */
+    int32 LiveShotsTaken = 0;
+    /** Seconds since the last request, so the shots are spread over the match
+     *  rather than all taken on the frame the switch was read. */
+    float LiveShotsElapsed = 0.0f;
+    /** One line per shot, written beside the images for a reviewable record. */
+    TArray<FString> LiveShotRows;
 
     // ---- Self-test state (inert unless -RKCSelfTest was passed) -------------
     bool bSelfTestActive = false;

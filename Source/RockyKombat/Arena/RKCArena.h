@@ -106,7 +106,7 @@ public:
     /** Tells the arena which camera will look at it: a field of view, the axis that
      *  angle describes (the engine's aspect-ratio axis constraint decides that, so
      *  the caller reads it rather than this class assuming it), the distance back
-     *  along -Y, the height, and the pitch in degrees. Re-frames only when a value
+     *  along +Y, the height, and the pitch in degrees. Re-frames only when a value
      *  actually changed, so it is safe to call every frame. */
     void SetFramingCamera(float InFOVDegrees, bool bInFOVIsHorizontal,
                           float InCameraDistanceCm, float InCameraHeightCm,

@@ -108,4 +108,4 @@ if /i not "%~1"=="quiet" (
 )
 
 REM setlocal hides these on exit, so re-export for the calling script
-endlocal & set "JAVA_HOME=%JAVA_HOME%" & set "ANDROID_HOME=%ANDROID_HOME%" & set "ANDROID_SDK_ROOT=%ANDROID_SDK_ROOT%" & set "NDKROOT=%NDKROOT%" & set "NDK_ROOT=%NDKROOT%" & set "NDK_PATH=%NDKROOT%" & set "PATH=%PATH%" & exit /b %ENV_RC%
+endlocal & set "UE_ROOT=%UE_ROOT%" & set "JAVA_HOME=%JAVA_HOME%" & set "ANDROID_HOME=%ANDROID_HOME%" & set "ANDROID_SDK_ROOT=%ANDROID_SDK_ROOT%" & set "NDKROOT=%NDKROOT%" & set "NDK_ROOT=%NDKROOT%" & set "NDK_PATH=%NDKROOT%" & set "PATH=%PATH%" & exit /b %ENV_RC%

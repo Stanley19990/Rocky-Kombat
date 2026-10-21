@@ -25,7 +25,10 @@
 #include "Match/RKCGameMode.h"
 
 #include "Audio/RKCAudio.h"
+#include "Fighters/RKCFighter.h"
 #include "Match/RKCPlayerController.h"
+#include "PaperFlipbook.h"
+#include "PaperFlipbookComponent.h"
 #include "UI/RKCFrontEnd.h"
 #include "UI/RKCTouchControls.h"
 
@@ -225,6 +228,94 @@ void ARKCGameMode::RunSelfTestPresentationSystems()
     const TArray<FRKCAudioCatalogEntry>& Catalog = RKCAudioCatalog();
 
     SelfTestLog += TEXT("\n--- PRESENTATION SYSTEMS ---\n");
+    // Exercise actual sprite components against an independent simulation. World
+    // time deliberately stays fixed: presentation must still follow combat ticks.
+    if (FighterA != nullptr && FighterA->IsUsingArtwork())
+    {
+        const float RestoreY = FighterA->GetActorLocation().Y;
+        for (const RKC::ERoster Roster : { RKC::ERoster::Rocky, RKC::ERoster::Shadow })
+        {
+            RKC::FCombatSim PoseSim;
+            RKC::FMatchRules PoseRules;
+            PoseRules.CountdownSeconds = 0.0f;
+            const RKC::FFighterConfig Config = RKC::MakeFighterConfig(Roster);
+            PoseSim.Init(PoseRules, Config, Config);
+            const RKC::FInputState Neutral;
+            for (int32 Wait = 0; Wait < 120 && !PoseSim.IsFighting(); ++Wait)
+            {
+                PoseSim.StepFixed(Neutral, Neutral);
+            }
+            FighterA->Init(&PoseSim, RKC::ESide::A, Roster, RestoreY);
+            UPaperFlipbookComponent* const Component = FighterA->GetSpriteComponent();
+            TSet<int32> WalkFrames;
+            bool bStableWithoutStep = true;
+            RKC::FInputState Move;
+            Move.bMoveRight = true;
+            for (int32 Step = 0; Step < 24; ++Step)
+            {
+                PoseSim.StepFixed(Move, Neutral);
+                FighterA->SyncFromSim();
+                const int32 Frame = Component->GetPlaybackPositionInFrames();
+                WalkFrames.Add(Frame);
+                FighterA->SyncFromSim();
+                bStableWithoutStep &= Component->GetPlaybackPositionInFrames() == Frame;
+            }
+            SelfTestCheck(WalkFrames.Num() >= 3 && bStableWithoutStep && !Component->IsPlaying(),
+                          FString::Printf(TEXT("%s walking advances by distance and stays fixed without movement (%d poses)"),
+                                          *RKC::GetRosterDisplayName(Roster), WalkFrames.Num()));
+            PoseSim.StepFixed(Neutral, Neutral);
+            FighterA->SyncFromSim();
+
+            for (const bool bHeavy : { false, true })
+            {
+                RKC::FInputState Punch;
+                Punch.bJabPressed = !bHeavy;
+                Punch.bHeavyPressed = bHeavy;
+                PoseSim.StepFixed(Punch, Neutral);
+                bool bSawStartup = false, bSawActive = false, bSawRecovery = false;
+                bool bCorrectPoses = true;
+                int32 PreviousFrame = -1;
+                for (int32 Step = 0; Step < 120; ++Step)
+                {
+                    const RKC::FFighterState& State = PoseSim.GetFighter(RKC::ESide::A);
+                    if (!State.IsAttackPhase())
+                    {
+                        break;
+                    }
+                    FighterA->SyncFromSim();
+                    const int32 Frame = Component->GetPlaybackPositionInFrames();
+                    const int32 Last = Component->GetFlipbook()->GetNumFrames() - 1;
+                    bCorrectPoses &= Frame >= PreviousFrame && !Component->IsPlaying();
+                    if (State.State == RKC::EFighterState::AttackStartup)
+                    {
+                        bSawStartup = true;
+                        bCorrectPoses &= Frame == 0;
+                    }
+                    else if (State.State == RKC::EFighterState::AttackActive)
+                    {
+                        bSawActive = true;
+                        bCorrectPoses &= Frame > 0 && Frame < Last;
+                    }
+                    else
+                    {
+                        bSawRecovery = true;
+                        bCorrectPoses &= Frame == Last;
+                    }
+                    PreviousFrame = Frame;
+                    PoseSim.StepFixed(Neutral, Neutral);
+                }
+                SelfTestCheck(bSawStartup && bSawActive && bSawRecovery && bCorrectPoses,
+                              FString::Printf(TEXT("%s %s poses follow startup, impact and recovery without restarting"),
+                                              *RKC::GetRosterDisplayName(Roster), bHeavy ? TEXT("heavy") : TEXT("jab")));
+                for (int32 Wait = 0; Wait < 60; ++Wait)
+                {
+                    PoseSim.StepFixed(Neutral, Neutral);
+                }
+            }
+        }
+        // The independent simulations go out of scope; restore the live binding.
+        FighterA->Init(&Sim, RKC::ESide::A, Setup.FighterA, RestoreY);
+    }
     SelfTestLog += TEXT("Checked here: the audio catalog and the event planner, the front-end state\n"
                         "machine driven with synthetic input, and the touch pad. Not checked here:\n"
                         "how any of it looks or sounds to a person.\n\n");

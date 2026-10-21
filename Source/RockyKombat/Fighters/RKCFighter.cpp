@@ -28,6 +28,18 @@ constexpr float NeutralRearX = 6.0f;
  *  punch's own reach. The gameplay hitbox is authoritative; this only makes the
  *  active window visible. */
 constexpr float ActiveExtensionFraction = 0.62f;
+
+/** Ground distance the walk cycle is taken to cover, in centimetres.
+ *
+ *  WHY THIS EXISTS: the pack's walk is four poses at 8 fps, which is two cycles a
+ *  second however fast the fighter is travelling. At the roster's own walk speeds
+ *  (205 cm/s advancing, 152 retreating, halved while blocking) a fixed two cycles
+ *  a second makes the feet slide against the ring instead of stepping on it. The
+ *  cycle is therefore rate-locked to distance covered, and this constant is the
+ *  distance one cycle is worth. It is a presentation constant, not a rule: no
+ *  simulation value is derived from it, so changing it cannot change the match. */
+constexpr float WalkCycleDistanceCm = 88.0f;
+
 }
 
 ARKCFighter::ARKCFighter()
@@ -79,6 +91,10 @@ void ARKCFighter::Init(RKC::FCombatSim* InSim, RKC::ESide InSide, RKC::ERoster I
     Side = InSide;
     Roster = InRoster;
     RingY = InRingY;
+    WalkPhase = 0.0f;
+    bHasWalkPosition = false;
+    LastArtState = 255;
+    LastArtAction = 255;
 
     BuildRig();
 
@@ -172,14 +188,34 @@ void ARKCFighter::SyncFromSim()
     const RKC::FFighterState& S = Sim->GetFighter(Side);
     const RKC::FFighterConfig& Cfg = Sim->GetConfig(Side);
 
+    UpdateWalkPhase(S);
+
     // The simulation works in 1-D along X on a single fight line.
     SetActorLocation(FVector(S.PositionX, RingY, 0.0f), false, nullptr, ETeleportType::TeleportPhysics);
     SetActorRotation(FRotator(0.0f, (S.Facing >= 0 ? 0.0f : 180.0f), 0.0f), ETeleportType::TeleportPhysics);
+    // Separate overlapping masked quads without moving gameplay or hitboxes.
+    // Compensate for actor mirroring so each side keeps its own WORLD depth.
+    if (Sprite)
+    {
+        const float Depth = Side == RKC::ESide::A ? 1.0f : -1.0f;
+        Sprite->SetRelativeLocation(FVector(0.0f, Depth * S.Facing, 0.0f));
+    }
 
     UpdatePose(S, Cfg);
     // After the pose, never before: UpdatePose decides what the greybox looks
     // like, and UpdateArt decides whether that greybox is on screen at all.
     UpdateArt(S);
+}
+
+void ARKCFighter::UpdateWalkPhase(const RKC::FFighterState& State)
+{
+    if (bHasWalkPosition && State.State == RKC::EFighterState::Moving)
+    {
+        WalkPhase = FMath::Fmod(WalkPhase + FMath::Abs(State.PositionX - LastWalkPositionX) /
+                                             WalkCycleDistanceCm, 1.0f);
+    }
+    LastWalkPositionX = State.PositionX;
+    bHasWalkPosition = true;
 }
 
 void ARKCFighter::InitArt()
@@ -287,7 +323,6 @@ void ARKCFighter::UpdateArt(const RKC::FFighterState& S)
     {
         return;
     }
-
     UPaperFlipbook* const Desired = RKCArt::SelectFlipbook(ArtSet, S);
     if (!Desired)
     {
@@ -296,105 +331,81 @@ void ARKCFighter::UpdateArt(const RKC::FFighterState& S)
 
     const uint8 StateId = static_cast<uint8>(S.State);
     const uint8 ActionId = static_cast<uint8>(S.CurrentAction);
-    const bool bStateChanged = (StateId != LastArtState) || (ActionId != LastArtAction);
-    const bool bAssetChanged = (Sprite->GetFlipbook() != Desired);
-
-    // Only restart on a real transition. Restarting every frame would reset the
-    // animation continuously and nothing would ever appear to play.
-    if (!bStateChanged && !bAssetChanged)
-    {
-        return;
-    }
-
-    Sprite->SetFlipbook(Desired);
-    Sprite->SetPlayRate(1.0f);
+    const bool bChanged = StateId != LastArtState || ActionId != LastArtAction ||
+                          Sprite->GetFlipbook() != Desired;
     LastArtState = StateId;
     LastArtAction = ActionId;
+    Sprite->SetFlipbook(Desired);
+    const int32 Frames = FMath::Max(1, Desired->GetNumFrames());
+
+    // Combat poses are sampled from the same fixed ticks as the hitboxes. Letting
+    // the component play independently restarts a punch at each phase boundary
+    // and can show an impact after the rules have already returned to recovery.
+    auto HoldFrame = [this, Frames](int32 Frame)
+    {
+        Sprite->SetLooping(false);
+        Sprite->Stop();
+        Sprite->SetPlaybackPositionInFrames(FMath::Clamp(Frame, 0, Frames - 1), false);
+    };
+    auto TimedFrame = [Frames](int32 RemainingTicks, float DurationSeconds)
+    {
+        const int32 Total = FMath::Max(1, FMath::RoundToInt(
+            DurationSeconds / RKC::FCombatSim::FixedTickSeconds));
+        const int32 Elapsed = FMath::Clamp(Total - RemainingTicks, 0, Total);
+        return FMath::Min(Frames - 1, Elapsed * Frames / Total);
+    };
+    const RKC::FFighterConfig& Config = Sim->GetConfig(Side);
 
     switch (S.State)
     {
-    case RKC::EFighterState::Blocking:
-        // A block is sustained input, not a one-shot. Hold the guard pose on the
-        // first frame instead of looping a sequence that drops the guard.
-        Sprite->SetLooping(false);
-        Sprite->SetPlaybackPositionInFrames(0, false);
-        Sprite->Stop();
-        break;
-
-    case RKC::EFighterState::HitStun:
-        // The pack ships no hit-reaction animation and no get-up sequence. Its
-        // documented stand-in is Knockdown frame 0 as a temporary hit response.
-        Sprite->SetLooping(false);
-        Sprite->SetPlaybackPositionInFrames(0, false);
-        Sprite->Stop();
-        break;
-
-    case RKC::EFighterState::KnockedDown:
-    case RKC::EFighterState::Defeated:
-        // Play down to the floor once, then hold there: non-looping playback
-        // leaves the final frame on screen, which is where a floored fighter is.
-        Sprite->SetLooping(false);
-        Sprite->SetPlaybackPositionInFrames(0, false);
-        Sprite->Play();
-        break;
-
     case RKC::EFighterState::AttackStartup:
+        HoldFrame(0);
+        break;
     case RKC::EFighterState::AttackActive:
+    {
+        const RKC::FAttackDef& Attack = S.CurrentAction == RKC::EAction::HeavyPunch
+                                         ? Config.HeavyPunch : Config.Jab;
+        int32 Startup = 0, Active = 0, Recovery = 0;
+        RKC::FCombatSim::GetAttackWindow(Attack, Startup, Active, Recovery);
+        const int32 First = FMath::Min(1, Frames - 1);
+        const int32 Count = FMath::Max(1, Frames - 2);
+        const int32 ActiveTick = FMath::Max(0, S.AttackTick - Startup - 1);
+        HoldFrame(First + FMath::Min(Count - 1, ActiveTick * Count / FMath::Max(1, Active)));
+        break;
+    }
     case RKC::EFighterState::AttackRecovery:
-    {
-        // Stretch the four-pose animation across the attack's real duration so the
-        // punch on screen lands in the same tick as the hitbox the rules use.
-        // AttackTotalTicks is the simulation's own figure, never a guess.
-        Sprite->SetLooping(false);
-        const int32 Frames = FMath::Max(1, Desired->GetNumFrames());
-        const float DurationSeconds =
-            (S.AttackTotalTicks > 0)
-                ? static_cast<float>(S.AttackTotalTicks) * RKC::FCombatSim::FixedTickSeconds
-                : 0.0f;
-        const float Rate = (DurationSeconds > 0.01f)
-                               ? static_cast<float>(Frames) / DurationSeconds
-                               : 1.0f;
-        Sprite->SetPlayRate(Rate);
-        Sprite->SetPlaybackPositionInFrames(0, false);
-        Sprite->Play();
+        HoldFrame(Frames - 1);
         break;
-    }
-
-    case RKC::EFighterState::Dodging:
-    {
-        // A slip is a one-shot too: play the evade and hold its end pose rather
-        // than looping it back into a standing frame mid-dodge.
-        Sprite->SetLooping(false);
-        const float DurationSeconds =
-            (S.StateTicksRemaining > 0)
-                ? static_cast<float>(S.StateTicksRemaining) * RKC::FCombatSim::FixedTickSeconds
-                : 0.0f;
-        const int32 Frames = FMath::Max(1, Desired->GetNumFrames());
-        const float Rate = (DurationSeconds > 0.01f)
-                               ? static_cast<float>(Frames) / DurationSeconds
-                               : 1.0f;
-        Sprite->SetPlayRate(Rate);
-        Sprite->SetPlaybackPositionInFrames(0, false);
-        Sprite->Play();
-        break;
-    }
-
-    case RKC::EFighterState::Victory:
-        Sprite->SetLooping(true);
-        Sprite->SetPlaybackPositionInFrames(0, false);
-        Sprite->Play();
-        break;
-
-    case RKC::EFighterState::Idle:
     case RKC::EFighterState::Moving:
+        HoldFrame(FMath::FloorToInt(WalkPhase * Frames));
+        break;
+    case RKC::EFighterState::Dodging:
+        HoldFrame(TimedFrame(S.StateTicksRemaining, Config.DodgeSeconds));
+        break;
+    case RKC::EFighterState::KnockedDown:
+        HoldFrame(TimedFrame(S.StateTicksRemaining, Config.KnockdownSeconds));
+        break;
+    case RKC::EFighterState::Defeated:
+        HoldFrame(Frames - 1);
+        break;
+    case RKC::EFighterState::Blocking:
+    case RKC::EFighterState::HitStun:
+        // The supplied art has no dedicated hit reaction; retain its documented fallback.
+        HoldFrame(0);
+        break;
+    case RKC::EFighterState::Idle:
+    case RKC::EFighterState::Victory:
     default:
-        Sprite->SetLooping(true);
-        Sprite->SetPlaybackPositionInFrames(0, false);
-        Sprite->Play();
+        if (bChanged)
+        {
+            Sprite->SetLooping(true);
+            Sprite->SetPlayRate(1.0f);
+            Sprite->SetPlaybackPositionInFrames(0, false);
+            Sprite->Play();
+        }
         break;
     }
 }
-
 void ARKCFighter::UpdatePose(const RKC::FFighterState& S, const RKC::FFighterConfig& Cfg)
 {
     const float Time = GetWorld() ? GetWorld()->GetTimeSeconds() : 0.0f;

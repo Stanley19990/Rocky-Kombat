@@ -297,7 +297,7 @@ void ARKCArena::EnableArtBackdrop()
     // the values here only have to be non-degenerate for the component to exist.
     ArtBackdrop = AddShape(this, Root, TEXT("ArtBackdrop"),
                            FVector(100.0f, 100.0f, 1.0f),
-                           FVector(0.0f, ImagePlaneDistanceCm, 0.0f),
+                           FVector(0.0f, -ImagePlaneDistanceCm, 0.0f),
                            FLinearColor::White, /*bDrawPlane=*/true);
     if (!ArtBackdrop)
     {
@@ -306,9 +306,8 @@ void ARKCArena::EnableArtBackdrop()
         return;
     }
 
-    // A roll of 90 degrees turns the plane's +Z normal to face -Y, which is the
-    // direction the match camera looks from, and its +Y to world +Z, so its local Y
-    // becomes the vertical axis of the picture. Its local X stays the width.
+    // Local Y becomes world Z, preserving the picture's vertical orientation.
+    // The imported unlit material is two-sided, so it also draws from camera +Y.
     ArtBackdrop->SetRelativeRotation(FRotator(0.0f, 0.0f, 90.0f));
 
     ArtBackdropMaterial = UMaterialInstanceDynamic::Create(BaseMaterial, this);
@@ -632,7 +631,7 @@ void ARKCArena::ApplyFraming()
            TEXT("narrowest cover margin %.0f cm."),
            Aspect, FramingFOV, bFOVIsHorizontal ? TEXT("horizontal") : TEXT("vertical"),
            FramingDistance, FramingHeight, FramingPitch, PictureWidthCm, PictureHeightCm,
-           ImagePlaneDistanceCm, FrameBottomZ, FrameTopZ, PlacedFloorLineZ, FeetScreen,
+           -ImagePlaneDistanceCm, FrameBottomZ, FrameTopZ, PlacedFloorLineZ, FeetScreen,
            ImageFloorScreenPosition, AlignmentDelta, CoverMarginCm);
 
     if (AlignmentDelta > 0.001f)
@@ -658,5 +657,5 @@ void ARKCArena::PositionArtBackdrop(float PictureWidthCm, float PictureHeightCm,
     // world axis those turn into. Thickness stays at 1 cm to keep the scale
     // non-degenerate; the plane is a backdrop, never a surface anyone stands on.
     ArtBackdrop->SetRelativeScale3D(FVector(PictureWidthCm, PictureHeightCm, 1.0f) / 100.0f);
-    ArtBackdrop->SetRelativeLocation(FVector(0.0f, ImagePlaneDistanceCm, CentreZ));
+    ArtBackdrop->SetRelativeLocation(FVector(0.0f, -ImagePlaneDistanceCm, CentreZ));
 }

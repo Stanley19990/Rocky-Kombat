@@ -5,8 +5,7 @@ REM
 REM  Produces a versioned, release-signed, ARM64-only APK with all content
 REM  inside it (no .obb, no network dependency).
 REM
-REM  Signing: the project config ships a throwaway debug key so dev builds
-REM  install over each other. For a shareable APK this script temporarily
+REM  Signing values are empty in source control. This script temporarily
 REM  overlays the private release keystore from .secrets\, builds, then
 REM  restores Config\DefaultEngine.ini byte-for-byte - even on failure.
 REM
@@ -21,6 +20,10 @@ set "ARCH=%RKC_ROOT%\Dist\Android\_archive"
 set "OUT=%RKC_ROOT%\Dist\Android"
 set "CONFIG=%~1"
 if "%CONFIG%"=="" set "CONFIG=Shipping"
+if /i not "%CONFIG%"=="Shipping" (
+    echo [FAIL] Private distribution signing requires Shipping. For the test APK use Scripts\package_android.bat Development.
+    exit /b 3
+)
 
 call "%~dp0android_env.bat" quiet
 if errorlevel 1 (
@@ -92,7 +95,7 @@ call "%UE_ROOT%\Engine\Build\BatchFiles\RunUAT.bat" BuildCookRun ^
     -project="%RKC_ROOT%\RockyKombat.uproject" ^
     -noP4 -utf8output ^
     -platform=Android -targetplatform=Android ^
-    -clientconfig=%CONFIG% ^
+    -clientconfig=%CONFIG% -distribution ^
     -build -cook -stage -pak -package ^
     -map=/Engine/Maps/Entry ^
     -archive -archivedirectory="%ARCH%"
