@@ -6,6 +6,16 @@ does not supply Xcode or an Apple signing identity.
 
 ## Android
 
+The first APK is published as
+[1.0.2-alpha.2, build 3](https://github.com/Stanley19990/Rocky-Kombat/releases/tag/v1.0.2-alpha.2)
+on 2026-10-23. Size: 175,204,803 bytes. Source:
+`20954a30ba6ffe04796f90f0466f34947453f798`.
+SHA-256: `187802321f3fec79247ce6a8857c883d06a3afb56c9ee81b8bd41271a50d9637`.
+The signature, ARM64 manifest and embedded `assets/main.obb.png` passed checks.
+The public APK was downloaded without authentication and matched the full SHA-256.
+The existing three-match engine integration suite also passed on Unreal 5.8.4.
+These checks do not constitute a phone playtest; no authorized phone was connected.
+
 Run `Scripts/package_android.bat` to build a self-contained ARM64 APK. Successful
 packaging writes the APK, `BUILD_INFO.json` and `SHA256SUMS.txt` in `Dist/Android`.
 The build requires Unreal's Android optional component, SDK platform 36,
