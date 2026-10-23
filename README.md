@@ -2,15 +2,19 @@
 
 ## Android test build
 
-[Download the Android APK — 1.0.2-alpha.2, build 3](https://github.com/Stanley19990/Rocky-Kombat/releases/download/v1.0.2-alpha.2/RockyKombat-1.0.2-alpha.2-build3-arm64.apk)
+[Download the Android APK — 1.0.3-alpha.3, build 4](https://github.com/Stanley19990/Rocky-Kombat/releases/download/v1.0.3-alpha.3/RockyKombat-1.0.3-alpha.3-build4-arm64.apk)
 
-[Release notes, build information and checksum](https://github.com/Stanley19990/Rocky-Kombat/releases/tag/v1.0.2-alpha.2)
+[Release notes, build information and checksum](https://github.com/Stanley19990/Rocky-Kombat/releases/tag/v1.0.3-alpha.3)
 
-Internal alpha for ARM64 Android 8.0/API 26 or newer. Download size: about 175 MB.
+Startup compatibility candidate for ARM64 Android 8.0/API 26 or newer, with
+OpenGL ES 3.2 required. Download size: about 161 MB. A tester reported build 3
+exiting at the Unreal splash. Build 4 uses OpenGL instead of Vulkan, disables
+the development file server, and adds Rockycat launcher and splash branding.
+The original crash cause is unconfirmed; build 4 still needs a phone retest.
 Game content is included; no separate OBB or Unreal installation is needed on the phone.
 
 Open the downloaded APK, allow installation from your browser/file manager if
-prompted, then install and launch Rocky Kombat.
+prompted, then install over the previous alpha and launch Rocky Kombat.
 
 First match: **Play > Rocky Boxing Arena > Play Against Computer > choose both
 fighters > Champion > Fight**. Move with the left stick. Use Jab, Heavy,

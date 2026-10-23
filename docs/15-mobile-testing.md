@@ -6,6 +6,11 @@ does not supply Xcode or an Apple signing identity.
 
 ## Android
 
+Current download: [1.0.3-alpha.3, build 4](https://github.com/Stanley19990/Rocky-Kombat/releases/tag/v1.0.3-alpha.3).
+This OpenGL ES 3.2 candidate adds Rockycat launch branding after a reported
+startup exit in build 3. Its public download and checksum passed verification;
+phone startup remains unverified. See [candidate checks](16-android-startup-candidate.md).
+
 The first APK is published as
 [1.0.2-alpha.2, build 3](https://github.com/Stanley19990/Rocky-Kombat/releases/tag/v1.0.2-alpha.2)
 on 2026-10-23. Size: 175,204,803 bytes. Source:
@@ -33,7 +38,7 @@ fighter > choose the CPU fighter > Champion > Fight**. Use the left thumb stick
 to move and the right-side Jab, Heavy, Block (hold) and Dodge controls. Results
 offers Rematch. The APK includes its game content; no separate OBB is needed.
 
-Minimum: ARM64 Android 8.0/API 26. Device rendering, performance, sound, touch
+Minimum: ARM64 Android 8.0/API 26 and OpenGL ES 3.2. Device rendering, performance, sound, touch
 and completion/rematch need a real phone test before wider release. Four-pose
 animations remain provisional. Online Versus awaits a hosted service endpoint;
 offline human-versus-CPU play is the intended test in this build.

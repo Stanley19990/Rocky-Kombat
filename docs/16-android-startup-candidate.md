@@ -22,6 +22,17 @@ alignment passed 16 KB checks. This does not constitute a device launch test.
 Startup breadcrumbs now identify entry into game mode, world construction and
 front-end/audio initialization in logs to narrow a subsequent crash report.
 
+Published on 2026-10-23: [1.0.3-alpha.3, build 4](https://github.com/Stanley19990/Rocky-Kombat/releases/tag/v1.0.3-alpha.3),
+160,689,730 bytes, source `a887fdfeae7841dbbb33e81ca15e206e5d14afbd`.
+SHA-256: `dad9c5ad14da80cc8b1c3b6dd895cff267c96f334fc7af72245a9bb8a4f14962`.
+Build/cook/package succeeded. Signature and 16 KB ZIP/ELF checks passed; compiled
+manifest confirms Vulkan support is disabled and file-server entries are absent.
+Rockycat resources, OpenGL
+startup shaders and embedded game containers were inspected in the actual APK.
+The public APK was downloaded without credentials and matched the full checksum.
+The existing three-match desktop engine suite passed with zero failed checks
+using `-nullrhi`; it did not verify rendering, touch or audible output on a phone.
+
 Install build 4 over build 3 and launch **Rocky Kombat**. Test reaching the menu,
 selecting each fighter, entering a human-versus-CPU match, touch movement and
 attacks, audible output, finishing a match and choosing Rematch. None of those
