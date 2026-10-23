@@ -4,6 +4,7 @@ param(
     [string]$EngineRoot = 'C:\Program Files\Epic Games\UE_5.8'
 )
 $ErrorActionPreference = 'Stop'
+$ProgressPreference = 'SilentlyContinue'
 $projectRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\..'))
 $engineDir = Join-Path $EngineRoot 'Engine'
 $required = @(
@@ -21,10 +22,11 @@ foreach ($line in [IO.File]::ReadAllLines((Join-Path $PSScriptRoot 'version.txt'
 }
 if (-not $version.VERSION_DISPLAY -or $version.STORE_VERSION -notmatch '^\d+$') { throw 'Invalid Android version.txt' }
 $engineConfig = [IO.File]::ReadAllText((Join-Path $projectRoot 'Config\DefaultEngine.ini'))
-foreach ($setting in @("VersionDisplayName=$($version.VERSION_DISPLAY)","StoreVersion=$($version.STORE_VERSION)",'bPackageDataInsideApk=True','bBuildForArm64=True','bBuildForX8664=False')) {
+foreach ($setting in @("VersionDisplayName=$($version.VERSION_DISPLAY)","StoreVersion=$($version.STORE_VERSION)",'bPackageDataInsideApk=True','bBuildForArm64=True','bBuildForX8664=False','bBuildForES31=True','bSupportsVulkan=False','bShowLaunchImage=True')) {
     if ($engineConfig -notmatch ('(?m)^' + [regex]::Escape($setting) + '\r?$')) { throw "Android config/version mismatch: $setting" }
 }
 $stamp = [DateTime]::UtcNow.ToString('yyyyMMdd_HHmmss')
+if (!(Test-Path -LiteralPath (Join-Path $projectRoot 'Build/Android/res/drawable/icon.png'))) { throw 'Missing Rockycat launcher artwork. Run Tools/Android/prepare_branding.ps1.' }
 $archive = Join-Path $projectRoot "Saved\Android\test_$stamp"
 $output = Join-Path $projectRoot 'Dist\Android'
 New-Item -ItemType Directory -Path $archive,$output -Force | Out-Null
@@ -52,6 +54,8 @@ foreach ($expected in @("name='com.rockycat.rockykombat'", "versionName='$($vers
 }
 & (Join-Path $buildTools 'apksigner.bat') verify --verbose --print-certs $apks[0].FullName
 if ($LASTEXITCODE -ne 0) { throw 'APK signature verification failed' }
+& (Join-Path $buildTools 'zipalign.exe') -c -P 16 4 $apks[0].FullName
+if ($LASTEXITCODE -ne 0) { throw 'APK zip alignment verification failed' }
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 $apkZip = [IO.Compression.ZipFile]::OpenRead($apks[0].FullName)
 try {
@@ -73,8 +77,10 @@ $buildInfo = [ordered]@{
     sourceRevision=$sourceRevision; sourceDirty=$sourceDirty
     engine=(Get-Content -LiteralPath (Join-Path $engineDir 'Build\Build.version') -Raw | ConvertFrom-Json)
     signing='Local Android debug identity (internal test only)'; embeddedContent=$contentEntries
+    graphics='OpenGL ES 3.2 only; Vulkan disabled in this compatibility candidate.'
+    startupStatus='Previous build exits at splash on an unconnected user phone. Cause unconfirmed; this candidate is not phone-verified.'
     androidDeviceTests='Not run by packaging; device testing must be recorded separately.'
-    knownIssues=@('Android rendering, performance, audible output and touch controls still require device testing.','Four-pose walking/punch artwork remains provisional.','No dedicated hit-reaction or get-up artwork.','Online Versus requires a separately hosted service; this build has no public online endpoint.','Android APK only: iPhones require a separate signed iOS build, which is not included.')
+    knownIssues=@('Startup crash reported on build 3; compatibility changes in build 4 have not been verified on that phone.','Android rendering, performance, audible output and touch controls still require device testing.','Four-pose walking/punch artwork remains provisional.','No dedicated hit-reaction or get-up artwork.','Online Versus requires a separately hosted service; this build has no public online endpoint.','Android APK only: iPhones require a separate signed iOS build, which is not included.')
 }
 $utf8 = New-Object Text.UTF8Encoding($false)
 [IO.File]::WriteAllText((Join-Path $output 'BUILD_INFO.json'), ($buildInfo | ConvertTo-Json -Depth 5), $utf8)

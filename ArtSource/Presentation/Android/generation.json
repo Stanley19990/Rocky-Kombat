@@ -1,0 +1,8 @@
+{
+  "tool": "Built-in image_gen, edit mode",
+  "source": "ArtSource/Presentation/RockycatLogo.jpeg",
+  "output": "ArtSource/Presentation/Android/RockycatIcon.png",
+  "prompt": "Edit target: the supplied Rockycat logo. Make ONE square 1024x1024 Android game launcher icon. Preserve the recognizable orange cartoon cat face, black thick outlines, angry determined eyes, red boxing gloves and the original warm cream background. Clean up JPEG noise and make edges crisp. Crop and arrange the cat-and-gloves emblem large in the center, leaving generous 18% safe margins for Android circle masks. Remove all text including ROCKYCAT and $RKC; this icon must have no text. Keep the exact same flat illustrated brand character, not a realistic animal, no 3D effects, no extra symbols. The source image is the edit target and identity reference.",
+  "nativeLaunchCard": "Original RockycatLogo.jpeg, re-encoded as PNG without changing the artwork; centered through an Android layer-list.",
+  "densityExports": "Tools/Android/prepare_branding.ps1"
+}

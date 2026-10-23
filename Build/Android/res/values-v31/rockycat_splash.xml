@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Android 12+ shows a system splash before the engine's landscape card. -->
+    <style name="UnrealSplashTheme" parent="UnrealBaseTheme">
+        <item name="android:windowSplashScreenBackground">#F5E9D6</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/icon</item>
+        <item name="android:windowBackground">@drawable/splashscreen_l</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+</resources>

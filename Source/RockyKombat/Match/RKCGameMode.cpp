@@ -468,13 +468,16 @@ ARKCGameMode::ARKCGameMode()
 
 void ARKCGameMode::StartPlay()
 {
+    UE_LOG(LogRockyKombat, Display, TEXT("Startup: entering game mode."));
     Super::StartPlay();
     ApplyConsoleOverridesAndRestart();
+    UE_LOG(LogRockyKombat, Display, TEXT("Startup: arena and fighters constructed."));
 
     // Audio, the front end and the lifecycle hooks come up after the world exists,
     // because the loading card's progress is measured from the world it built - so
     // this must run after BuildWorld and before anything is stepped.
     InitFrontEndAndAudio();
+    UE_LOG(LogRockyKombat, Display, TEXT("Startup: front end and audio initialized."));
 
     // A scripted-input run (if the command line asked for one) starts here, after
     // the world and the front end exist, because the driver presses keys through

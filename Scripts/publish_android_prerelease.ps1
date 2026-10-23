@@ -1,6 +1,7 @@
 [CmdletBinding()]
 param([string]$ArtifactDirectory = '', [string]$Repository = 'Stanley19990/Rocky-Kombat')
 $ErrorActionPreference = 'Stop'
+$ProgressPreference = 'SilentlyContinue'
 $root = Split-Path -Parent $PSScriptRoot
 if (!$ArtifactDirectory) { $ArtifactDirectory = Join-Path $root 'Dist/Android' }
 $infoPath = Join-Path $ArtifactDirectory 'BUILD_INFO.json'
@@ -29,7 +30,9 @@ try {
     $body = @"
 Internal Android alpha: $($info.version), build $($info.build), ARM64. Unreal $($info.engine.MajorVersion).$($info.engine.MinorVersion).$($info.engine.PatchVersion).
 
-Download **$($info.apk)** to an ARM64 Android phone (Android 8.0/API 26 or newer). Open the APK, allow installation from that browser/file manager if prompted, then install. Game content is included; no separate OBB is needed. This is a disposable debug-signed test package.
+Download **$($info.apk)** to an ARM64 Android phone (Android 8.0/API 26 or newer, OpenGL ES 3.2 required). Open the APK, allow installation from that browser/file manager if prompted, then install over the previous alpha. Game content is included; no separate OBB is needed. This is a disposable debug-signed test package.
+
+Compatibility candidate following a reported exit at the Unreal splash in build 3: this build uses OpenGL ES instead of Vulkan, disables the development Android File Server and replaces the launcher/system/landscape splash artwork with Rockycat branding. The original crash cause is unconfirmed and startup on that phone has not been verified. Please report whether it reaches the Rockycat/RBA cards and menu.
 
 First match: **Play > Rocky Boxing Arena > Play Against Computer > choose your fighter > choose the CPU fighter > Champion > Fight**. Left stick moves. Right buttons are Jab, Heavy, Block (hold), and Dodge. Choose Rematch on Results.
 

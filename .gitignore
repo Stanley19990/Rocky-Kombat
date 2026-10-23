@@ -23,6 +23,8 @@ Build/Android/*.gradle
 Build/*
 !Build/Android/
 Build/Android/*
+!Build/Android/res/
+!Build/Android/res/**
 
 # --- Local distribution artefacts (regenerable, and far too large) -----------
 Dist/
