@@ -39,6 +39,9 @@ dist/
 *.keystore
 *.jks
 *.p12
+*.mobileprovision
+*.provisionprofile
+*.p8
 *.pem
 *.key
 keystore.pw

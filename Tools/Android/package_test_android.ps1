@@ -72,7 +72,7 @@ $buildInfo = [ordered]@{
     engine=(Get-Content -LiteralPath (Join-Path $engineDir 'Build\Build.version') -Raw | ConvertFrom-Json)
     signing='Local Android debug identity (internal test only)'; embeddedContent=$contentEntries
     androidDeviceTests='Not run by packaging; device testing must be recorded separately.'
-    knownIssues=@('Sprite overlap rendering is corrected on desktop; Android rendering and performance still require device testing.','Four-pose walking/punch artwork remains provisional.','No dedicated hit-reaction or get-up artwork.')
+    knownIssues=@('Android rendering, performance, audible output and touch controls still require device testing.','Four-pose walking/punch artwork remains provisional.','No dedicated hit-reaction or get-up artwork.','Online Versus requires a separately hosted service; this build has no public online endpoint.','Android APK only: iPhones require a separate signed iOS build, which is not included.')
 }
 $utf8 = New-Object Text.UTF8Encoding($false)
 [IO.File]::WriteAllText((Join-Path $output 'BUILD_INFO.json'), ($buildInfo | ConvertTo-Json -Depth 5), $utf8)
