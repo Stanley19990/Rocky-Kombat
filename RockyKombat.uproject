@@ -16,6 +16,10 @@
 	],
 	"Plugins": [
 		{
+			"Name": "AndroidFileServer",
+			"Enabled": false
+		},
+		{
 			"Name": "Paper2D",
 			"Enabled": true
 		},
