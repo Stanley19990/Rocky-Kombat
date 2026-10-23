@@ -35,6 +35,8 @@ $uatArguments = @(
     '-platform=Android', "-clientconfig=$Configuration", '-cookflavor=ETC2',
     '-build', '-cook', '-stage', '-package', '-pak', '-iostore', '-compressed',
     '-archive', "-archivedirectory=$archive", '-nocompileeditor', '-nohotreload',
+    # Avoid UBA retaining a second large header cache on this memory-limited PC.
+    '-UbtArgs=-NoUBA',
     '-map=/Engine/Maps/Entry'
 )
 & $uat @uatArguments 2>&1 | Tee-Object -FilePath $logPath
